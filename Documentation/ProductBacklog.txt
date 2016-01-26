@@ -1,0 +1,26 @@
+- Main menu
+- Teams
+- Player team assignment
+- Colored character models
+- Character movement
+- Character jumping
+- Character falling
+- Character running
+- Player/environment collision
+- Stage design
+- Randomly generated stages
+- Networking
+- Matchmaking
+- Multiplayer support
+- Party/invite system
+- NPCs
+- Environmental hazards
+- Items
+- "As a normal player, I want the game to provide instructions so that I can easily understand how to
+  play the game."
+- Character health/size
+- "As a normal player, I want the game to allow me to rebind its controls to my liking so that I can
+  choose how I want to control my character."
+- Toggle sound
+- Leaderboards
+- Player stats
