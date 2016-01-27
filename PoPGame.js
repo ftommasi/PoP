@@ -29034,17 +29034,26 @@ module.exports = function () {
 //# sourceMappingURL=pixi.js.map
 //END PIXI.js
 
-function Drawable(x,y,img){
+
+
+
+//PoPGame
+(function(){ //javascript entry point
+
+  function Drawable(x,y,img){
         this.sprite = new PIXI.Sprite.fromImage(img);
         this.sprite.x = x;
         this.sprite.y = y;
         this.sprite.anchor.x = 0.5;
         this.sprite.anchor.y = 0.5;
-};
-
-
-//PoPGame
-(function(){ //javascript entry point
+  };
+  
+  function update(){
+    
+    
+    
+  };
+  
   var renderer = PIXI.autoDetectRenderer(800,600,{backgroundColor : 0x1099bb});
   document.body.appendChild(renderer.view);
   
@@ -29059,6 +29068,7 @@ function Drawable(x,y,img){
   
   function animate(){
       requestAnimationFrame(animate);
+      update();
       renderer.render(stage);
   }
   
