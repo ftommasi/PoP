@@ -25,30 +25,27 @@
  
   //Drawable class 
   function Drawable(x,y,img,width,height){
-        this.sprite = new PIXI.Sprite.fromImage(img);
-        this.sprite.x = x;
-        this.sprite.y = y;
+        this.__proto__ = new PIXI.Sprite.fromImage(img);
+        this.x = x;
+        this.y = y;
         this.old_x = x;
         this.old_y = x;
-        this.sprite.anchor.x = 0.5;
-        this.sprite.anchor.y = 0.5;
+        this.anchor.x = 0.5;
+        this.anchor.y = 0.5;
         this.speed = 256;
-        //TODO(front-end): make these variables represent real values
-        this.height = height;
-        this.width = width;
   };
   
   Drawable.prototype.moveX = function(dir,modifier){
-    this.sprite.x+=(this.speed*dir)*modifier;
+    this.x+=(this.speed*dir)*modifier;
     //this.x+=(this.speed*dir)*modifier;
   };
   Drawable.prototype.moveY = function(dir,modifier){
-    this.sprite.y+=(this.speed*dir)*modifier;
+    this.y+=(this.speed*dir)*modifier;
     //this.y+=(this.speed*dir)*modifier;
   };
   
   Drawable.prototype.getX = function(){
-    return this.sprite.x;
+    return this.x;
   };
   
   Drawable.prototype.collision = function(other){
@@ -66,8 +63,8 @@
   
   var wall = new Drawable(330,350,'assets/wall.png',10,10);
   var ball = new Drawable(150,130,'assets/white_ball.png',15,15);
-  stage.addChild(wall.sprite);
-  stage.addChild(ball.sprite);
+  stage.addChild(wall);
+  stage.addChild(ball);
   
   //Debug text TODO(front-end): remove when not needed before release
   var debugText1 = new PIXI.Text('1 x: ');
@@ -107,10 +104,10 @@
     var collision = false;
     for(var item1 in spriteList){
         for(var item2 in spriteList){
-          spriteList[0].old_x = spriteList[0].sprite.x; 
-          spriteList[0].old_y = spriteList[0].sprite.y;
-          spriteList[1].old_x = spriteList[1].sprite.x;
-          spriteList[1].old_y = spriteList[1].sprite.y;
+          spriteList[0].old_x = spriteList[0].x; 
+          spriteList[0].old_y = spriteList[0].y;
+          spriteList[1].old_x = spriteList[1].x;
+          spriteList[1].old_y = spriteList[1].y;
           
           //TODO(Fausto): uncomment when collison function is fully refactored
           /*
@@ -123,14 +120,14 @@
           
           
           //Debug text TODO(front-end): remove when not needed before release
-          debugText1.setText('1 x: '+ spriteList[0].sprite.x + ' y: '+ (spriteList[0].sprite.y));
-          debugText2.setText('2 x: '+ spriteList[1].sprite.x + ' y: '+ (spriteList[1].sprite.y));        
+          debugText1.setText('1 x: '+ spriteList[0].x + ' y: '+ (spriteList[0].y));
+          debugText2.setText('2 x: '+ spriteList[1].x + ' y: '+ (spriteList[1].y));        
           //END Debug
           if(
-              (spriteList[0].sprite.x  - spriteList[0].sprite.width/2 < (spriteList[1].sprite.x + spriteList[1].sprite.width/2)) && 
-              (spriteList[0].sprite.x + spriteList[0].sprite.width/2 > spriteList[1].sprite.x  - spriteList[1].sprite.width/2)&&
-              (spriteList[0].sprite.y + spriteList[0].sprite.height/2 > spriteList[1].sprite.y - spriteList[1].sprite.height/2)&&
-              (spriteList[0].sprite.y - spriteList[0].sprite.height/2 < spriteList[1].sprite.y + spriteList[1].sprite.height/2)
+              (spriteList[0].x - spriteList[0].width/2 < (spriteList[1].x + spriteList[1].width/2)) && 
+              (spriteList[0].x + spriteList[0].width/2 > spriteList[1].x  - spriteList[1].width/2)&&
+              (spriteList[0].y + spriteList[0].height/2 > spriteList[1].y - spriteList[1].height/2)&&
+              (spriteList[0].y - spriteList[0].height/2 < spriteList[1].y + spriteList[1].height/2)
               
           ){
             collision = true;    
