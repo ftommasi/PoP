@@ -129,7 +129,8 @@
           if(
               (spriteList[0].sprite.x  - spriteList[0].sprite.width/2 < (spriteList[1].sprite.x + spriteList[1].sprite.width/2)) && 
               (spriteList[0].sprite.x + spriteList[0].sprite.width/2 > spriteList[1].sprite.x  - spriteList[1].sprite.width/2)&&
-              (spriteList[0].sprite.y + spriteList[0].sprite.height/2 > spriteList[1].sprite.y - spriteList[1].sprite.height/2)
+              (spriteList[0].sprite.y + spriteList[0].sprite.height/2 > spriteList[1].sprite.y - spriteList[1].sprite.height/2)&&
+              (spriteList[0].sprite.y - spriteList[0].sprite.height/2 < spriteList[1].sprite.y + spriteList[1].sprite.height/2)
               
           ){
             collision = true;    
