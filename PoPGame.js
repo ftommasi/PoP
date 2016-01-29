@@ -24,16 +24,18 @@
   
  
   //Drawable class 
-  function Drawable(x,y,img,width,height){
-        this.__proto__ = new PIXI.Sprite.fromImage(img);
+  var Drawable = function(x,y,img){
+        PIXI.Sprite.fromImage(this,img);
         this.x = x;
-        this.y = y;
+        this.y =  y;
+        this.imageId = img;
         this.old_x = x;
         this.old_y = x;
-        this.anchor.x = 0.5;
-        this.anchor.y = 0.5;
         this.speed = 256;
   };
+  
+  Drawable.prototype = new PIXI.Sprite();
+  Drawable.prototype.contructor = Drawable;
   
   Drawable.prototype.moveX = function(dir,modifier){
     this.x+=(this.speed*dir)*modifier;
@@ -61,8 +63,8 @@
   
   var stage = new PIXI.Container(); 
   
-  var wall = new Drawable(330,350,'assets/wall.png',10,10);
-  var ball = new Drawable(150,130,'assets/white_ball.png',15,15);
+  var wall = new Drawable(330,350,'assets/wall.png');
+  var ball = new Drawable(150,130,'assets/white_ball.png');
   stage.addChild(wall);
   stage.addChild(ball);
   
