@@ -7,14 +7,15 @@
 //Drawable class 
  
   var Drawable = function(x,y,img){
+    //TODO(Fausto): add elements as necessary
         PIXI.Sprite.call(this,PIXI.Texture.fromImage(img));
        
         this.x = x;
         this.y = y;
         this.old_x = null;
         this.old_y = null;
-        this.speed = 256;
-        
+        this.speed = 256; //TODO(Fausto): implement dynamic speed 
+        this.max_height = y - 256;
   };
   
   Drawable.prototype = PIXI.Sprite.prototype;
@@ -23,6 +24,7 @@
   
  //move functions 
   Drawable.prototype.moveX = function(dir,modifier){
+     
     this.x+=(this.speed*dir)*modifier;
     //this.x+=(this.speed*dir)*modifier;
   };
@@ -70,10 +72,10 @@
   Drawable.prototype.collision = function(other){
     if
         (
-              (this.x   < other.x + other.width) && 
-              (this.x + this.width   > other.x  )  &&
-              (this.y + this.height > other.y) &&
-              (this.y   < other.y + other.height)
+              (this.x   < other.x + other.width) && //right
+              (this.x + this.width   > other.x  )  && //left
+              (this.y + this.height > other.y) && //bot
+              (this.y   < other.y + other.height) // top
               
        
           ){
@@ -83,6 +85,43 @@
         return false;
     }
   }
+   Drawable.prototype.collisionBot = function(other){
+    if(this.y + this.height > other.y && this.x >= other.x && this.x + this.width <= other.x + other.width){
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+  
+  Drawable.prototype.collisionTop = function(other){
+    if(this.y   < other.y + other.height && this.x > other.x && this.x + this.width < other.x + other.width){
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+  
+  Drawable.prototype.collisionLeft = function(other){
+    if(this.x + this.width   > other.x && this.y > other.y && this.y + this.height < other.y + other.height  ){
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+  
+  Drawable.prototype.collisionRight = function(other){
+    if (this.x   < other.x + other.width && this.y > other.y && this.y + this.height < other.y + other.height){
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+  
+  
   
   
   Drawable.prototype.restorePos = function(){
