@@ -37,6 +37,35 @@
     return this.x;
   };
   
+  Drawable.prototype.getY = function(){
+    return this.y;
+  };
+  
+    Drawable.prototype.setX = function(newX){
+     this.x = newX;
+  };
+  
+  Drawable.prototype.setY = function(newY){
+     this.y = newY;
+  };
+  
+  Drawable.prototype.getWidth = function(){
+    return this.width;
+  };
+  
+  Drawable.prototype.getHeight = function(){
+    return this.height;
+  };
+  
+   Drawable.prototype.getSpeed = function(){
+    return this.speed;
+  };
+  
+    Drawable.prototype.setSpeed = function(newSpeed){
+     this.speed = newSpeed;
+  };
+  
+  
   //collision function
   Drawable.prototype.collision = function(other){
     if
