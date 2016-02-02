@@ -84,6 +84,7 @@
     else {
         return false;
     }
+<<<<<<< HEAD
   }
    Drawable.prototype.collisionBot = function(other){
     if(this.y + this.height > other.y && this.x >= other.x && this.x + this.width <= other.x + other.width){
@@ -122,11 +123,14 @@
   }
   
   
+=======
+  };
+>>>>>>> 4c695f00ff6e5969fa8ce1fbc87a2fa1e44c2073
   
   
   Drawable.prototype.restorePos = function(){
        this.x = this.old_x; 
        this.y = this.old_y;
       
-  }
+  };
  
