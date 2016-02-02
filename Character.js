@@ -10,17 +10,55 @@
 //                 Character size
 //
 // Takes optional anonymous object as initialization arguments
-function Character() {
-  this.xpos = 0;
-  this.ypos = 0;
-
-  if (arguments[0]) {
-    for (var property in this) {
-      if (arguments[0].hasOwnProperty(property)) {
-        this[property] = arguments[0][property];
-      }
-    }
-  }
-
-
+function Character(x, y, img) {
+  this.sprite = new Drawable(x, y, img);
 }
+
+// wrappers to access character sprite functionality
+Character.prototype.moveX = function(dir, modifier) {
+  this.sprite.moveX(dir, modifier);
+};
+
+Character.prototype.moveY = function(dir, modifier) {
+  this.sprite.moveY(dir, modifier);
+};
+
+Character.prototype.getSpriteX = function() {
+  return this.sprite.getX();
+};
+
+Character.prototype.getSpriteY = function() {
+  return this.sprite.getY();
+};
+
+Character.prototype.setSpriteX = function(newX) {
+  this.sprite.setX(newX);
+};
+
+Character.prototype.setSpriteY = function(newY) {
+  this.sprite.setY(newY);
+};
+
+Character.prototype.getSpriteWidth = function() {
+  return this.sprite.getWidth();
+};
+
+Character.prototype.getSpriteHeight = function() {
+  return this.sprite.getHeight();
+};
+
+Character.prototype.getSpriteSpeed = function() {
+  return this.sprite.getSpeed();
+};
+
+Character.prototype.setSpriteSpeed = function(newSpeed) {
+  this.sprite.setSpeed(newSpeed);
+};
+
+Character.prototype.collision = function(other) {
+  return this.sprite.collision(other.sprite);
+};
+
+Character.prototype.restorePos = function() {
+  this.sprite.restorePos();
+};
