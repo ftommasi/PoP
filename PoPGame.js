@@ -5,7 +5,7 @@
 
 //PoPGame
  var then = Date.now(); //global variable used for update time modifier
- var spriteList = []; //global variable used for collision detection
+ var characterList = []; //global variable used for collision detection
   var collision = false; //global collision vairable 
 (function(){ //javascript entry point
   
@@ -34,15 +34,16 @@
   
   var stage = new PIXI.Container(); 
   
-  var wall = new Drawable(150,350,'assets/wall.png');
-  var ball = new Drawable(150,130,'assets/white_ball.png');
+  //var wall = new Drawable(150,350,'assets/wall.png');
+  //var ball = new Drawable(150,130,'assets/white_ball.png');
+  var wall = new Character(150, 350, 'assets/wall.png');
+  var ball = new Character(150, 130, 'assets/white_ball.png');
   
+  stage.addChild(ball.sprite);
+  stage.addChild(wall.sprite);
   
-  stage.addChild(ball);
-  stage.addChild(wall);
-  
-  spriteList.push(ball);
-  spriteList.push(wall);
+  characterList.push(ball);
+  characterList.push(wall);
   
   
   //Debug text TODO(front-end): remove when not needed before release
@@ -75,24 +76,24 @@
    function update(modifier){
        
    
-    for(var item1 in spriteList){
-        for(var item2 in spriteList){
-            if(item1!=item2){
-                if(spriteList[item1].collision(spriteList[item2])){
+    for(var item1 in characterList){
+        for(var item2 in characterList){
+            if(item1!==item2){
+                if(characterList[item1].collision(characterList[item2])){
                     collision = true;
                 }
             } 
           }
         }
  //Debug text TODO(front-end): remove when not needed before release
-  debugText1.setText('1 x: '+ spriteList[0].x + ' y: '+ (spriteList[0].y));
-  debugText2.setText('2 x: '+ spriteList[1].x + ' y: '+ (spriteList[1].y));        
+  debugText1.setText('1 x: '+ characterList[0].sprite.x + ' y: '+ (characterList[0].sprite.y));
+  debugText2.setText('2 x: '+ characterList[1].sprite.x + ' y: '+ (characterList[1].sprite.y));        
   //END Debug
     //get keys and call corresponding function 
     if(38 in keysDown){ //up
         //HACK 
         //TODO(front-end): fix this collision work around
-        ball.old_y = ball.y + 10;
+        ball.sprite.old_y = ball.sprite.y + 10;
         //end HACK
         if(!collision){
             ball.moveY(-1,modifier);
@@ -102,7 +103,7 @@
     if(40  in keysDown){ //down
          //HACK 
         //TODO(front-end): fix this collision work around
-        ball.old_y = ball.y - 10;
+        ball.sprite.old_y = ball.sprite.y - 10;
         //end HACK
         if(!collision){
             ball.moveY(1,modifier);
@@ -111,7 +112,7 @@
     if (37  in keysDown){ // left
         //HACK 
         //TODO(front-end): fix this collision work around
-        ball.old_x = ball.x + 10;
+        ball.sprite.old_x = ball.sprite.x + 10;
         //end HACK
         if(!collision){
             ball.moveX(-1,modifier);
@@ -121,20 +122,20 @@
     if(39 in keysDown){ // right
         //HACK 
         //TODO(front-end): fix this collision work around
-        ball.old_x = ball.x - 10;
+        ball.sprite.old_x = ball.sprite.x - 10;
         //end HACK
         if(!collision){
             ball.moveX(1,modifier);
         }
     }
     
-    for(var i in spriteList){
+    for(var i in characterList){
        
          if(collision){
-            spriteList[i].restorePos();
+            characterList[i].restorePos();
              }
-        spriteList[i].old_x = spriteList[i].x;
-        spriteList[i].old_y = spriteList[i].y;
+        characterList[i].sprite.old_x = characterList[i].sprite.x;
+        characterList[i].sprite.old_y = characterList[i].sprite.y;
         }
     collision = false;
   }

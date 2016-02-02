@@ -82,12 +82,12 @@
     else {
         return false;
     }
-  }
+  };
   
   
   Drawable.prototype.restorePos = function(){
        this.x = this.old_x; 
        this.y = this.old_y;
       
-  }
+  };
  
