@@ -2,7 +2,7 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-
+var world = require('./server.js');
 app.get('/', function(req, res){
       res.sendFile(__dirname + '/PoP.html');
 });
@@ -15,7 +15,11 @@ app.get('/*', function(req, res){
 io.on('connection', function(socket){
   console.log('a user connected');
   
+  
   var id = socket.id;
+  
+  world.addPlayer(id);
+  
   
   //Add Player
   
