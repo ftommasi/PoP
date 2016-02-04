@@ -7,6 +7,7 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var UUID = require('node-uuid');
 var world = require('./server.js');
   require('./Player.js');
 
@@ -20,13 +21,17 @@ app.get('/*', function(req, res){
 });
 
 io.on('connection', function(socket){
-  console.log('a user connected');
-  
+   
+  socket.id = UUID();
+  console.log('a user connected with id '+socket.id);
   var player = { };
   player.Player = new Player(player);
   player.Player.setPlayerID(socket.id);
-  console.log(player.Player.getPlayerID());
-
+  
+  //Save to the socket.
+  socket.player = player;
+  
+  
   world.findGame(player);
   
   socket.on('move', function(data){
@@ -34,14 +39,14 @@ io.on('connection', function(socket){
   });
   
   socket.on('disconnect', function(){
-    console.log(player.id);
+    console.log(player.Player.getPlayerID());
     console.log(socket.id);
     world.endGame();
   });
 });
 
 var port = 4004;
-var ip_address = '10.178.9.245';
+var ip_address = '0.0.0.0';
 
 http.listen(port, ip_address, function(){
   console.log("Listening on " + ip_address + ", port " + port);
