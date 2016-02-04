@@ -1,4 +1,4 @@
-/* Authors/Contributors: Fred Trelz
+/* Authors/Contributors: Fred Trelz, Nick Anderson
 *  Date: 2/2/16
 *  Purpose: This file will contain all the functions and objects related to players and player
 *           network communication.
@@ -6,12 +6,14 @@
 
 // Player object constructor
 
-function Player() {
-  var isHost = false;
+var Player =function (player_instance) {
+  this.isHost = false;
   this.playerID = -1;
   this.character = null;
-}
+};
 
+//Make it global.
+module.exports = global.Player = Player;
 // takes anonymous object for optional initialization of character properties
 Player.prototype.addCharacter = function(x, y, img) {
   this.character = new Character(x, y, img);
