@@ -1,4 +1,4 @@
-/* Authors/Contributors: Fred Trelz
+/* Authors/Contributors: Fred Trelz, Saddha Santanaporn
 *  Date: 1/25/16
 *  Purpose: This file will contain all the functions and objects related to characters
 */
@@ -10,55 +10,15 @@
 //                 Character size
 //
 // Takes optional anonymous object as initialization arguments
-function Character(x, y, img) {
-  this.sprite = new Drawable(x, y, img);
+var Character = function (x, y, WorldData) {
+    GameObject.call(this);
+    this.AddPhysicsComponent(x, y, new RectBodyData(80, 80), WorldData);
+
+    //set these values so we don't rotate as we collide with stuff
+    this.physicsComponent.inertia = Infinity;
+    this.physicsComponent.inverseInertia = 0;
 }
 
-// wrappers to access character sprite functionality
-Character.prototype.moveX = function(dir, modifier) {
-  this.sprite.moveX(dir, modifier);
-};
+Character.prototype = GameObject.prototype;
+Character.prototype.contructor = Character;
 
-Character.prototype.moveY = function(dir, modifier) {
-  this.sprite.moveY(dir, modifier);
-};
-
-Character.prototype.getSpriteX = function() {
-  return this.sprite.getX();
-};
-
-Character.prototype.getSpriteY = function() {
-  return this.sprite.getY();
-};
-
-Character.prototype.setSpriteX = function(newX) {
-  this.sprite.setX(newX);
-};
-
-Character.prototype.setSpriteY = function(newY) {
-  this.sprite.setY(newY);
-};
-
-Character.prototype.getSpriteWidth = function() {
-  return this.sprite.getWidth();
-};
-
-Character.prototype.getSpriteHeight = function() {
-  return this.sprite.getHeight();
-};
-
-Character.prototype.getSpriteSpeed = function() {
-  return this.sprite.getSpeed();
-};
-
-Character.prototype.setSpriteSpeed = function(newSpeed) {
-  this.sprite.setSpeed(newSpeed);
-};
-
-Character.prototype.collision = function(other) {
-  return this.sprite.collision(other.sprite);
-};
-
-Character.prototype.restorePos = function() {
-  this.sprite.restorePos();
-};
