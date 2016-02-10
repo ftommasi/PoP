@@ -1,59 +1,52 @@
-/* Author/Contributors: Fausto Tommasi 
-*  Date: 1/21/2016
-*  Purpose: This file contains the file that will be drawn onto the canvas
-*/
+//dictionary for keyboard functionality
+var keysDown = {};
 
-//PoPGame
+(function () { //javascript entry point  
+    //add listeners to grab keyboard input from user - make a seperate input manager class later!
+    addEventListener("keydown", function (e) {
+        keysDown[e.keyCode] = true;
+    }, false);
 
-(function(){
-  //add listeners to grab keyboard input from user
-  addEventListener("keydown", function (e) {
-	keysDown[e.keyCode] = true;
-  }, false);
-  
-  addEventListener("keyup", function (e) {
-  	delete keysDown[e.keyCode];
-  }, false);
-  
-  addEventListener("keypress", function (e) {
-  	keysDown[e.keyCode] = true;
-  }, false);
-  
-  //dictionary for keyboard functionality
-  //TODO(Fausto): implement to Game class
-  var keysDown = {};
- 
-  var wall = new Character(150, 350, 'assets/wall.png');
-  var ball = new Character(150, 130, 'assets/white_ball.png');
-  
-  var game = new PoPGame(800,600,null,false,0x10F9bb);
-  
-  
-  //TODO(Fausto): Add fucntionality to constructor
-  //game.setLocalPlayer(ball);
-  game.localPlayer = ball;
-  game.then = Date.now();
-  
-  game.addPlayers(ball);
-  game.addPlayers(wall);
-  
-  document.body.appendChild(game.renderer.view);
-  
-  animate();
- 
-  function animate(){
-      game.animate();
-      requestAnimationFrame(animate);
-      game.now = Date.now();
-      update((game.now-game.then)/1000); // should update be outside of animate?
-      game.then = game.now;
-     
-  }
-  
-   function update(modifier){
-       game.update(modifier,keysDown);
-  
-  }
- 
-  
+    addEventListener("keyup", function (e) {
+        delete keysDown[e.keyCode];
+    }, false);
+
+    addEventListener("keypress", function (e) {
+        keysDown[e.keyCode] = true;
+    }, false);
+
+    // Matter.js module aliases
+    var Engine = Matter.Engine,
+        World = Matter.World,
+        Bodies = Matter.Bodies;
+    // create a Matter.js engine
+    var engine = Engine.create(document.body);
+    // encapsulate data
+    var WorldData = new WorldContainer(engine, World, Bodies);
+
+    // create a GameObjectManager
+    var GameObjManager = new GameObjectManager();
+    // create a PlayerManager
+    var playerManager = new PlayerManager(0, false);
+
+    GameObjManager.AddObject(playerManager);
+    var myCharacter = new Character(400, 200, WorldData);
+    GameObjManager.AddObject(myCharacter);
+    playerManager.setLocalPLayer(myCharacter);
+
+    // create a ground
+    var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
+    World.add(engine.world, ground);
+
+    game = new Game(60);
+
+    game.onUpdate = function (delta) {
+        GameObjManager.UpdateAll(delta);
+
+        // run the engine
+        Matter.Engine.update(engine, delta);
+        Matter.Render.world(engine);
+    }
+
+    game.start();
 })();
