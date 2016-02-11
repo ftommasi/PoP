@@ -3,32 +3,43 @@
 *  Purpose: This file will contain all the functions related to the server.
 */
 
-var	game_server = module.exports = { games : {}, game_count:0 };
+//var server = module.exports = { games : {}, game_count:0 };
 
-var createGame = function(){
-   
-  //return theGame;
-}
+var games = [];
+var players=[];
 
-var findGame = function(player){
-  
-  console.log('From find game');
-  //return theGame;
-}
-
-
-var onMove = function(player, data){
-  //console.log(player.Player.getPlayerID());
-}
-
-var endGame = function(){
+require('./Game.js');
+var createGame=function(id){
+  var game={};
+  console.log('Created game.');
+  game.Game=new Game(60);
   
 }
 
-var onMove = function() {
+var addPlayer = function(id){
+  var player = new Player();
+  player.playerId=id;
   
-}
+  //TODO call addPlayer in game
+  
+  return player;
+};
 
-module.exports.onMove = onMove;
-module.exports.endGame = endGame;
-module.exports.findGame=findGame;
+var removePlayer = function(player){
+  //TODO Nick call remove Player in game.
+};
+
+var updatePlayerData = function(data){
+  var player = //TODO Nick getPlayerById(data.playerId);
+  player.x=data.x;
+  player.y=data.y;
+  return player;
+};
+module.exports.createGame=createGame;
+module.exports.players=players;
+module.exports.addPlayer=addPlayer;
+module.exports.removePlayer=removePlayer;
+module.exports.updatePlayerData=updatePlayerData;
+
+
+

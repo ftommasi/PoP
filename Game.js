@@ -32,6 +32,8 @@ var Game = function (fps) {
     this.onRender = function () {
     };
 };
+
+module.exports.Game = Game;
 Game.prototype.update = function (delta) {
     this.onUpdate(delta);
 };
