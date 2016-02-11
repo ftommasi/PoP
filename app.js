@@ -9,7 +9,6 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var UUID = require('node-uuid');
 var world = require('./server.js');
-  require('./Player.js');
 
 app.get('/', function(req, res){
       res.sendFile(__dirname + '/index.html');
@@ -23,25 +22,44 @@ app.get('/*', function(req, res){
 io.on('connection', function(socket){
    
   socket.id = UUID();
+  var id = socket.id;
   console.log('a user connected with id '+socket.id);
-  var player = { };
-  player.Player = new Player(player);
-  player.Player.setPlayerID(socket.id);
   
-  //Save to the socket.
-  socket.player = player;
+  //TODO Nick find/create game here and add (use that game as world).
+  //Add yourself to the world
+  
+  //world.createGame(id);
+  world.addPlayer(id);
+  
+  //Get yourself back
+  var player = world.playerForId(id);
+  
+  //Send so you are created locally.
+  socket.emit('createPlayer', player);
+  
+  //Send to others so you get added.
+  socket.broadcast.emit('addOtherPlayer', player);
   
   
-  world.findGame(player);
-  
-  socket.on('move', function(data){
-    world.onMove(player, data);
+  //Request the old players from the world
+  socket.on('requestOldPlayers', function(){
+    for (var i = 0; i<world.players.length; i++){
+      if(world.players[i].playerId!=id)
+	socket.emit('addOtherPlayer', world.players[i]);
+    }
   });
   
+  //Move, update world(server), broadcast to others.
+  socket.on('move', function(data){
+    var newData = world.updatePlayerData(data);
+    socket.broadcast.emit('move', newData);
+  });
+  
+  //Remove other players as they disconnect.
   socket.on('disconnect', function(){
-    console.log(player.Player.getPlayerID());
-    console.log(socket.id);
-    world.endGame();
+    console.log('user disconnected');
+    io.emit('removeOtherPlayer', player);
+    world.removePlayer(player);
   });
 });
 
