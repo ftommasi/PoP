@@ -24,12 +24,12 @@ tick = tick(100);
 
 var Game = function (fps) {
     this.fps = fps;
+    this.id;
+    this.playerList = [];
     this.delay = 1000 / this.fps;
     this.lastTime = 0;
     this.raf = 0;
     this.onUpdate = function (delta) {
-    };
-    this.onRender = function () {
     };
 };
 
@@ -37,15 +37,12 @@ module.exports.Game = Game;
 Game.prototype.update = function (delta) {
     this.onUpdate(delta);
 };
-Game.prototype.render = function () {
-    this.onRender();
-};
+
 Game.prototype.loop = function (now) {
     this.raf = tick(this.loop.bind(this));
     var delta = now - this.lastTime;
     if (delta >= this.delay) {
         this.update(delta);
-        this.render();
         this.lastTime = now;
     }
 };
@@ -56,7 +53,8 @@ Game.prototype.start = function () {
 };
 Game.prototype.stop = function () {
     if (this.raf > 0) {
-        cancelAnimationFrame(this.raf);
+        //TODO(Nick): Broadcast stop to all client games
+	//cancelAnimationFrame(this.raf);
         this.raf = 0;
     }
 };

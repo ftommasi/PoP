@@ -3,16 +3,15 @@ Sprint 1 Backlog
 Goal: Have one basic map with one or more platforms, functionality is to pick up a weapon and have a 'death state.' Basic multiplayer functioning.
 
 X Determine the specifics of what needs to be server based, and what needs to be client based --Eric
--Have networking complete so that four players can connect together (no lobby functionality yet) --Nick
--Have the server setup on the WWW folder of turing. Figure out remote server handling etc. --Eric
+-Have networking complete so that four players can connect together (no lobby functionality yet) --Nick, Eric
+-Have the server setup on the WWW folder of turing. Figure out remote server handling etc. --Eric (on Hold)
 -Implement classes together 
-	X Drawable inherit from sprite --Fausto
-	-Item inherit from drawable --Fred
-	X Character inherit from drawable --Fred
--Implement gravity --Saddah
--Create and implement one weapon minimum --Fred
-X Basic collission system --Fausto
-X Create character --Fred
+        -Player Class --Fred
+	-Item Class --Fausto
+	XImplement gravity --Saddah
+-Create and implement one weapon minimum --Fausto
+-Basic Game loop --Sadda
+-Multiple Player -- Sadda
 -Health system --Fred
 -Damage system --Fred
 -Create a death state --Fred
