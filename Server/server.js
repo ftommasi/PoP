@@ -6,23 +6,49 @@
 //var server = module.exports = { games : {}, game_count:0 };
 
 var games = [];
-var players=[];
-
-require('./Game.js');
-var createGame=function(id){
+var game_count=0;
+require('./ServerGame.js');
+require('./Player.js');
+var createGame=function(player){
   var game={};
+  
   console.log('Created game.');
   game.Game=new Game(60);
-  
-}
+  game.Game.id=game_count;
+  games.push(game);
+  player.Player.gameid=game.Game.id;
+  game.Game.playerList.push(player);
+  game_count++;
+  return player.Player.gameid;
+};
+
+var joinGame=function(player){
+  var validGame=false;
+  if(game_count!=0){
+      for(var i = 0; i<game_count; i++){
+	var temp = games[i];
+	if(temp.Game.playerList.length<4){
+	  player.Player.gameid=i;
+	  temp.Game.playerList.push(player);
+	  validGame=true;
+	  break;
+	}
+      }
+      if(!validGame){
+	player.Player.gameid=createGame(player);
+      }
+  }
+  else{
+    player.Player.gameid=createGame(player);
+  }
+  return player;
+};
 
 var addPlayer = function(id){
-  var player = new Player();
-  player.playerId=id;
-  
-  //TODO call addPlayer in game
-  
-  return player;
+  var player={}; 
+  player.Player = new Player();
+  player.Player.id=id;
+  return joinGame(player);
 };
 
 var removePlayer = function(player){
@@ -30,13 +56,13 @@ var removePlayer = function(player){
 };
 
 var updatePlayerData = function(data){
-  var player = //TODO Nick getPlayerById(data.playerId);
-  player.x=data.x;
-  player.y=data.y;
+  var player.Player = new Player();
+  player.Player.gameid=data.Player.gameid;
+
   return player;
 };
-module.exports.createGame=createGame;
-module.exports.players=players;
+
+
 module.exports.addPlayer=addPlayer;
 module.exports.removePlayer=removePlayer;
 module.exports.updatePlayerData=updatePlayerData;
