@@ -8,7 +8,7 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var UUID = require('node-uuid');
-var world = require('./server.js');
+var world = require('./Server/server.js');
 
 app.get('/', function(req, res){
       res.sendFile(__dirname + '/index.html');
@@ -29,11 +29,8 @@ io.on('connection', function(socket){
   //Add yourself to the world
   
   //world.createGame(id);
-  world.addPlayer(id);
-  
-  //Get yourself back
-  var player = world.playerForId(id);
-  
+  var player=world.addPlayer(id);
+  console.log('Player id: '+player.Player.id+' Connected to game: '+player.Player.gameid);
   //Send so you are created locally.
   socket.emit('createPlayer', player);
   
@@ -43,10 +40,10 @@ io.on('connection', function(socket){
   
   //Request the old players from the world
   socket.on('requestOldPlayers', function(){
-    for (var i = 0; i<world.players.length; i++){
-      if(world.players[i].playerId!=id)
-	socket.emit('addOtherPlayer', world.players[i]);
-    }
+//     for (var i = 0; i<world.players.length; i++){
+//       if(world.players[i].playerId!=id)
+// 	socket.emit('addOtherPlayer', world.players[i]);
+//     }
   });
   
   //Move, update world(server), broadcast to others.
