@@ -17,6 +17,7 @@
   <!--<script src="Game.js"></script>-->
   <script src="PlayerManager.js"></script>
   <!--<script src="PoPGame.js"></script>-->
+  <script src="InputListener.js"></script>
   <script src="Client/ClientGame.js"></script>
      <script type ="text/javascript">
 	    var game={};
@@ -27,10 +28,11 @@
 	      socket.emit('join');
 	    });
 	    
+	    game.socket=socket;
 	    //Start game.
 	    socket.on('start', function(data){
 	      if(game.id==data){
-		//game.start();
+		game.start();
 		console.log('Start game ' +data);
 	      }
 	    });
@@ -49,12 +51,27 @@
 	    
 	    //Add other players when they connect
 	    socket.on('addOtherPlayer', function(data){
-	      game.addOtherPlayer(data);
+	      if(game.id==data.Player.gameid){
+		if(game.localPlayerid!=data.Player.id){
+		  console.log('From addOtherPlayer');
+		  console.log('Adding player: ' +data.Player.id);
+		  game.addOtherPlayer(data);
+	      	}
+	      }
 	    });
 	    
 	    //Remove other players as they leave.
 	    socket.on('removeOtherPlayer', function(data){
-	      game.removeOtherPlayer(data);
+	      if(game.id==data.Player.gameid){
+		game.removeOtherPlayer(data);
+	      }
+	    });
+	    socket.on('RequestOldPlayer', function(data){
+	      console.log('From RequestOldPlayer');
+	      if(game.id==data.Player.gameid){
+		console.log('Adding player: ' + data.Player.id);
+		game.addOtherPlayer(data);
+	      }
 	    });
     </script>
   </body>

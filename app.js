@@ -41,19 +41,18 @@ io.on('connection', function(socket){
     //Send to others so you get added.
     socket.broadcast.emit('addOtherPlayer', player);
     
+    for (var i =0; i<world.playLength(player.Player.gameid); i++){
+      var temp = world.getPlayers(player.Player.gameid, i);
+      if(temp.Player.id!=player.Player.id){
+	socket.emit('RequestOldPlayer', temp);
+      }
+    }
+    
     //Can we start the game?
     if(world.checkReady(player.Player.gameid)){
       socket.broadcast.emit('start', player.Player.gameid);
     };
   
-  });
-
-  //Request the old players from the world
-  socket.on('requestOldPlayers', function(){
-//     for (var i = 0; i<world.players.length; i++){
-//       if(world.players[i].playerId!=id)
-// 	socket.emit('addOtherPlayer', world.players[i]);
-//     }
   });
   
   //Move, update world(server), broadcast to others.

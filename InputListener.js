@@ -1,12 +1,25 @@
 //TODO: ADD HEADER
+var keysDown = {};
 
-function InputListener(){
+var InputListener = function(){
   //TODO: Add members as necessary
-  this.player 
+  GameObject.call(this);
+  this.player;
+  addEventListener("keydown", function (e) {
+        keysDown[e.keyCode] = true;
+    }, false);
 
+    addEventListener("keyup", function (e) {
+        delete keysDown[e.keyCode];
+    }, false);
+
+    addEventListener("keypress", function (e) {
+        keysDown[e.keyCode] = true;
+    }, false);
 
 };
-
+InputListener.prototype = GameObject.prototype;
+InputListener.prototype.contructor = InputListener;
 
 InputListener.prototype.update = function (delta) { 
  
@@ -14,7 +27,7 @@ InputListener.prototype.update = function (delta) {
 
      if (38 in keysDown) { //up 
 	     y_factor = -2; 
-	     player.WHATERVER();i//TODO IMPLEMENT CORRECT FUNCTION
+	     //player.WHATERVER();i//TODO IMPLEMENT CORRECT FUNCTION
      } 
      if (40 in keysDown) { //down 
 	     y_factor = 2; 
@@ -26,8 +39,8 @@ InputListener.prototype.update = function (delta) {
 	     x_factor = 2; 
      } 
 
-     if (this.localPlayer != null) { 
-	     Matter.Body.setVelocity(this.localPlayer.physicsComponent, Matter.Vector.create(x_factor, y_factor)); 
+     if (this.player != null) { 
+	     Matter.Body.setVelocity(this.player.physicsComponent, Matter.Vector.create(x_factor, y_factor)); 
      } 
 }; 
 

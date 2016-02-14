@@ -18,6 +18,8 @@ var createGame=function(player){
   games.push(game);
   player.Player.gameid=game.Game.id;
   game.Game.playerList.push(player);
+  player.Player.startX=100;
+  player.Player.startY=100;
   game_count++;
   return player.Player.gameid;
 };
@@ -27,8 +29,11 @@ var joinGame=function(player){
   if(game_count!=0){
       for(var i = 0; i<game_count; i++){
 	var temp = games[i];
-	if(temp.Game.playerList.length<4){
+	var length=temp.Game.playerList.length;
+	if(length<2){
 	  player.Player.gameid=i;
+	  player.Player.startX=100*(length+3);
+	  player.Player.startY=100*(length+3);
 	  temp.Game.playerList.push(player);
 	  validGame=true;
 	  break;
@@ -52,7 +57,7 @@ var addPlayer = function(id){
 };
 
 var checkReady = function(gameid){
-  if(games[gameid].Game.playerList.length==4){
+  if(games[gameid].Game.playerList.length==2){
     return true;
   }
   return false;
@@ -70,7 +75,15 @@ var updatePlayerData = function(data){
   return player;
 };
 
+var playLength = function(gameid){
+  return games[gameid].Game.playerList.length;
+};
 
+var getPlayers = function(gameid, i){
+  return games[gameid].Game.playerList[i];
+};
+module.exports.getPlayers=getPlayers;
+module.exports.playLength=playLength;
 module.exports.addPlayer=addPlayer;
 module.exports.removePlayer=removePlayer;
 module.exports.updatePlayerData=updatePlayerData;

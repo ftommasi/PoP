@@ -6,6 +6,8 @@ var Player= function () {
     GameObject.call(this);
     this.id; //may need id for plaryer AND game
     this.gameid;
+    this.startX;
+    this.startY;
 };
 
 inherits(Player, GameObject);
