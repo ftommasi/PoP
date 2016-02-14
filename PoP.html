@@ -14,39 +14,47 @@
   <script src="GameObjectManager.js"></script>
   <script src="GameObject.js"></script>
   <script src="Character.js"></script>
-  <script src="Game.js"></script>
+  <!--<script src="Game.js"></script>-->
   <script src="PlayerManager.js"></script>
-  <script src="PoPGame.js"></script>
-  
+  <!--<script src="PoPGame.js"></script>-->
+  <script src="Client/ClientGame.js"></script>
      <script type ="text/javascript">
+	    var game={};
+	    game = new Game(60);
 	    var socket = io();
+	    
+	    socket.on('connect', function(){
+	      socket.emit('join');
+	    });
+	    
+	    //Start game.
+	    socket.on('start', function(data){
+	      if(game.id==data){
+		//game.start();
+		console.log('Start game ' +data);
+	      }
+	    });
 	    
 	    //Client on move call updatePlayerPosition
 	    socket.on('move', function(data){
-	      updatePlayerPosition(data);
+	      game.updatePlayerPosition(data);
 	     });
-	     
-	     //Client on connect
-	     //TODO Nick initialize world,
-	     //TODO ?? requestOldPlayers -players who are already in game
-	     socket.on('connect', function(){
-	      //loadWorld()
-	      socket.emit('requestOldPlayers',{});
-	    });
 	    
 	    //CreatePlayer
 	    socket.on('createPlayer', function(data){
-	      createPlayer(data);//TODO define in client game
+	      game.id=data.Player.gameid;
+	      console.log('From createPlayer Client gameid: '+data.Player.gameid);
+	      game.addLocalPlayer(data);
 	    });
 	    
 	    //Add other players when they connect
 	    socket.on('addOtherPlayer', function(data){
-	      addOtherPlayer(data);
+	      game.addOtherPlayer(data);
 	    });
 	    
 	    //Remove other players as they leave.
 	    socket.on('removeOtherPlayer', function(data){
-	      removeOtherPlayer(data);
+	      game.removeOtherPlayer(data);
 	    });
     </script>
   </body>

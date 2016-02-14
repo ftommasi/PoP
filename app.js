@@ -29,15 +29,25 @@ io.on('connection', function(socket){
   //Add yourself to the world
   
   //world.createGame(id);
-  var player=world.addPlayer(id);
-  console.log('Player id: '+player.Player.id+' Connected to game: '+player.Player.gameid);
-  //Send so you are created locally.
-  socket.emit('createPlayer', player);
+  socket.on('join', function(){
+    var player=world.addPlayer(id);
+    console.log('Player id: '+player.Player.id+' Connected to game: '+player.Player.gameid);
+    
   
-  //Send to others so you get added.
-  socket.broadcast.emit('addOtherPlayer', player);
+    //Send so you are created locally.
+    //console.log(player);
+    socket.emit('createPlayer', player);
+    
+    //Send to others so you get added.
+    socket.broadcast.emit('addOtherPlayer', player);
+    
+    //Can we start the game?
+    if(world.checkReady(player.Player.gameid)){
+      socket.broadcast.emit('start', player.Player.gameid);
+    };
   
-  
+  });
+
   //Request the old players from the world
   socket.on('requestOldPlayers', function(){
 //     for (var i = 0; i<world.players.length; i++){
@@ -49,14 +59,12 @@ io.on('connection', function(socket){
   //Move, update world(server), broadcast to others.
   socket.on('move', function(data){
     var newData = world.updatePlayerData(data);
-    socket.broadcast.emit('move', newData);
+    //socket.broadcast.emit('move', newData);
   });
   
   //Remove other players as they disconnect.
   socket.on('disconnect', function(){
-    console.log('user disconnected');
-    io.emit('removeOtherPlayer', player);
-    world.removePlayer(player);
+ 
   });
 });
 

@@ -51,12 +51,20 @@ var addPlayer = function(id){
   return joinGame(player);
 };
 
-var removePlayer = function(player){
-  //TODO Nick call remove Player in game.
+var checkReady = function(gameid){
+  if(games[gameid].Game.playerList.length==4){
+    return true;
+  }
+  return false;
+};
+
+var removePlayer = function(id){
+  
 };
 
 var updatePlayerData = function(data){
-  var player.Player = new Player();
+  var player={};
+  player.Player = new Player();
   player.Player.gameid=data.Player.gameid;
 
   return player;
@@ -66,6 +74,7 @@ var updatePlayerData = function(data){
 module.exports.addPlayer=addPlayer;
 module.exports.removePlayer=removePlayer;
 module.exports.updatePlayerData=updatePlayerData;
+module.exports.checkReady=checkReady;
 
 
 
