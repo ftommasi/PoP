@@ -58,7 +58,7 @@ io.on('connection', function(socket){
   //Move, update world(server), broadcast to others.
   socket.on('move', function(data){
     var newData = world.updatePlayerData(data);
-    //socket.broadcast.emit('move', newData);
+    socket.broadcast.emit('move', newData);
   });
   
   //Remove other players as they disconnect.

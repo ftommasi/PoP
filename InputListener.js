@@ -1,10 +1,12 @@
 //TODO: ADD HEADER
 var keysDown = {};
 
-var InputListener = function(){
+var InputListener = function(socket){
   //TODO: Add members as necessary
   GameObject.call(this);
+  this.socket=socket;
   this.player;
+
   addEventListener("keydown", function (e) {
         keysDown[e.keyCode] = true;
     }, false);
@@ -39,7 +41,14 @@ InputListener.prototype.update = function (delta) {
 	     x_factor = 2; 
      } 
 
-     if (this.player != null) { 
+     if (this.player != null) {
+	     var message = {
+	       gameid : this.player.gamid,
+	       id :this.player.id,
+	       xFac : x_factor,
+	       yFac : y_factor
+	     };
+	     this.socket.emit('move', message);
 	     Matter.Body.setVelocity(this.player.physicsComponent, Matter.Vector.create(x_factor, y_factor)); 
      } 
 }; 
