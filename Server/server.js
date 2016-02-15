@@ -19,7 +19,7 @@ var createGame=function(player){
   player.Player.gameid=game.Game.id;
   game.Game.playerList.push(player);
   player.Player.startX=100;
-  player.Player.startY=100;
+  player.Player.startY=500;
   game_count++;
   return player.Player.gameid;
 };
@@ -33,7 +33,7 @@ var joinGame=function(player){
 	if(length<2){
 	  player.Player.gameid=i;
 	  player.Player.startX=100*(length+3);
-	  player.Player.startY=100*(length+3);
+	  player.Player.startY=500;
 	  temp.Game.playerList.push(player);
 	  validGame=true;
 	  break;
@@ -68,11 +68,7 @@ var removePlayer = function(id){
 };
 
 var updatePlayerData = function(data){
-  var player={};
-  player.Player = new Player();
-  player.Player.gameid=data.Player.gameid;
-
-  return player;
+  return data;
 };
 
 var playLength = function(gameid){

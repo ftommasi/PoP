@@ -109,9 +109,11 @@ Game.prototype.addLocalPlayer = function(player){
     this.playerList.push(player);
     this.localPlayerid=player.Player.id;
     var myCharacter = new Character(player.Player.startX, player.Player.startY, this.WorldData);
+    myCharacter.id=player.Player.id;
+    myCharacter.gameid=this.id;
     GameObjManager.AddObject(myCharacter);
     playerManager.setLocalPLayer(myCharacter);
-    var myInputManager = new InputListener();
+    var myInputManager = new InputListener(this.socket);
     myInputManager.player=myCharacter;
     GameObjManager.AddObject(myInputManager);
     console.log('add local from client');
@@ -120,9 +122,21 @@ Game.prototype.addLocalPlayer = function(player){
 Game.prototype.addOtherPlayer = function(player){
   //TODO: implement
     this.playerList.push(player);
-     var myCharacter = new Character(player.Player.startX, player.Player.startY, this.WorldData);
+    var myCharacter = new Character(player.Player.startX, player.Player.startY, this.WorldData);
+    myCharacter.id=player.Player.id;
+    myCharacter.gameid=this.id;
     GameObjManager.AddObject(myCharacter); 
     console.log('add other from client');
 };
+
+Game.prototype.updatePlayerPosition = function(data){
+  for (var i=0; i<GameObjManager.GameObjectList.length; i++){
+      var temp = GameObjManager.GameObjectList[i];
+      if((data.id!=this.localPlayerid)&&(temp.id == data.id)){
+	Matter.Body.setVelocity(temp.physicsComponent, Matter.Vector.create(data.xFac, data.yFac));
+      }
+  }
+};
+	
 
 

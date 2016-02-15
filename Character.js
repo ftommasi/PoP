@@ -21,6 +21,8 @@ var Character = function (x, y, WorldData) {
     this.oldY=y;
     this.newX;
     this.newY;
+    this.id;
+    this.gameid;
 }
 
 Character.prototype = GameObject.prototype;
