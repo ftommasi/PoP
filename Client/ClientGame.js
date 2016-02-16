@@ -32,6 +32,7 @@ var Game = function (fps) {
     this.localPlayerid;
     this.fps = fps;
     this.playerList =[];
+    this.itemList =[];	
     this.delay = 1000 / this.fps;
     this.lastTime = 0;
     this.raf = 0;
@@ -139,6 +140,10 @@ Game.prototype.updatePlayerPosition = function(data){
 	Matter.Body.setVelocity(temp.physicsComponent, Matter.Vector.create(data.xFac, data.yFac));
       }
   }
+
+Game.prototype.addItem(item){
+  this.itemList.push(item); 
+}
 };
 	
 

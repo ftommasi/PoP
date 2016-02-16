@@ -3,11 +3,15 @@
 *  Purpose: item class to be used for weapons and powerups   
 */
 
-function Item(){
+function Item(x,y,width,height,damage,worldData){
   GameObject.call(this);
-  this.damage;
-  this.width;
-  this.height;
+  this.AddPhysicsComponent(x,y,new RectBodyData(width,height),wolrdData) ;
+  this.damage=damage;
+  this.width=width;
+  this.height=heigh;
+
+  this.id;
+  this.gameid;
 };
 
 Item.prototype = GameObject.prototype;

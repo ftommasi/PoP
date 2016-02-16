@@ -1,6 +1,6 @@
 //TODO: ADD HEADER
 var keysDown = {};
-
+var isAttacking = false;
 var InputListener = function(socket){
   //TODO: Add members as necessary
   GameObject.call(this);
@@ -39,7 +39,13 @@ InputListener.prototype.update = function (delta) {
      } 
      if (39 in keysDown) { // right 
 	     x_factor = 2; 
-     } 
+     }
+
+     if (32 in keysDown){ //Spacebar
+        //TODO(Fausto): implement attack
+	isAttacking = !isAttacking;
+     
+     }  
 
      if (this.player != null) {
 	     var message = {
@@ -50,6 +56,14 @@ InputListener.prototype.update = function (delta) {
 	     };
 	     this.socket.emit('move', message);
 	     Matter.Body.setVelocity(this.player.physicsComponent, Matter.Vector.create(x_factor, y_factor)); 
+
+	     if(isAttacking){
+		     this.player.attack();
+	     } 
+	     
+	     else {
+		     this.player.stopAttack();
+	     }
      } 
 }; 
 
