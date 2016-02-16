@@ -9,3 +9,4 @@ node_modules/
 .idea/vcs.xml
 .idea/workspace.xml
 PoP.iml
+*.swp
