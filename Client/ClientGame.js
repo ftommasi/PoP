@@ -4,6 +4,7 @@
 */
 var GameObjManager;
 var playerManager;
+var WorldData;
 
 //TODO: make game render here
 var tick = function (delay) {
@@ -34,7 +35,6 @@ var Game = function (fps) {
     this.delay = 1000 / this.fps;
     this.lastTime = 0;
     this.raf = 0;
-    this.WorldData;
     this.engine;
     this.onUpdate = function (delta) {
     };
@@ -48,7 +48,12 @@ var Game = function (fps) {
     // create a Matter.js engine
     this.engine = Engine.create(document.body);
     // encapsulate data
-    this.WorldData = new WorldContainer(this.engine, World, Bodies);
+    WorldData = new WorldContainer(this.engine, World, Bodies);
+    var renderOptions = this.engine.render.options;
+    renderOptions.background = './assets/Background.png';
+    renderOptions.showAngleIndicator = false;
+    renderOptions.wireframes = false;
+    Matter.Engine.run(this.engine);
 
     // create a GameObjectManager
     GameObjManager = new GameObjectManager();
@@ -59,8 +64,6 @@ var Game = function (fps) {
     // create a ground
     var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
     World.add(this.engine.world, ground);
-    
-    Matter.Engine.run(this.engine);
 };
 
 Game.prototype.update = function (delta) {
@@ -108,7 +111,7 @@ Game.prototype.addLocalPlayer = function(player){
   //TODO: implement
     this.playerList.push(player);
     this.localPlayerid=player.Player.id;
-    var myCharacter = new Character(player.Player.startX, player.Player.startY, this.WorldData);
+    var myCharacter = new Character(player.Player.startX, player.Player.startY);
     myCharacter.id=player.Player.id;
     myCharacter.gameid=this.id;
     GameObjManager.AddObject(myCharacter);
@@ -122,7 +125,7 @@ Game.prototype.addLocalPlayer = function(player){
 Game.prototype.addOtherPlayer = function(player){
   //TODO: implement
     this.playerList.push(player);
-    var myCharacter = new Character(player.Player.startX, player.Player.startY, this.WorldData);
+    var myCharacter = new Character(player.Player.startX, player.Player.startY);
     myCharacter.id=player.Player.id;
     myCharacter.gameid=this.id;
     GameObjManager.AddObject(myCharacter); 

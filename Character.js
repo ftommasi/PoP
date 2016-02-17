@@ -10,9 +10,9 @@
 //                 Character size
 //
 // Takes optional anonymous object as initialization arguments
-var Character = function (x, y, WorldData) {
+var Character = function (x, y, texture_location) {
     GameObject.call(this);
-    this.AddPhysicsComponent(x, y, new RectBodyData(80, 80), WorldData);
+    this.AddPhysicsComponent(x, y, new RectBodyData(80, 80), texture_location);
 
     //set these values so we don't rotate as we collide with stuff
     this.physicsComponent.inertia = Infinity;
