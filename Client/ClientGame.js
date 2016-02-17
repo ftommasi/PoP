@@ -1,4 +1,4 @@
-/* Author/Contributors: Saddha Santanaporn
+/* Author/Contributors: Saddha Santanaporn, Fausto Tommasi
 *  Date: 2/9/2016
 *  Purpose: Create the main game loop
 */
@@ -139,6 +139,13 @@ Game.prototype.updatePlayerPosition = function(data){
       if((data.id!=this.localPlayerid)&&(temp.id == data.id)){
 	Matter.Body.setVelocity(temp.physicsComponent, Matter.Vector.create(data.xFac, data.yFac));
       }
+   //RENDER ITEM ON GROUND   
+   for(var i=0; i<this.itemList.length; i++){
+       if((data.id!=this.localPlayerid)&&(temp.id == data.id)){ //dont know if we need this
+         Matter.Body.setVelocity(itemList[i].physicsComponent, Matter.Vector.create(0,0)); // still object
+       
+       } 
+    }
   }
 
 Game.prototype.addItem(item){
