@@ -64,7 +64,11 @@ var Game = function (fps) {
   
     // create a ground
     var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
+    var item = new Item(10,10,10,10,10,this.engine.world);
+    item.body = Bodies.rectangle(40, 60, 80, 60, { isStatic: true });
+
     World.add(this.engine.world, ground);
+    World.add(this.engine.world,item.body);
 };
 
 Game.prototype.update = function (delta) {
@@ -139,19 +143,20 @@ Game.prototype.updatePlayerPosition = function(data){
       if((data.id!=this.localPlayerid)&&(temp.id == data.id)){
 	Matter.Body.setVelocity(temp.physicsComponent, Matter.Vector.create(data.xFac, data.yFac));
       }
-   //RENDER ITEM ON GROUND   
+  }
+  //RENDER ITEM ON GROUND   
    for(var i=0; i<this.itemList.length; i++){
        if((data.id!=this.localPlayerid)&&(temp.id == data.id)){ //dont know if we need this
          Matter.Body.setVelocity(itemList[i].physicsComponent, Matter.Vector.create(0,0)); // still object
        
        } 
     }
-  }
 
-Game.prototype.addItem(item){
+};
+
+Game.prototype.addItem = function (item){
   this.itemList.push(item); 
 }
-};
 	
 
 

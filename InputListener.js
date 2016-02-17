@@ -58,11 +58,12 @@ InputListener.prototype.update = function (delta) {
 	     Matter.Body.setVelocity(this.player.physicsComponent, Matter.Vector.create(x_factor, y_factor)); 
 
 	     if(isAttacking){
-		     this.player.attack();
+		     console.log("IN ATTACK: " +  typeof(this.player));
+//		     this.player.attack();
 	     } 
 	     
 	     else {
-		     this.player.stopAttack();
+//		     this.player.stopAttack();
 	     }
      } 
 }; 
