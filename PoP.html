@@ -41,6 +41,10 @@
 	    //Client on move call updatePlayerPosition
 	    socket.on('move', function(data){
 	      game.updatePlayerPosition(data);
+	      if(data.attack == true){
+	        game.attack(data);
+	      }
+
 	     });
 	    
 	    //CreatePlayer

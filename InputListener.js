@@ -52,14 +52,14 @@ InputListener.prototype.update = function (delta) {
 	       gameid : this.player.gamid,
 	       id :this.player.id,
 	       xFac : x_factor,
-	       yFac : y_factor
+	       yFac : y_factor,
+	       attack: isAttacking
 	     };
 	     this.socket.emit('move', message);
 	     Matter.Body.setVelocity(this.player.physicsComponent, Matter.Vector.create(x_factor, y_factor)); 
 
 	     if(isAttacking){
 		     if(!this.item){
-			     console.log("x:"+(this.player.physicsComponent.type));
 			     this.item = new Item(this.player.physicsComponent.position.x,this.player.physicsComponent.position.y,10,10);
 			   //  this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,80,{isStatic: true});
 			     isAttacking = false;

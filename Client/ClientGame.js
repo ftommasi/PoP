@@ -167,5 +167,19 @@ Game.prototype.addItem = function (item){
   //TODO(Fausto): Make sure that item is still
 }
 	
+Game.prototype.attack = function(data){
+  for (var i=0; i<GameObjManager.GameObjectList.length; i++){
+      var temp = GameObjManager.GameObjectList[i];
+      if((data.id!=this.localPlayerid)&&(temp.id == data.id)){
+        this.item = new Item(temp.physicsComponent.position.x,temp.physicsComponent.position.y,10,10);
+     //  this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,80,{isStatic: true});
 
+      
+      }
+  }
+ 
+     											                     }
+
+
+};
 
