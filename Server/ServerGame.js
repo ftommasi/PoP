@@ -26,6 +26,7 @@ var Game = function (fps) {
     this.fps = fps;
     this.id;
     this.playerList = [];
+    this.itemList = [];
     this.delay = 1000 / this.fps;
     this.lastTime = 0;
     this.raf = 0;
@@ -57,4 +58,8 @@ Game.prototype.stop = function () {
 	//cancelAnimationFrame(this.raf);
         this.raf = 0;
     }
+};
+
+Game.prototype.addItem = function (item){
+  this.itemList.push(item);
 };

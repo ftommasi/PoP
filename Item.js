@@ -1,33 +1,19 @@
-/* Author/Contributors: Fausto Tommasi
-*  Date: 2/14/2016
-*  Purpose: Item class for weapons and power-ups
+/* Author/Contributor: Fausto Tommasi
+*  Date: 2/16/2016
+*  Purpose: item class to be used for weapons and powerups   
 */
-function Item(damage,height,width,worldData){
-    GameObject.call(this);
-    this.damage = damage;
-    this.height = height;
-    this.width = width;
-    this.worldData = worldData;
+
+function Item(x,y,width,height,damage,worldData){
+  GameObject.call(this);
+  this.AddPhysicsComponent(x,y,new RectBodyData(width,height)) ;
+  this.body;
+  this.damage=damage;
+  this.width=width;
+  this.height=height;
+
+  this.id;
+  this.gameid;
 };
-
-
-Item.prototype.activate = function(){
-    //activate collision and damage (think of swinging a sword)
-    //this.addPhysicsComponent(this.x,this.y,Matter.Bodies.rectangle(this.x,this.y,this.height,this.width));
-    this.MakeRigidBody(this.x,this.y.this.worldData,this.width,this.height);
-    
-    
-    
-};
-
-
-Item.prototype.deactivate = function(){
-    //deactivate collision (idle sword)
-    this.physicsComponent = null;
-    
-}
 
 Item.prototype = GameObject.prototype;
-Item.prototype.contructor = Item;
-
-module.exports.Item = Item;
+Item.prototype.constructor = Item;

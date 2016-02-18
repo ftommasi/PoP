@@ -31,6 +31,7 @@ io.on('connection', function(socket){
   //world.createGame(id);
   socket.on('join', function(){
     var player=world.addPlayer(id);
+//    var item = world.addItem(id)
     console.log('Player id: '+player.Player.id+' Connected to game: '+player.Player.gameid);
     
   
@@ -54,7 +55,6 @@ io.on('connection', function(socket){
     };
   
   });
-  
   //Move, update world(server), broadcast to others.
   socket.on('move', function(data){
     var newData = world.updatePlayerData(data);

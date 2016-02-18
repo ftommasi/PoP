@@ -23,6 +23,8 @@ var Character = function (x, y, texture_location) {
     this.newY;
     this.id;
     this.gameid;
+
+    this.item;
 }
 
 Character.prototype = GameObject.prototype;
