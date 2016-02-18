@@ -64,8 +64,8 @@ var Game = function (fps) {
   
     // create a ground
     var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
-    var item = new Item(10,10,10,10,10,this.engine.world);
-    item.body = Bodies.rectangle(40, 60, 80, 60, { isStatic: true });
+    var item = new Item(10,10,10,10,10);
+    item.body = Bodies.rectangle(400, 600, 80, 60, { isStatic: true });
 
     World.add(this.engine.world, ground);
     World.add(this.engine.world,item.body);

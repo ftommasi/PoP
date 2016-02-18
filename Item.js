@@ -5,7 +5,7 @@
 
 function Item(x,y,width,height,damage,worldData){
   GameObject.call(this);
- this.AddPhysicsComponent(x,y,new RectBodyData(width,height),wolrdData) ;
+  this.AddPhysicsComponent(x,y,new RectBodyData(width,height)) ;
   this.body;
   this.damage=damage;
   this.width=width;
