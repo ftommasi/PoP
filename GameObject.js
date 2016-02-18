@@ -1,4 +1,4 @@
-/* Author/Contributors: Saddha Santanaporn
+/* Author/Contributors: Saddha Santanaporn, Fausto Tommasi
 *  Date: 2/9/2016
 *  Purpose: Hold states for an object that wants to use the game loop
 */
@@ -14,6 +14,12 @@ GameObject.prototype.AddPhysicsComponent = function (x, y, RigidBodyData, textur
 
 GameObject.prototype.update = function (delta) {
 
+};
+
+
+//function wrapper that takes annonymous function @param
+GameObject.prototype.onCollision = function(object){
+  Matter.Events.on(this.physicsComponent,"collision",object);
 };
 
 

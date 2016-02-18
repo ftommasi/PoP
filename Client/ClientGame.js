@@ -157,8 +157,15 @@ Game.prototype.updatePlayerPosition = function(data){
          Matter.Body.setVelocity(itemList[i].physicsComponent, Matter.Vector.create(0,0)); // still object
        
        } 
-    }
 
+      itemList[i].onCollision( function(){
+         //TODO(Fausto): implement item on Collision method
+	 //remove item from list
+	 this.itemList.splice(this.itemList.indexOf(itemList[i]),1);
+	}); 
+
+    }
+  
 };
 
 //TODO(Networking): implement in Server Game 
