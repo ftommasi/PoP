@@ -31,7 +31,10 @@ var Game = function (fps) {
     this.socket;
     this.localPlayerid;
     this.fps = fps;
+    
+    //TODO(Networking): implement in Server Game 
     this.playerList =[];
+
     this.itemList =[];	
     this.delay = 1000 / this.fps;
     this.lastTime = 0;
@@ -64,10 +67,14 @@ var Game = function (fps) {
   
     // create a ground
     var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
+    
+    //TODO(Networking): implement in Server Game 
     var item = new Item(10,10,10,10,10);
     item.body = Bodies.rectangle(400, 600, 80, 60, { isStatic: true });
 
     World.add(this.engine.world, ground);
+
+    //TODO(Networking): implement in Server Game 
     World.add(this.engine.world,item.body);
 };
 
@@ -154,8 +161,10 @@ Game.prototype.updatePlayerPosition = function(data){
 
 };
 
+//TODO(Networking): implement in Server Game 
 Game.prototype.addItem = function (item){
-  this.itemList.push(item); 
+  this.itemList.push(item);
+  //TODO(Fausto): Make sure that item is still
 }
 	
 
