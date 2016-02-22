@@ -3,16 +3,19 @@
 *  Purpose: Handles setting up the server to handle connections and pass stuff around.
 */
 
-
+//Grabs all node modules, and the server file for use.
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var UUID = require('node-uuid');
 var world = require('./Server/server.js');
 
+//Send the index page
 app.get('/', function(req, res){
       res.sendFile(__dirname + '/index.html');
 });
+
+//Send any page requested.
 app.get('/*', function(req, res){
     var file = req.params[0];
       //Send the requesting client the file.
@@ -20,28 +23,25 @@ app.get('/*', function(req, res){
 });
 
 io.on('connection', function(socket){
-   
+  //Redifine the socket id.
   socket.id = UUID();
   var id = socket.id;
   console.log('a user connected with id '+socket.id);
-  
-  //TODO Nick find/create game here and add (use that game as world).
-  //Add yourself to the world
-  
-  //world.createGame(id);
+  //When a client calls join do this.
   socket.on('join', function(){
+    //Find a game.
     var player=world.addPlayer(id);
-//    var item = world.addItem(id)
     console.log('Player id: '+player.Player.id+' Connected to game: '+player.Player.gameid);
     
   
     //Send so you are created locally.
-    //console.log(player);
     socket.emit('createPlayer', player);
     
     //Send to others so you get added.
+    //TODO bind this socket to a room.
     socket.broadcast.emit('addOtherPlayer', player);
     
+    //Send the players in the game to the client who just connected.
     for (var i =0; i<world.playLength(player.Player.gameid); i++){
       var temp = world.getPlayers(player.Player.gameid, i);
       if(temp.Player.id!=player.Player.id){
@@ -55,13 +55,14 @@ io.on('connection', function(socket){
     };
   
   });
+  
   //Move, update world(server), broadcast to others.
   socket.on('move', function(data){
     var newData = world.updatePlayerData(data);
     socket.broadcast.emit('move', newData);
   });
   
-  //Remove other players as they disconnect.
+  //TODO Remove other players as they disconnect.
   socket.on('disconnect', function(){
  
   });
@@ -69,7 +70,7 @@ io.on('connection', function(socket){
 
 var port = 4004;
 var ip_address = '0.0.0.0';
-
+//Set to listen on this ip and this port.
 http.listen(port, ip_address, function(){
   console.log("Listening on " + ip_address + ", port " + port);
 });
