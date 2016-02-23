@@ -5,6 +5,7 @@
 var GameObjManager;
 var playerManager;
 var WorldData;
+var Events = Matter.Events;
 
 //TODO: make game render here
 var tick = function (delay) {
@@ -49,6 +50,7 @@ var Game = function (fps) {
     var Engine = Matter.Engine,
         World = Matter.World,
         Bodies = Matter.Bodies;
+	Events = Matter.Events;
     // create a Matter.js engine
     this.engine = Engine.create(document.body);
     // encapsulate data
@@ -76,8 +78,19 @@ var Game = function (fps) {
 
     //TODO(Networking): implement in Server Game 
     World.add(this.engine.world,item.body);
+    
+    Events.on(this.engine, 'collisionStart', function(event) {
+      var pairs = event.pairs;
+      for (var i = 0; i < pairs.length; i++) {
+	var pair = pairs[i];
+	//do more stuff here
+	console.log("hit coll");
+      }
+    });
 };
 
+
+  
 Game.prototype.update = function (delta) {
     this.onUpdate(delta);
     console.log('update');
@@ -155,9 +168,10 @@ Game.prototype.updatePlayerPosition = function(data){
    for(var i=0; i<this.itemList.length; i++){
        if((data.id!=this.localPlayerid)&&(temp.id == data.id)){ //dont know if we need this
          Matter.Body.setVelocity(itemList[i].physicsComponent, Matter.Vector.create(0,0)); // still object
-       
-       } 
-    }
+       }
+   }
+      /*   Matter.Events.on(itemList[i].physicsComponent, "collisionStart", function(event){
+	   console.log("Collision against object ", event.object);*/
 
 };
 
@@ -178,4 +192,8 @@ Game.prototype.attack = function(data){
   }
 
 };
+
+
+
+
 
