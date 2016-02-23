@@ -121,27 +121,35 @@ Game.prototype.stop = function () {
 
 Game.prototype.addLocalPlayer = function(player){
   //TODO: implement
-    this.playerList.push(player);
-    this.localPlayerid=player.Player.id;
-    var myCharacter = new Character(player.Player.startX, player.Player.startY);
-    myCharacter.id=player.Player.id;
-    myCharacter.gameid=this.id;
-    GameObjManager.AddObject(myCharacter);
-    playerManager.setLocalPLayer(myCharacter);
-    var myInputManager = new InputListener(this.socket);
-    myInputManager.player=myCharacter;
-    GameObjManager.AddObject(myInputManager);
-    console.log('add local from client');
+  var newPlayer = new ClientPlayer(player.newX, player.newY, null, player.id, false);
+  newPlayer.oldX = player.oldX;
+  newPlayer.oldY = player.oldY;
+  newPlayer.gameid = player.gameid; 
+  this.playerList.push(newPlayer);
+  this.localPlayerid=newPlayer.id;
+  //var myCharacter = new Character(player.Player.startX, player.Player.startY);
+  //myCharacter.id=player.Player.id;
+  //myCharacter.gameid=this.id;
+  GameObjManager.AddObject(newPlayer);
+  playerManager.setLocalPLayer(newPlayer);
+  var myInputManager = new InputListener(this.socket);
+  myInputManager.player=newPlayer;
+  GameObjManager.AddObject(myInputManager);
+  console.log('add local from client');
 };
 
 Game.prototype.addOtherPlayer = function(player){
   //TODO: implement
-    this.playerList.push(player);
-    var myCharacter = new Character(player.Player.startX, player.Player.startY);
-    myCharacter.id=player.Player.id;
-    myCharacter.gameid=this.id;
-    GameObjManager.AddObject(myCharacter); 
-    console.log('add other from client');
+  var newPlayer = new ClientPlayer(player.newX, player.newY, null, player.id, false);
+  newPlayer.oldX = player.oldX;
+  newPlayer.oldY = player.oldY;
+  newPlayer.gameid = player.gameid; 
+  this.playerList.push(newPlayer);
+  //var myCharacter = new Character(player.Player.startX, player.Player.startY);
+  //myCharacter.id=player.Player.id;
+  //myCharacter.gameid=this.id;
+  GameObjManager.AddObject(newPlayer); 
+  console.log('add other from client');
 };
 
 Game.prototype.updatePlayerPosition = function(data){

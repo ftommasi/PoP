@@ -2,20 +2,16 @@
 - Teams
 - Player team assignment
 - Colored character models
-- Character movement
 - Character jumping
-- Character falling
 - Character running
 - Player/environment collision
 - Stage design
 - Randomly generated stages
 - Networking
-- Matchmaking
-- Multiplayer support
 - Party/invite system
 - NPCs
 - Environmental hazards
-- Items
+- Weapons
 - "As a normal player, I want the game to provide instructions so that I can easily understand how to
   play the game."
 - Character health/size
@@ -24,3 +20,6 @@
 - Toggle sound
 - Leaderboards
 - Player stats
+- Character Death State
+- Game win/loss state
+

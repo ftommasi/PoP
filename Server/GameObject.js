@@ -46,3 +46,5 @@ CircleBodyData.prototype.MakeRigidBody = function (x, y, WorldData) {
 };
 
 module.exports = GameObject;
+module.exports.RectBodyData = RectBodyData;
+module.exports.CircleBodyData = CircleBodyData;

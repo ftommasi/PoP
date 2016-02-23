@@ -3,35 +3,9 @@
 *  Purpose: Create the main game loop
 */
 
-var tick = function (delay) {
-    var _delay = delay;
-    var timer;
-    if (typeof requestAnimationFrame === 'undefined') {
-        timer = function (cb) {
-            setImmediate(function () {
-                cb(_delay);
-            }, _delay);
-        }
-    } else {
-        timer = window.requestAnimationFrame;
-    }
-    return function (cb) {
-        return timer(cb);
-    }
-};
-
-tick = tick(100);
-
-var Game = function (fps) {
-    this.fps = fps;
-    this.id;
-    this.playerList = [];
-    this.itemList = [];
-    this.delay = 1000 / this.fps;
-    this.lastTime = 0;
-    this.raf = 0;
-    this.onUpdate = function (delta) {
-    };
+var Game = function () {
+  this.id;
+  this.playerList = [];
 };
 
 module.exports =global.Game = Game;
@@ -63,3 +37,4 @@ Game.prototype.stop = function () {
 Game.prototype.addItem = function (item){
   this.itemList.push(item);
 };
+
