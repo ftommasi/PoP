@@ -1,0 +1,12 @@
+Sprint 2 Backlog
+
+Goal: Figure out server/client timing issues and game state synchronization. Get character stuff working. Improve game world. Get items and weapons working.
+
+- Character size
+- Death state
+- Game win/loss state
+- Server/client timing issues
+- Game state synchronization
+- Game world improvements
+- Weapons
+- WWW folder hooks

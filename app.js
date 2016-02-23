@@ -25,33 +25,48 @@ app.get('/*', function(req, res){
 io.on('connection', function(socket){
   //Redifine the socket id.
   socket.id = UUID();
-  var id = socket.id;
+  var socketid = socket.id;
   console.log('a user connected with id '+socket.id);
   //When a client calls join do this.
   socket.on('join', function(){
     //Find a game.
-    var player=world.addPlayer(id);
-    console.log('Player id: '+player.Player.id+' Connected to game: '+player.Player.gameid);
+    var player=world.addPlayer(socketid);
+    console.log('Player id: '+player.ServerPlayer.id+' Connected to game: '+player.ServerPlayer.gameid);
     
-  
+    var message = {
+      id : player.ServerPlayer.id,
+      gameid : player.ServerPlayer.gameid,
+      oldX : player.ServerPlayer.oldX,
+      oldY : player.ServerPlayer.oldY,
+      newX : player.ServerPlayer.newX,
+      newY : player.ServerPlayer.newY
+    };
     //Send so you are created locally.
-    socket.emit('createPlayer', player);
+    socket.emit('createPlayer', message);
     
     //Send to others so you get added.
     //TODO bind this socket to a room.
-    socket.broadcast.emit('addOtherPlayer', player);
-    
+    socket.broadcast.emit('addOtherPlayer', message);
+
     //Send the players in the game to the client who just connected.
-    for (var i =0; i<world.playLength(player.Player.gameid); i++){
-      var temp = world.getPlayers(player.Player.gameid, i);
-      if(temp.Player.id!=player.Player.id){
-	socket.emit('RequestOldPlayer', temp);
+    for (var i =0; i<world.playLength(player.ServerPlayer.gameid); i++){
+      var temp = world.getPlayers(player.ServerPlayer.gameid, i);
+      if(temp.ServerPlayer.id!=player.ServerPlayer.id){
+        var socketMessage = {
+          id : temp.ServerPlayer.id,
+          gameid : temp.ServerPlayer.gameid,
+          oldX : temp.ServerPlayer.oldX,
+          oldY : temp.ServerPlayer.oldY,
+          newX : temp.ServerPlayer.newX,
+          newY : temp.ServerPlayer.newY
+        };
+	socket.emit('RequestOldPlayer', socketMessage);
       }
     }
     
     //Can we start the game?
-    if(world.checkReady(player.Player.gameid)){
-      socket.broadcast.emit('start', player.Player.gameid);
+    if(world.checkReady(player.ServerPlayer.gameid)){
+      socket.broadcast.emit('start', player.ServerPlayer.gameid);
     };
   
   });

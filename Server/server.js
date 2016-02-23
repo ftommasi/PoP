@@ -10,7 +10,7 @@ var game_count=0;
 
 //Grab the game engine and the player class
 require('./ServerGame.js');
-require('./Player.js');
+require('./ServerPlayer.js');
 
 //Creates a game for the player
 var createGame=function(player){
@@ -20,12 +20,12 @@ var createGame=function(player){
   game.Game=new Game(60);
   game.Game.id=game_count;
   games.push(game);
-  player.Player.gameid=game.Game.id;
+  player.ServerPlayer.gameid=game.Game.id;
   game.Game.playerList.push(player);
-  player.Player.startX=100;
-  player.Player.startY=500;
+  player.ServerPlayer.newX=100;
+  player.ServerPlayer.newY=500;
   game_count++;
-  return player.Player.gameid;
+  return player.ServerPlayer.gameid;
 };
 
 //Looks for an available, valid game, if none a createGame is called.
@@ -36,20 +36,20 @@ var joinGame=function(player){
 	var temp = games[i];
 	var length=temp.Game.playerList.length;
 	if(length<4){
-	  player.Player.gameid=i;
-	  player.Player.startX=100*(length+3);
-	  player.Player.startY=500;
+	  player.ServerPlayer.gameid=i;
+	  player.ServerPlayer.newX=100*(length+3);
+	  player.ServerPlayer.newY=500;
 	  temp.Game.playerList.push(player);
 	  validGame=true;
 	  break;
 	}
       }
       if(!validGame){
-	player.Player.gameid=createGame(player);
+	player.ServerPlayer.gameid=createGame(player);
       }
   }
   else{
-    player.Player.gameid=createGame(player);
+    player.ServerPlayer.gameid=createGame(player);
   }
   return player;
 };
@@ -57,8 +57,7 @@ var joinGame=function(player){
 //Adds a player to a game.
 var addPlayer = function(id){
   var player={}; 
-  player.Player = new Player();
-  player.Player.id=id;
+  player.ServerPlayer = new ServerPlayer(100, 100, '../assets/Orb of Blood.png', id, false);
   return joinGame(player);
 };
 
