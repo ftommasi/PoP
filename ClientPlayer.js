@@ -18,7 +18,7 @@ var ClientPlayer= function (x, y, texture_location, id, isServer) {
 }
 
 ClientPlayer.prototype = GameObject.prototype;
-ClientPlayer.prototype.contructor = Player;
+ClientPlayer.prototype.contructor = ClientPlayer;
 
 ClientPlayer.prototype.attack = function(){
   this.item = new Item(this.x,this.y,100,100,100,this.worldData);

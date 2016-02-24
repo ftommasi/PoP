@@ -31,42 +31,26 @@ io.on('connection', function(socket){
   socket.on('join', function(){
     //Find a game.
     var player=world.addPlayer(socketid);
-    console.log('Player id: '+player.ServerPlayer.id+' Connected to game: '+player.ServerPlayer.gameid);
+    console.log('Player id: '+player.id+' Connected to game: '+player.gameid);
     
-    var message = {
-      id : player.ServerPlayer.id,
-      gameid : player.ServerPlayer.gameid,
-      oldX : player.ServerPlayer.oldX,
-      oldY : player.ServerPlayer.oldY,
-      newX : player.ServerPlayer.newX,
-      newY : player.ServerPlayer.newY
-    };
     //Send so you are created locally.
-    socket.emit('createPlayer', message);
+    socket.emit('createPlayer', player);
     
     //Send to others so you get added.
     //TODO bind this socket to a room.
-    socket.broadcast.emit('addOtherPlayer', message);
+    socket.broadcast.emit('addOtherPlayer', player);
 
     //Send the players in the game to the client who just connected.
-    for (var i =0; i<world.playLength(player.ServerPlayer.gameid); i++){
-      var temp = world.getPlayers(player.ServerPlayer.gameid, i);
-      if(temp.ServerPlayer.id!=player.ServerPlayer.id){
-        var socketMessage = {
-          id : temp.ServerPlayer.id,
-          gameid : temp.ServerPlayer.gameid,
-          oldX : temp.ServerPlayer.oldX,
-          oldY : temp.ServerPlayer.oldY,
-          newX : temp.ServerPlayer.newX,
-          newY : temp.ServerPlayer.newY
-        };
-	socket.emit('RequestOldPlayer', socketMessage);
+    for (var i =0; i<world.playLength(player.gameid); i++){
+      var temp = world.getPlayers(player.gameid, i);
+      if(temp.id!=player.id){
+	socket.emit('RequestOldPlayer', temp);
       }
     }
     
     //Can we start the game?
-    if(world.checkReady(player.ServerPlayer.gameid)){
-      socket.broadcast.emit('start', player.ServerPlayer.gameid);
+    if(world.checkReady(player.gameid)){
+      socket.broadcast.emit('start', player.gameid);
     };
   
   });
