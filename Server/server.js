@@ -9,7 +9,7 @@ var games = [];
 var game_count=0;
 
 //Grab the game engine
-require('./ServerGame.js');
+require('./ServerGame2.js');
 
 //Creates a game for the player
 var createGame=function(player){
@@ -20,9 +20,9 @@ var createGame=function(player){
   game.Game.id=game_count;
   games.push(game);
   player.gameid=game.Game.id;
-  game.Game.playerList.push(player);
   player.newX=100;
   player.newY=500;
+  game.Game.addOtherPlayer(player);
   game_count++;
   return player.gameid;
 };
@@ -38,7 +38,7 @@ var joinGame=function(player){
 	  player.gameid=i;
 	  player.newX=100*(length+3);
 	  player.newY=500;
-	  temp.Game.playerList.push(player);
+	  temp.Game.addOtherPlayer(player);
 	  validGame=true;
 	  break;
 	}

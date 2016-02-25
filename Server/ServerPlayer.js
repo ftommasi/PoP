@@ -2,9 +2,9 @@
 //TODO: Implement Player functions
 var GameObject = require('./GameObject.js')
 		, inherits = require('util').inherits;
-var ServerPlayer= function (x, y, texture_location, id, isServer) {
+var ServerPlayer= function (x, y, texture_location, id, isServer, GameObjManager) {
     GameObject.call(this);
-    this.AddPhysicsComponent(x, y, new GameObject.RectBodyData(80, 80), texture_location);
+    this.AddPhysicsComponent(x, y, new GameObject.RectBodyData(80, 80), texture_location, GameObjManager);
 
     //set these values so we don't rotate as we collide with stuff
     this.physicsComponent.inertia = Infinity;
