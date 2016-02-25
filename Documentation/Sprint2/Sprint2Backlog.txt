@@ -2,11 +2,12 @@ Sprint 2 Backlog
 
 Goal: Figure out server/client timing issues and game state synchronization. Get character stuff working. Improve game world. Get items and weapons working.
 
-- Character size
-- Death state
-- Game win/loss state
-- Server/client timing issues
-- Game state synchronization
-- Game world improvements
-- Weapons
-- WWW folder hooks
+- Character size = 3 sprint points
+- Death state = 5 sprint points
+- Game win/loss state = 3 sprint points
+- Server/client lag issues = 20 sprint points
+- Game state synchronization = 20 sprint points
+- Better movement = 3 sprint points
+- More/better maps = 3 sprint points
+- Weapons = 5 sprint points
+- WWW folder hooks = 1/2 sprint points
