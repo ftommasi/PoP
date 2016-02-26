@@ -9,10 +9,10 @@ var ServerPlayer= function (x, y, texture_location, id, isServer, GameObjManager
     //set these values so we don't rotate as we collide with stuff
     this.physicsComponent.inertia = Infinity;
     this.physicsComponent.inverseInertia = 0;
-    this.oldX=x;
-    this.oldY=y;
-    this.newX;
-    this.newY;
+    this.oldX;
+    this.oldY;
+    this.newX=x;
+    this.newY=y;
     this.id = id; //may need id for plaryer AND game
     this.gameid;
     this.item;

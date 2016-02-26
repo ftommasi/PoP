@@ -42,6 +42,7 @@ io.on('connection', function(socket){
 
     //Send the players in the game to the client who just connected.
     for (var i =0; i<world.playLength(player.gameid); i++){
+
       var temp = world.getPlayers(player.gameid, i);
       if(temp.id!=player.id){
 	socket.emit('RequestOldPlayer', temp);

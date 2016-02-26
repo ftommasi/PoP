@@ -9,7 +9,7 @@ var games = [];
 var game_count=0;
 
 //Grab the game engine
-require('./ServerGame2.js');
+require('./ServerGame.js');
 
 //Creates a game for the player
 var createGame=function(player){
@@ -93,7 +93,23 @@ var playLength = function(gameid){
 
 //Returns the playerlist for this game.
 var getPlayers = function(gameid, i){
-  return games[gameid].Game.playerList[i];
+    var player={
+    id : null,
+    gameid: null,
+    oldX: null,
+    oldY: null,
+    newX: null,
+    newY: null
+  }; 
+  
+  var temp = games[gameid].Game.playerList[i];
+  player.id = temp.ServerPlayer.id;
+  player.gameid=temp.ServerPlayer.gameid;
+  player.oldX = temp.ServerPlayer.oldX;
+  player.oldY=temp.ServerPlayer.oldY;
+  player.newX=temp.ServerPlayer.newX;
+  player.newY=temp.ServerPlayer.newY;
+  return player;
 };
 
 //Exports all the functions so they can be used with node.
