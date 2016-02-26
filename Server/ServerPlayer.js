@@ -23,6 +23,9 @@ inherits(ServerPlayer, GameObject);
 //Player.prototype.contructor = Player;
 module.exports =global.ServerPlayer = ServerPlayer;
 
+ServerPlayer.prototype.update = function(delta){
+  ServerPlayer.super_.prototype.update(delta);
+};
 ServerPlayer.prototype.attack = function(){
     this.item = new Item(this.x,this.y,100,100,100,this.worldData);  
 };

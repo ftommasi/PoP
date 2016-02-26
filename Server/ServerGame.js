@@ -77,7 +77,7 @@ module.exports = global.Game = Game;
 Game.prototype.update = function (delta) {
     this.onUpdate(delta);
     console.log('update');
-           GameObjManager.UpdateAll(delta);
+    GameObjManager.GameObjectManager.UpdateAll(delta);
 
         // run the engine
         //Matter.Engine.update(this.engine,e delta);
@@ -97,7 +97,7 @@ Game.prototype.loop = function (now) {
     //this.raf = requestAnimationFrame(this.loop.bind(this));
     //var delta = now - this.lastTime;
     //if (delta >= this.delay) {
-      console.log('new delta');
+      //console.log('new delta');
       //this.update(delta);
       //this.render();
       //this.lastTime = now;

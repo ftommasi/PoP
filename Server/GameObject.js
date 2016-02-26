@@ -60,7 +60,7 @@ CircleBodyData.prototype.MakeRigidBody = function (x, y, worldData, texture_loca
     return body;
 };
 
-module.exports = GameObject;
+module.exports =GameObject;
 module.exports.RectBodyData = RectBodyData;
 module.exports.CircleBodyData = CircleBodyData;
 module.exports.WorldContainer=WorldContainer;
