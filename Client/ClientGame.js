@@ -79,14 +79,14 @@ var Game = function (fps) {
     //TODO(Networking): implement in Server Game 
     World.add(this.engine.world,item.body);
     
-    Events.on(this.engine, 'collisionStart', function(event) {
-      var pairs = event.pairs;
-      for (var i = 0; i < pairs.length; i++) {
-	var pair = pairs[i];
-	//do more stuff here
-	console.log("hit coll");
-      }
-    });
+//     Events.on(this.engine, 'collisionStart', function(event) {
+//       var pairs = event.pairs;
+//       for (var i = 0; i < pairs.length; i++) {
+// 	var pair = pairs[i];
+// 	//do more stuff here
+// 	console.log("hit coll");
+//       }
+//     });
 };
 
 

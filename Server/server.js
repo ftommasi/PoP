@@ -20,9 +20,9 @@ var createGame=function(player){
   game.Game.id=game_count;
   games.push(game);
   player.gameid=game.Game.id;
-  game.Game.playerList.push(player);
   player.newX=100;
   player.newY=500;
+  game.Game.addOtherPlayer(player);
   game_count++;
   return player.gameid;
 };
@@ -38,7 +38,7 @@ var joinGame=function(player){
 	  player.gameid=i;
 	  player.newX=100*(length+3);
 	  player.newY=500;
-	  temp.Game.playerList.push(player);
+	  temp.Game.addOtherPlayer(player);
 	  validGame=true;
 	  break;
 	}
@@ -69,6 +69,7 @@ var addPlayer = function(id){
 //Checks if the game is ready
 var checkReady = function(gameid){
   if(games[gameid].Game.playerList.length==2){
+    games[gameid].Game.start();
     return true;
   }
   return false;
@@ -93,7 +94,23 @@ var playLength = function(gameid){
 
 //Returns the playerlist for this game.
 var getPlayers = function(gameid, i){
-  return games[gameid].Game.playerList[i];
+    var player={
+    id : null,
+    gameid: null,
+    oldX: null,
+    oldY: null,
+    newX: null,
+    newY: null
+  }; 
+  
+  var temp = games[gameid].Game.playerList[i];
+  player.id = temp.ServerPlayer.id;
+  player.gameid=temp.ServerPlayer.gameid;
+  player.oldX = temp.ServerPlayer.oldX;
+  player.oldY=temp.ServerPlayer.oldY;
+  player.newX=temp.ServerPlayer.newX;
+  player.newY=temp.ServerPlayer.newY;
+  return player;
 };
 
 //Exports all the functions so they can be used with node.
