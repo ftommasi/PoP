@@ -97,8 +97,7 @@ var Game = function (fps) {
   
 Game.prototype.update = function (delta) {
     this.onUpdate(delta);
-    console.log('update');
-           GameObjManager.UpdateAll(delta);
+    GameObjManager.UpdateAll(delta);
 
         // run the engine
         //Matter.Engine.update(this.engine,e delta);
@@ -108,21 +107,21 @@ Game.prototype.render = function () {
     this.onRender();
 };
 Game.prototype.loop = function (now) {
-    /*this.raf = tick(this.loop.bind(this));
+    this.raf = tick(this.loop.bind(this));
     var delta = now - this.lastTime;
     if (delta >= this.delay) {
         this.update(delta);
         this.render();
         this.lastTime = now;
-    }*/
-    this.raf = requestAnimationFrame(this.loop.bind(this));
+    }
+    /*this.raf = requestAnimationFrame(this.loop.bind(this));
     var delta = now - this.lastTime;
     //if (delta >= this.delay) {
       console.log('new delta');
       this.update(delta);
       this.render();
       this.lastTime = now;
-    //}
+    }*/
 };
 Game.prototype.start = function () {    
     if (this.raf < 1) {

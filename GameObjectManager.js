@@ -19,8 +19,8 @@ GameObjectManager.prototype.UpdateAll = function (delta) {
 
 GameObjectManager.prototype.GetGameObjectFromBody = function (body) {
     for (var i = 0; i < this.GameObjectList.length; i++) {
-        if (GameObjectList[i].physicsComponent == body)
-            return GameObjectList[i];
+        if (this.GameObjectList[i].physicsComponent == body)
+            return this.GameObjectList[i];
     }
     return null;
 };

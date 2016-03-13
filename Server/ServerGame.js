@@ -80,7 +80,6 @@ var Game = function (fps) {
 module.exports = global.Game = Game;
 Game.prototype.update = function (delta) {
     this.onUpdate(delta);
-    console.log('update');
     GameObjManager.GameObjectManager.UpdateAll(delta);
 
         // run the engine

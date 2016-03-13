@@ -2,6 +2,8 @@
 //TODO: Implement Player functions
 var GameObject = require('./GameObject.js')
 		, inherits = require('util').inherits;
+
+//TODO: Update this so it behaves like Client - should consider a better way to do this!
 var ServerPlayer= function (x, y, texture_location, id, isServer, GameObjManager) {
     GameObject.call(this);
     this.AddPhysicsComponent(x, y, new GameObject.RectBodyData(80, 80), texture_location, GameObjManager);
@@ -16,6 +18,8 @@ var ServerPlayer= function (x, y, texture_location, id, isServer, GameObjManager
     this.id = id; //may need id for plaryer AND game
     this.gameid;
     this.item;
+
+    this.tag = "player";
 };
 
 inherits(ServerPlayer, GameObject);

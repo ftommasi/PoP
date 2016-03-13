@@ -10,6 +10,8 @@
 //                 Character size
 //
 // Takes optional anonymous object as initialization arguments
+
+//So character is not in use now?????
 var Character = function (x, y, texture_location) {
     GameObject.call(this);
     this.AddPhysicsComponent(x, y, new RectBodyData(80, 80), texture_location);
