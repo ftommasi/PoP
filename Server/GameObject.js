@@ -16,6 +16,9 @@ GameObject.prototype.update = function (delta) {
 
 };
 
+GameObject.prototype.onCollisionEnter = function (other) {
+
+};
 
 // a class to encapsulate physics world, engine, and bodies
 var WorldContainer = function (engine, world, bodies) {

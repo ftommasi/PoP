@@ -25,8 +25,14 @@ var Character = function (x, y, texture_location) {
     this.gameid;
 
     this.item;
+
+    this.tag = "hero";
 }
 
 Character.prototype = GameObject.prototype;
 Character.prototype.contructor = Character;
 
+Character.prototype.onCollisionEnter = function(other) {
+    if (other.tag == "hero")
+        console.log("I hit other player!!");
+}

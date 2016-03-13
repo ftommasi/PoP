@@ -22,6 +22,13 @@ GameObjectManager.prototype.UpdateAll = function (delta) {
         this.GameObjectList[i].ServerPlayer.update(delta);
 };
 
+GameObjectManager.prototype.GetGameObjectFromBody = function (body) {
+    for (var i = 0; i < this.GameObjectList.length; i++) {
+        if (GameObjectList[i].physicsComponent == body)
+            return GameObjectList[i];
+    }
+    return null;
+};
 
 module.exports=global.GameObjectManager=GameObjectManager;
  

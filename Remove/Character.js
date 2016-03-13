@@ -17,6 +17,8 @@ var Character = function (x, y, WorldData) {
     //set these values so we don't rotate as we collide with stuff
     this.physicsComponent.inertia = Infinity;
     this.physicsComponent.inverseInertia = 0;
+
+    this.tag = "hero";
 }
 
 Character.prototype = GameObject.prototype;
