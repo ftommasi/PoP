@@ -1,4 +1,4 @@
-/* Author/Contributors: Saddha Santanaporn, Fausto Tommasi
+/* Author/Contributors: Saddha Santanaporn, Fausto Tommasi, Nicholas Anderson, Eric Whitman
 *  Date: 2/9/2016
 *  Purpose: Create the main game loop
 */
@@ -28,7 +28,7 @@ var tick = function (delay) {
 };
 
 tick = tick(100);
-
+    
 var Game = function (fps) {
     this.id;
     this.host = true;
@@ -61,6 +61,10 @@ var Game = function (fps) {
     var ground = Matter.Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
     
     World.add(this.engine.world, ground);
+
+    //TODO: What is this item?
+    var item = new Item(10,10,10,10,10);
+    World.add(this.engine.world,item.body);
 
     Events.on(this.engine, 'collisionStart', function(event) {
         var pairs = event.pairs;
@@ -146,7 +150,6 @@ Game.prototype.updatePlayerPosition = function(data){
    }
 };
 
-//TODO(Networking): implement in Server Game 
 Game.prototype.addItem = function (item){
   this.itemList.push(item);
   //TODO(Fausto): Make sure that item is still
