@@ -28,28 +28,26 @@ var tick = function (delay) {
 tick = tick(100);
 
 var Game = function (fps) {
-	this.id;
-	this.socket;
-	this.localPlayerid;
-	this.fps = fps;
+    this.id;
+    this.socket;
+    this.localPlayerid;
+    this.fps = fps; 
+    this.playerList =[];
 
-	//TODO(Networking): implement in Server Game 
-	this.playerList =[];
-
-	this.itemList =[];	
-	this.delay = 1000 / this.fps;
-	this.lastTime = 0;
-	this.raf = 0;
-	this.engine;
-	this.onUpdate = function (delta) {
-	};
-	this.onRender = function () {
-	};
-
-	// Matter.js module aliases
-	var Engine = Matter.Engine,
-	    World = Matter.World,
-	    Bodies = Matter.Bodies;
+    this.itemList =[];	
+    this.delay = 1000 / this.fps;
+    this.lastTime = 0;
+    this.raf = 0;
+    this.engine;
+    this.onUpdate = function (delta) {
+    };
+    this.onRender = function () {
+    };
+    
+    // Matter.js module aliases
+    var Engine = Matter.Engine,
+        World = Matter.World,
+        Bodies = Matter.Bodies;
 	Events = Matter.Events;
 	// create a Matter.js engine
 	this.engine = Engine.create(document.body);
@@ -74,13 +72,11 @@ var Game = function (fps) {
 	// create a ground
 	var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
 
-	//TODO(Networking): implement in Server Game 
 	var item = new Item(10,10,10,10,10);
 	item.body = Bodies.rectangle(400, 600, 80, 60, { isStatic: true });
 
 	World.add(this.engine.world, ground);
 
-	//TODO(Networking): implement in Server Game 
 	World.add(this.engine.world,item.body);
 
 	Events.on(this.engine, 'collisionStart', function(event) {
@@ -187,7 +183,6 @@ Game.prototype.updatePlayerPosition = function(data){
 	}
 };
 
-//TODO(Networking): implement in Server Game 
 Game.prototype.addItem = function (item){
 	this.itemList.push(item);
 	//TODO(Fausto): Make sure that item is still
