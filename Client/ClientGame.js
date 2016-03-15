@@ -79,22 +79,25 @@ var Game = function (fps) {
     //TODO(Networking): implement in Server Game 
     World.add(this.engine.world,item.body);
     
-//     Events.on(this.engine, 'collisionStart', function(event) {
-//       var pairs = event.pairs;
-//       for (var i = 0; i < pairs.length; i++) {
-// 	var pair = pairs[i];
-// 	//do more stuff here
-// 	console.log("hit coll");
-//       }
-//     });
+     Events.on(this.engine, 'collisionStart', function(event) {
+         var pairs = event.pairs;
+         for (var i = 0; i < pairs.length; i++) {
+             var pair = pairs[i];
+             var baseObject = GameObjManager.GetGameObjectFromBody(pair.bodyA);
+             var otherObject = GameObjManager.GetGameObjectFromBody(pair.bodyB);
+             if (baseObject != null && otherObject != null) {
+                 baseObject.onCollisionEnter(otherObject);
+                 otherObject.onCollisionEnter(baseObject);
+             }
+       }
+     });
 };
 
 
   
 Game.prototype.update = function (delta) {
     this.onUpdate(delta);
-    console.log('update');
-           GameObjManager.UpdateAll(delta);
+    GameObjManager.UpdateAll(delta);
 
         // run the engine
         //Matter.Engine.update(this.engine,e delta);
@@ -104,21 +107,21 @@ Game.prototype.render = function () {
     this.onRender();
 };
 Game.prototype.loop = function (now) {
-    /*this.raf = tick(this.loop.bind(this));
+    this.raf = tick(this.loop.bind(this));
     var delta = now - this.lastTime;
     if (delta >= this.delay) {
         this.update(delta);
         this.render();
         this.lastTime = now;
-    }*/
-    this.raf = requestAnimationFrame(this.loop.bind(this));
+    }
+    /*this.raf = requestAnimationFrame(this.loop.bind(this));
     var delta = now - this.lastTime;
     //if (delta >= this.delay) {
       console.log('new delta');
       this.update(delta);
       this.render();
       this.lastTime = now;
-    //}
+    }*/
 };
 Game.prototype.start = function () {    
     if (this.raf < 1) {
@@ -178,9 +181,6 @@ Game.prototype.updatePlayerPosition = function(data){
          Matter.Body.setVelocity(itemList[i].physicsComponent, Matter.Vector.create(0,0)); // still object
        }
    }
-      /*   Matter.Events.on(itemList[i].physicsComponent, "collisionStart", function(event){
-	   console.log("Collision against object ", event.object);*/
-
 };
 
 //TODO(Networking): implement in Server Game 

@@ -10,6 +10,8 @@
 //                 Character size
 //
 // Takes optional anonymous object as initialization arguments
+
+//So character is not in use now?????
 var Character = function (x, y, texture_location) {
     GameObject.call(this);
     this.AddPhysicsComponent(x, y, new RectBodyData(80, 80), texture_location);
@@ -25,8 +27,14 @@ var Character = function (x, y, texture_location) {
     this.gameid;
 
     this.item;
+
+    this.tag = "hero";
 }
 
 Character.prototype = GameObject.prototype;
 Character.prototype.contructor = Character;
 
+Character.prototype.onCollisionEnter = function(other) {
+    if (other.tag == "hero")
+        console.log("I hit other player!!");
+}

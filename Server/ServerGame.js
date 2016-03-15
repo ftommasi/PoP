@@ -61,14 +61,18 @@ var Game = function (fps) {
     var ground = Matter.Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
     
     World.add(this.engine.world, ground);
-    
+
     Events.on(this.engine, 'collisionStart', function(event) {
-      var pairs = event.pairs;
-      for (var i = 0; i < pairs.length; i++) {
-	var pair = pairs[i];
-	//do more stuff here
-	console.log("hit coll");
-      }
+        var pairs = event.pairs;
+        for (var i = 0; i < pairs.length; i++) {
+            var pair = pairs[i];
+            var baseObject = GameObjManager.GetGameObjectFromBody(pair.bodyA);
+            var otherObject = GameObjManager.GetGameObjectFromBody(pair.bodyB);
+            if (baseObject != null && otherObject != null) {
+                baseObject.onCollisionEnter(otherObject);
+                otherObject.onCollisionEnter(baseObject);
+            }
+        }
     });
 };
 
@@ -76,7 +80,6 @@ var Game = function (fps) {
 module.exports = global.Game = Game;
 Game.prototype.update = function (delta) {
     this.onUpdate(delta);
-    console.log('update');
     GameObjManager.GameObjectManager.UpdateAll(delta);
 
         // run the engine

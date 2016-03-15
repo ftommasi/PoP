@@ -14,7 +14,8 @@ var ClientPlayer= function (x, y, texture_location, id, isServer) {
     this.id = id; //may need id for plaryer AND game
     this.gameid;
     this.item;
-
+   
+    this.tag = "player";
 }
 
 ClientPlayer.prototype = GameObject.prototype;
@@ -28,4 +29,9 @@ ClientPlayer.prototype.attack = function(){
 ClientPlayer.prototype.stopAttack = function(){
   this.item = null ;
 };
+
+ClientPlayer.prototype.onCollisionEnter = function (other) {
+    if (other.tag == "player")
+        console.log("I hit other player!!");
+}
 
