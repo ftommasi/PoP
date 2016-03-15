@@ -82,6 +82,7 @@ if (inputTimer === 0){
 }else{
     clearTimeout(inputTimer);
     inputTimer = 0;
+}
 } 
 }; 
 
