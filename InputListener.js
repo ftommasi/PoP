@@ -1,6 +1,8 @@
 //TODO: ADD HEADER
 var keysDown = {};
 var isAttacking = false;
+var inputTimer = 0;
+var inputTimeoutPeriod = 100;
 var InputListener = function(socket){
   //TODO: Add members as necessary
   GameObject.call(this);
@@ -47,21 +49,21 @@ InputListener.prototype.update = function (delta) {
 
   }  
 
-  if (this.player != null) {
+if (this.player != null) {
     var message = {
-      gameid : this.player.gameid,
-      id :this.player.id,
-      xFac : x_factor,
-      yFac : y_factor,
-      attack: isAttacking
-    };
-    this.socket.emit('move', message);
-    Matter.Body.setVelocity(this.player.physicsComponent, Matter.Vector.create(x_factor, y_factor)); 
+    gameid : this.player.gameid,
+    id :this.player.id,
+    xFac : x_factor,
+    yFac : y_factor,
+    attack: isAttacking
+ };
 
-    if(isAttacking){
+if(isAttacking){
       if(!this.item){
-        this.item = new Item(this.player.physicsComponent.position.x,this.player.physicsComponent.position.y,10,10);
-        //  this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,80,{isStatic: true});
+        this.item = new Item(this.player.physicsComponent.position.x,
+                             this.player.physicsComponent.position.y,10,10);
+        /*  this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,
+                                              80,{isStatic: true});*/
         isAttacking = false;
       }
 
@@ -69,8 +71,18 @@ InputListener.prototype.update = function (delta) {
         this.item = null;
       }
 
-    } 
-
-  } 
+    }
+ 
+if (inputTimer === 0){
+    inputTimer = setTimeout(function(){
+         this.socket.emit('move', message);
+         Matter.Body.setVelocity(this.player.physicsComponent,
+                                 Matter.Vector.create(x_factor, y_factor)); 
+  }, inputTimeoutPeriod);
+}else{
+    clearTimeout(inputTimer);
+    inputTimer = 0;
+}
+} 
 }; 
 
