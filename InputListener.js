@@ -1,3 +1,4 @@
+/*
 //TODO: ADD HEADER
 var keysDown = {};
 var isAttacking = false;
@@ -73,4 +74,4 @@ InputListener.prototype.update = function (delta) {
 
   } 
 }; 
-
+*/
