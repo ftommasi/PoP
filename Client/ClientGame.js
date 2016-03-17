@@ -50,7 +50,6 @@ var Game = function (fps) {
         World = Matter.World,
         Bodies = Matter.Bodies;
 	Events = Matter.Events;
-<<<<<<< HEAD
     // create a Matter.js engine
     this.engine = Engine.create(document.body);
     // encapsulate data
