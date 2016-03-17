@@ -10,7 +10,7 @@ function Item(x,y,width,height,damage,worldData){
   this.damage=damage;
   this.width=width;
   this.height=height;
-
+  this.type = "item";
   this.id;
   this.gameid;
 };
