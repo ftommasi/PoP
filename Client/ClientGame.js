@@ -63,6 +63,10 @@ var Game = function (fps) {
 
 	// create a GameObjectManager
 	GameObjManager = new GameObjectManager();
+	GameObjManager.engine = this.engine;
+	GameObjManager.World = World;
+	GameObjManager.Bodies = Bodies;
+
 	// create a PlayerManager
 	playerManager = new PlayerManager(0, false);
 	GameObjManager.AddObject(playerManager);
