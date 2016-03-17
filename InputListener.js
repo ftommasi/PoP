@@ -63,8 +63,8 @@ if(isAttacking){
       if(!this.item){
         this.item = new Item(this.player.physicsComponent.position.x,
                              this.player.physicsComponent.position.y,10,10);
-        /*  this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,
-                                              80,{isStatic: true});*/
+         this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,
+                                              80,{isStatic: true});
         isAttacking = false;
       }
 
@@ -85,5 +85,4 @@ if (inputTimer === 0){
     inputTimer = 0;
 }
 } 
-}; 
-*/
+}; */

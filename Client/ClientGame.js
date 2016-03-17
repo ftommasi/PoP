@@ -6,7 +6,8 @@ var GameObjManager;
 var playerManager;
 var WorldData;
 var Events = Matter.Events;
-
+var inputTimer = 0;
+var inputTimeoutPeriod = 100;
 //TODO: make game render here
 var tick = function (delay) {
 	var _delay = delay;
@@ -254,30 +255,32 @@ InputListener.prototype.update = function (delta) {
 
 	if (this.player != null) {
 		var message = {
-gameid : this.player.gameid,
-	 id :this.player.id,
-	 xFac : x_factor,
-	 yFac : y_factor,
-	 attack: isAttacking
-		};
-		this.socket.emit('move', message);
-		Matter.Body.setVelocity(this.player.physicsComponent, Matter.Vector.create(x_factor, y_factor)); 
+            gameid : this.player.gameid,
+            id :this.player.id,
+            xFac : x_factor,
+            yFac : y_factor,
+            attack: isAttacking
+        };
+        if(isAttacking){
+            if(!this.item){
+                    this.item = new Item(this.player.physicsComponent.position.x,
+                                     this.player.physicsComponent.position.y,10,10);
+                    /*this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,
+                                                      80,{isStatic: true});*/
+                    isAttacking = false;
+            }
 
-		if(isAttacking){
-			if(!this.item){
-				this.item = new Item(this.player.physicsComponent.position.x,this.player.physicsComponent.position.y,10,10);
-				//  this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,80,{isStatic: true});
-				isAttacking = false;
-			}
+            else {
+                this.item = null;
+            }
 
-			else {
-				this.item = null;
-			}
-
-		} 
-
-	} 
-}; 
-
+        }
+        if((x_factor!=0)||(y_factor!=0)||(isAttacking)){
+            this.socket.emit('move', message);
+            Matter.Body.setVelocity(this.player.physicsComponent,
+                                Matter.Vector.create(x_factor, y_factor));
+        }
+    } 
+};
 
 
