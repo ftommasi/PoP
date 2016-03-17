@@ -84,17 +84,17 @@ var Game = function (fps) {
 	World.add(this.engine.world,item.body);
 
 	Events.on(this.engine, 'collisionStart', function(event) {
-			var pairs = event.pairs;
-			for (var i = 0; i < pairs.length; i++) {
-			var pair = pairs[i];
-			var baseObject = GameObjManager.GetGameObjectFromBody(pair.bodyA);
-			var otherObject = GameObjManager.GetGameObjectFromBody(pair.bodyB);
-			if (baseObject != null && otherObject != null) {
-			baseObject.onCollisionEnter(otherObject);
-			otherObject.onCollisionEnter(baseObject);
-			}
-			}
-			});
+	  var pairs = event.pairs;
+	  for (var i = 0; i < pairs.length; i++) {
+	    var pair = pairs[i];
+	    var baseObject = GameObjManager.GetGameObjectFromBody(pair.bodyA);
+	    var otherObject = GameObjManager.GetGameObjectFromBody(pair.bodyB);
+	    if (baseObject != null && otherObject != null) {
+	      baseObject.onCollisionEnter(otherObject);
+	      otherObject.onCollisionEnter(baseObject);
+	     }
+	   }
+	});
 };
 
 
@@ -266,11 +266,12 @@ gameid : this.player.gameid,
 	 attack: isAttacking
 		};
 		this.socket.emit('move', message);
-		Matter.Body.setVelocity(this.player.physicsComponent, Matter.Vector.create(x_factor, y_factor)); 
-
+		Matter.Body.setVelocity(this.player.physicsComponent, Matter.Vector.create(x_factor, y_factor));
 		if(isAttacking){
 			if(!this.item){
-				this.item = new Item(this.player.physicsComponent.position.x,this.player.physicsComponent.position.y,10,10);
+				this.item = new Item(this.player.physicsComponent.position.x + 100 ,this.player.physicsComponent.position.y,10,10); 
+				Matter.Body.setVelocity(this.item.physicsComponent,Matter.Vector.create(0,0));
+
 				//  this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,80,{isStatic: true});
 				isAttacking = false;
 			}
