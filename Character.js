@@ -25,7 +25,7 @@ var Character = function (x, y, texture_location) {
     this.newY;
     this.id;
     this.gameid;
-
+    this.type = "character";
     this.item;
 
     this.tag = "hero";

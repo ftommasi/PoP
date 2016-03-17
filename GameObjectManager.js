@@ -5,6 +5,9 @@
 
 var GameObjectManager = function () {
     this.GameObjectList = [];
+    this.engine;
+    this.World;
+    this.Bodies;
 };  
   
 GameObjectManager.prototype.AddObject = function (object) {
@@ -24,4 +27,13 @@ GameObjectManager.prototype.GetGameObjectFromBody = function (body) {
     }
     return null;
 };
+
+GameObjectManager.prototype.remove = function (gameObject) {
+    this.World.remove(this.World, gameObject.physicsComponent);
+    var index = this.GameObjectList.indexOf(gameObject);
+    if (index > -1) {
+        this.GameObjectList.splice(index, 1);
+    }
+};
+ 
  

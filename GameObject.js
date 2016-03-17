@@ -6,6 +6,7 @@
 var GameObject = function () {
     this.tag = "";
     this.physicsComponent = null;
+    this.type = "gameobject";
 };
 
 GameObject.prototype.AddPhysicsComponent = function (x, y, RigidBodyData, texture_location) {
