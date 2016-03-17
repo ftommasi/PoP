@@ -138,10 +138,12 @@ Game.prototype.addOtherPlayer = function(player){
 };
 
 Game.prototype.updatePlayerPosition = function(data){
-  for (var i=0; i<GameObjManager.GameObjectList.length; i++){
-      var temp = GameObjManager.GameObjectList[i];
-      if((data.id!=this.localPlayerid)&&(temp.id == data.id)){
-	Matter.Body.setVelocity(temp.physicsComponent, Matter.Vector.create(data.xFac, data.yFac));
+  for (var i=0; i<GameObjManager.GameObjectManager.GameObjectList.length; i++){
+      var temp = GameObjManager.GameObjectManager.GameObjectList[i];
+      if((temp.ServerPlayer.id == data.id)){
+        //console.log(temp.ServerPlayer.id); 
+	    Matter.Body.setVelocity(temp.ServerPlayer.physicsComponent, 
+                                Matter.Vector.create(data.xFac, data.yFac));
       }
   }
   //RENDER ITEM ON GROUND   
@@ -150,6 +152,7 @@ Game.prototype.updatePlayerPosition = function(data){
          Matter.Body.setVelocity(itemList[i].physicsComponent, Matter.Vector.create(0,0)); // still object
        }
    }
+   return data;
 };
 
 Game.prototype.addItem = function (item){
