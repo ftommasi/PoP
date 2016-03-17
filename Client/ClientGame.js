@@ -50,6 +50,7 @@ var Game = function (fps) {
         World = Matter.World,
         Bodies = Matter.Bodies;
 	Events = Matter.Events;
+<<<<<<< HEAD
 	// create a Matter.js engine
 	this.engine = Engine.create(document.body);
 	// encapsulate data
@@ -93,6 +94,33 @@ var Game = function (fps) {
 			}
 			});
 };
+=======
+    // create a Matter.js engine
+    this.engine = Engine.create(document.body);
+    // encapsulate data
+    WorldData = new WorldContainer(this.engine, World, Bodies);
+    var renderOptions = this.engine.render.options;
+    renderOptions.background = './assets/Background.png';
+    renderOptions.showAngleIndicator = false;
+    renderOptions.wireframes = false;
+    Matter.Engine.run(this.engine);
+
+    // create a GameObjectManager
+    GameObjManager = new GameObjectManager();
+    GameObjManager.engine = this.engine;
+    GameObjManager.World = World;
+    GameObjManager.Bodies = Bodies;
+    // create a PlayerManager
+    playerManager = new PlayerManager(0, false);
+    GameObjManager.AddObject(playerManager);
+  
+    // create a ground
+    var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
+    
+    //TODO: What is this item? 
+    var item = new Item(10,10,10,10,10);
+    item.body = Bodies.rectangle(400, 600, 80, 60, { isStatic: true });
+>>>>>>> Merge issues..
 
 
 
