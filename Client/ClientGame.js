@@ -271,6 +271,7 @@ gameid : this.player.gameid,
 			if(!this.item){
 				this.item = new Item(this.player.physicsComponent.position.x + 100 ,this.player.physicsComponent.position.y,10,10); 
 				Matter.Body.setVelocity(this.item.physicsComponent,Matter.Vector.create(0,0));
+				GameObjManager.AddObject(this.item);
 
 				//  this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,80,{isStatic: true});
 				isAttacking = false;

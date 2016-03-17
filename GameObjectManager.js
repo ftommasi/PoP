@@ -30,6 +30,7 @@ GameObjectManager.prototype.GetGameObjectFromBody = function (body) {
 
 GameObjectManager.prototype.remove = function (gameObject) {
     this.World.remove(this.World, gameObject.physicsComponent);
+    console.log("REMOVING OBJECT");
     var index = this.GameObjectList.indexOf(gameObject);
     if (index > -1) {
         this.GameObjectList.splice(index, 1);

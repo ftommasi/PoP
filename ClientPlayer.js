@@ -31,7 +31,9 @@ ClientPlayer.prototype.stopAttack = function(){
 };
 
 ClientPlayer.prototype.onCollisionEnter = function (other) {
-    if (other.tag == "player")
+    if (other.tag == "player"){
         console.log("I hit other player!!");
+	GameObjManager.remove(other);
+	}
 }
 

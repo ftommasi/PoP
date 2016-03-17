@@ -18,7 +18,9 @@ GameObject.prototype.update = function (delta) {
 };
 
 GameObject.prototype.onCollisionEnter = function (other) {
-
+  if(other.type && other.type == "item"){
+    GameObjManager.remove(other);
+  }
 };
 
 
