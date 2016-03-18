@@ -1,10 +1,11 @@
-/* Author/Contributors: Saddha Santanaporn, Fausto Tommasi
+/* Author/Contributors: Saddha Santanaporn, Fausto Tommasi, Nicholas Anderson, Eric Whitman
 *  Date: 2/9/2016
 *  Purpose: Create the main game loop
 */
 var GameObjManager = require('./GameObjectManager.js');
 global.GameObjManager;
 require('./ServerPlayer.js');
+require('./Item.js');
 var Matter = require ('../matter.js');
 var Events = Matter.Events;
 
@@ -28,7 +29,7 @@ var tick = function (delay) {
 };
 
 tick = tick(100);
-
+    
 var Game = function (fps) {
     this.id;
     this.host = true;
@@ -57,6 +58,11 @@ var Game = function (fps) {
     var ground = Matter.Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
     
     Matter.World.add(this.engine.world, ground);
+
+    //TODO: What is this item?
+    var item = {};
+    item.Item = new Item(10,10,10,10,10, GameObjManager);
+   // World.add(this.engine.world,item.Item.body);
 
     Events.on(this.engine, 'collisionStart', function(event) {
         var pairs = event.pairs;
@@ -128,10 +134,12 @@ Game.prototype.addOtherPlayer = function(player){
 };
 
 Game.prototype.updatePlayerPosition = function(data){
-  for (var i=0; i<GameObjManager.GameObjectList.length; i++){
-      var temp = GameObjManager.GameObjectList[i];
-      if((data.id!=this.localPlayerid)&&(temp.id == data.id)){
-	Matter.Body.setVelocity(temp.physicsComponent, Matter.Vector.create(data.xFac, data.yFac));
+  for (var i=0; i<GameObjManager.GameObjectManager.GameObjectList.length; i++){
+      var temp = GameObjManager.GameObjectManager.GameObjectList[i];
+      if((temp.ServerPlayer.id == data.id)){
+        //console.log(temp.ServerPlayer.id); 
+	    Matter.Body.setVelocity(temp.ServerPlayer.physicsComponent, 
+                                Matter.Vector.create(data.xFac, data.yFac));
       }
   }
   //RENDER ITEM ON GROUND   
@@ -140,11 +148,11 @@ Game.prototype.updatePlayerPosition = function(data){
          Matter.Body.setVelocity(itemList[i].physicsComponent, Matter.Vector.create(0,0)); // still object
        }
    }
+   return data;
 };
 
-//TODO(Networking): implement in Server Game 
 Game.prototype.addItem = function (item){
-  this.itemList.push(item);
+  // this.itemList.push(item);
   //TODO(Fausto): Make sure that item is still
 }
 	
@@ -152,7 +160,7 @@ Game.prototype.attack = function(data){
   for (var i=0; i<GameObjManager.GameObjectList.length; i++){
       var temp = GameObjManager.GameObjectList[i];
       if((data.id!=this.localPlayerid)&&(temp.id == data.id)){
-        this.item = new Item(temp.physicsComponent.position.x,temp.physicsComponent.position.y,10,10);
+        this.item.Item = new Item(temp.physicsComponent.position.x,temp.physicsComponent.position.y,10,10,10, GameObjManager);
 //  this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,80,{isStatic: true});
       
       }

@@ -5,7 +5,8 @@
 var GameObjManager;
 var playerManager;
 var Events = Matter.Events;
-
+var inputTimer = 0;
+var inputTimeoutPeriod = 100;
 //TODO: make game render here
 var tick = function (delay) {
 	var _delay = delay;
@@ -27,27 +28,26 @@ var tick = function (delay) {
 tick = tick(100);
 
 var Game = function (fps) {
-	this.id;
-	this.socket;
-	this.localPlayerid;
-	this.fps = fps;
 
-	//TODO(Networking): implement in Server Game 
-	this.playerList =[];
+    this.id;
+    this.socket;
+    this.localPlayerid;
+    this.fps = fps; 
+    this.playerList =[];
 
-	this.itemList =[];	
-	this.delay = 1000 / this.fps;
-	this.lastTime = 0;
-	this.raf = 0;
-	this.engine;
-	this.onUpdate = function (delta) {
-	};
-	this.onRender = function () {
-	};
-
-	// Matter.js module aliases
-	var Engine = Matter.Engine,
-	    World = Matter.World,
+    this.itemList =[];	
+    this.delay = 1000 / this.fps;
+    this.lastTime = 0;
+    this.raf = 0;
+    this.engine;
+    this.onUpdate = function (delta) {
+    };
+    this.onRender = function () {
+    };
+    
+    // Matter.js module aliases
+    var Engine = Matter.Engine,
+        World = Matter.World
 	Events = Matter.Events;
 	// create a Matter.js engine
 	this.engine = Engine.create(document.body);
@@ -69,13 +69,11 @@ var Game = function (fps) {
 	// create a ground
 	var ground = Matter.Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
 
-	//TODO(Networking): implement in Server Game 
 	var item = new Item(10,10,10,10,10);
 	item.body = Matter.Bodies.rectangle(400, 600, 80, 60, { isStatic: true });
 
 	World.add(this.engine.world, ground);
 
-	//TODO(Networking): implement in Server Game 
 	World.add(this.engine.world,item.body);
 
 	Events.on(this.engine, 'collisionStart', function(event) {
@@ -91,8 +89,6 @@ var Game = function (fps) {
 			}
 			});
 };
-
-
 
 Game.prototype.update = function (delta) {
 	this.onUpdate(delta);
@@ -182,7 +178,6 @@ Game.prototype.updatePlayerPosition = function(data){
 	}
 };
 
-//TODO(Networking): implement in Server Game 
 Game.prototype.addItem = function (item){
 	this.itemList.push(item);
 	//TODO(Fausto): Make sure that item is still
@@ -254,30 +249,32 @@ InputListener.prototype.update = function (delta) {
 
 	if (this.player != null) {
 		var message = {
-gameid : this.player.gameid,
-	 id :this.player.id,
-	 xFac : x_factor,
-	 yFac : y_factor,
-	 attack: isAttacking
-		};
-		this.socket.emit('move', message);
-		Matter.Body.setVelocity(this.player.physicsComponent, Matter.Vector.create(x_factor, y_factor)); 
+            gameid : this.player.gameid,
+            id :this.player.id,
+            xFac : x_factor,
+            yFac : y_factor,
+            attack: isAttacking
+        };
+        if(isAttacking){
+            if(!this.item){
+                    this.item = new Item(this.player.physicsComponent.position.x,
+                                     this.player.physicsComponent.position.y,10,10);
+                    /*this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,
+                                                      80,{isStatic: true});*/
+                    isAttacking = false;
+            }
 
-		if(isAttacking){
-			if(!this.item){
-				this.item = new Item(this.player.physicsComponent.position.x,this.player.physicsComponent.position.y,10,10);
-				//  this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,80,{isStatic: true});
-				isAttacking = false;
-			}
+            else {
+                this.item = null;
+            }
 
-			else {
-				this.item = null;
-			}
-
-		} 
-
-	} 
-}; 
-
+        }
+        if((x_factor!=0)||(y_factor!=0)||(isAttacking)){
+            this.socket.emit('move', message);
+            Matter.Body.setVelocity(this.player.physicsComponent,
+                                Matter.Vector.create(x_factor, y_factor));
+        }
+    } 
+};
 
 
