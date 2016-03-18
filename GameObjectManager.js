@@ -5,9 +5,8 @@
 
 var GameObjectManager = function () {
     this.GameObjectList = [];
+    this.RemoveList = [];
     this.engine;
-    this.World;
-    this.Bodies;
 };  
   
 GameObjectManager.prototype.AddObject = function (object) {
@@ -15,7 +14,11 @@ GameObjectManager.prototype.AddObject = function (object) {
 };
 
 GameObjectManager.prototype.UpdateAll = function (delta) {
-  //console.log('From GO Manager ' + this.GameObjectList.length);
+    for (var i = 0; i < this.RemoveList.length; i++) {
+        Matter.Composite.remove(this.engine.world, this.RemoveList[i].physicsComponent);
+    }
+    this.RemoveList.length = 0;
+
   for (var i = 0; i < this.GameObjectList.length; i++)
         this.GameObjectList[i].update(delta);
 };
@@ -29,7 +32,9 @@ GameObjectManager.prototype.GetGameObjectFromBody = function (body) {
 };
 
 GameObjectManager.prototype.remove = function (gameObject) {
-    this.World.remove(this.World, gameObject.physicsComponent);
+    this.RemoveList.push(gameObject);
+    Matter.Body.setPosition(gameObject.physicsComponent, Matter.Vector.create(1000, 1000));
+    console.log("attempt remove");
     var index = this.GameObjectList.indexOf(gameObject);
     if (index > -1) {
         this.GameObjectList.splice(index, 1);
