@@ -4,13 +4,12 @@
 */
 
 var GameObject = function () {
-    this.tag = "";
     this.physicsComponent = null;
-    this.type = "gameobject";
+    this.tag = "";
 };
 
 GameObject.prototype.AddPhysicsComponent = function (x, y, RigidBodyData, texture_location) {
-    this.physicsComponent = RigidBodyData.MakeRigidBody(x, y, WorldData, texture_location);
+    this.physicsComponent = RigidBodyData.MakeRigidBody(x, y, texture_location);
 };
 
 GameObject.prototype.update = function (delta) {
@@ -21,22 +20,14 @@ GameObject.prototype.onCollisionEnter = function (other) {
 
 };
 
-
-// a class to encapsulate physics world, engine, and bodies
-var WorldContainer = function (engine, world, bodies) {
-    this.engine = engine;
-    this.world = world;
-    this.bodies = bodies;
-};
-
 // classes containing data to create physics rigidbody
 var RectBodyData = function (width, height) {
     this.width = width;
     this.height = height;
 };
 
-RectBodyData.prototype.MakeRigidBody = function (x, y, worldData, texture_location) {
-    body = worldData.bodies.rectangle(x, y, this.width, this.height, {
+RectBodyData.prototype.MakeRigidBody = function (x, y, texture_location) {
+    body = Matter.Bodies.rectangle(x, y, this.width, this.height, {
         render: {
             strokeStyle: '#ffffff',
             sprite: {
@@ -44,7 +35,7 @@ RectBodyData.prototype.MakeRigidBody = function (x, y, worldData, texture_locati
             }
         }
     });
-    worldData.world.add(worldData.engine.world, body);
+    Matter.World.add(GameObjManager.engine.world, body);
     return body;
 };
 
@@ -52,8 +43,8 @@ var CircleBodyData = function (radius) {
     this.radius = radius;
 };
 
-CircleBodyData.prototype.MakeRigidBody = function (x, y, worldData, texture_location) {
-    body = worldData.bodies.circle(x, y, radius, {
+CircleBodyData.prototype.MakeRigidBody = function (x, y, texture_location) {
+    body = Matter.Bodies.circle(x, y, radius, {
         render: {
             strokeStyle: '#ffffff',
                 sprite: {
@@ -61,7 +52,7 @@ CircleBodyData.prototype.MakeRigidBody = function (x, y, worldData, texture_loca
             }
         }
     });
-    worldData.world.add(worldData.engine.world, body);
+    Matter.World.add(GameObjManager.engine.world, body);
     return body;
 };
 

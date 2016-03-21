@@ -3,9 +3,9 @@
 *  Purpose: Create the main game loop
 */
 var GameObjManager = require('./GameObjectManager.js');
+global.GameObjManager;
 require('./ServerPlayer.js');
 require('./Item.js');
-var WorldData=require('./GameObject.js').WorldContainer;
 var Matter = require ('../matter.js');
 var Events = Matter.Events;
 
@@ -47,21 +47,17 @@ var Game = function (fps) {
     
     // Matter.js module aliases
     this.engine = Matter.Engine.create();
-    var World = Matter.World,
-        Bodies = Matter.Bodies;
 	Events = Matter.Events;
-
 
     // create a GameObjectManager
     GameObjManager.GameObjectManager = new GameObjectManager();
-    GameObjManager.engine=this.engine;
-    GameObjManager.World=World;
-    GameObjManager.Bodies=Bodies;
-  
+    GameObjManager.engine = this.engine;
+    global.GameObjManager = GameObjManager;
+
     // create a ground
     var ground = Matter.Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
     
-    World.add(this.engine.world, ground);
+    Matter.World.add(this.engine.world, ground);
 
     //TODO: What is this item?
     var item = {};
@@ -128,7 +124,7 @@ Game.prototype.stop = function () {
 Game.prototype.addOtherPlayer = function(player){
   //TODO: implement
   var newPlayer ={};
-  newPlayer.ServerPlayer=new ServerPlayer(player.newX, player.newY, null, player.id, false, GameObjManager);
+  newPlayer.ServerPlayer=new ServerPlayer(player.newX, player.newY, null, player.id, false);
   newPlayer.ServerPlayer.oldX = player.oldX;
   newPlayer.ServerPlayer.oldY = player.oldY;
   newPlayer.ServerPlayer.gameid = player.gameid; 

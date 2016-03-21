@@ -4,7 +4,6 @@
  */
 var GameObjManager;
 var playerManager;
-var WorldData;
 var Events = Matter.Events;
 var inputTimer = 0;
 var inputTimeoutPeriod = 100;
@@ -29,6 +28,7 @@ var tick = function (delay) {
 tick = tick(100);
 
 var Game = function (fps) {
+
     this.id;
     this.socket;
     this.localPlayerid;
@@ -47,34 +47,30 @@ var Game = function (fps) {
     
     // Matter.js module aliases
     var Engine = Matter.Engine,
-        World = Matter.World,
-        Bodies = Matter.Bodies;
+        World = Matter.World
 	Events = Matter.Events;
 	// create a Matter.js engine
 	this.engine = Engine.create(document.body);
-	// encapsulate data
-	WorldData = new WorldContainer(this.engine, World, Bodies);
+
+    // create a GameObjectManager
+	GameObjManager = new GameObjectManager();
+	GameObjManager.engine = this.engine;
+
 	var renderOptions = this.engine.render.options;
 	renderOptions.background = './assets/Background.png';
 	renderOptions.showAngleIndicator = false;
 	renderOptions.wireframes = false;
 	Matter.Engine.run(this.engine);
 
-	// create a GameObjectManager
-	GameObjManager = new GameObjectManager();
-	GameObjManager.engine = this.engine;
-	GameObjManager.World = World;
-	GameObjManager.Bodies = Bodies;
-
 	// create a PlayerManager
 	playerManager = new PlayerManager(0, false);
 	GameObjManager.AddObject(playerManager);
 
 	// create a ground
-	var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
+	var ground = Matter.Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
 
 	var item = new Item(10,10,10,10,10);
-	item.body = Bodies.rectangle(400, 600, 80, 60, { isStatic: true });
+	item.body = Matter.Bodies.rectangle(400, 600, 80, 60, { isStatic: true });
 
 	World.add(this.engine.world, ground);
 
