@@ -14,7 +14,7 @@
 //So character is not in use now?????
 var Character = function (x, y, texture_location) {
     GameObject.call(this);
-    this.AddPhysicsComponent(x, y, new RectBodyData(80, 80), texture_location);
+    this.AddPhysicsComponent(x, y, new CircleBodyData(40), texture_location);
 
     //set these values so we don't rotate as we collide with stuff
     this.physicsComponent.inertia = Infinity;
