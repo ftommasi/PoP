@@ -32,10 +32,10 @@ var Game = function (fps) {
     this.id;
     this.socket;
     this.localPlayerid;
-    this.fps = fps; 
+    this.fps = fps;
     this.playerList =[];
-
-    this.itemList =[];	
+		this.inputSeq=0;
+    this.itemList =[];
     this.delay = 1000 / this.fps;
     this.lastTime = 0;
     this.raf = 0;
@@ -44,7 +44,7 @@ var Game = function (fps) {
     };
     this.onRender = function () {
     };
-    
+
     // Matter.js module aliases
     var Engine = Matter.Engine,
         World = Matter.World
@@ -57,7 +57,7 @@ var Game = function (fps) {
 	GameObjManager.engine = this.engine;
 
 	var renderOptions = this.engine.render.options;
-	renderOptions.background = './assets/Background.png';
+	renderOptions.background = './assets/grid.png';
 	renderOptions.showAngleIndicator = false;
 	renderOptions.wireframes = false;
 	Matter.Engine.run(this.engine);
@@ -118,7 +118,7 @@ Game.prototype.loop = function (now) {
 	this.lastTime = now;
 	}*/
 };
-Game.prototype.start = function () {    
+Game.prototype.start = function () {
 	if (this.raf < 1) {
 		this.loop(0);
 	}
@@ -135,7 +135,7 @@ Game.prototype.addLocalPlayer = function(player){
 	var newPlayer = new ClientPlayer(player.newX, player.newY, null, player.id, false);
 	newPlayer.oldX = player.oldX;
 	newPlayer.oldY = player.oldY;
-	newPlayer.gameid = player.gameid; 
+	newPlayer.gameid = player.gameid;
 	this.playerList.push(newPlayer);
 	this.localPlayerid=newPlayer.id;
 	//var myCharacter = new Character(player.Player.startX, player.Player.startY);
@@ -154,12 +154,12 @@ Game.prototype.addOtherPlayer = function(player){
 	var newPlayer = new ClientPlayer(player.newX, player.newY, null, player.id, false);
 	newPlayer.oldX = player.oldX;
 	newPlayer.oldY = player.oldY;
-	newPlayer.gameid = player.gameid; 
+	newPlayer.gameid = player.gameid;
 	this.playerList.push(newPlayer);
 	//var myCharacter = new Character(player.Player.startX, player.Player.startY);
 	//myCharacter.id=player.Player.id;
 	//myCharacter.gameid=this.id;
-	GameObjManager.AddObject(newPlayer); 
+	GameObjManager.AddObject(newPlayer);
 	console.log('add other from client');
 };
 
@@ -167,10 +167,17 @@ Game.prototype.updatePlayerPosition = function(data){
 	for (var i=0; i<GameObjManager.GameObjectList.length; i++){
 		var temp = GameObjManager.GameObjectList[i];
 		if((data.id!=this.localPlayerid)&&(temp.id == data.id)){
-			Matter.Body.setVelocity(temp.physicsComponent, Matter.Vector.create(data.xFac, data.yFac));
+			if(temp.physicsComponent.position.x != data.pos.x || temp.physicsComponent.position.y != data.pos.y)
+			{
+					Matter.Body.setPosition(temp.physicsComponent, data.pos);
+					Matter.Body.setVelocity(temp.physicsComponent, Matter.Vector.create(data.xFac, data.yFac));
+			}
+			else{
+					Matter.Body.setVelocity(temp.physicsComponent, Matter.Vector.create(data.xFac, data.yFac));
+			}
 		}
 	}
-	//RENDER ITEM ON GROUND   
+	//RENDER ITEM ON GROUND
 	for(var i=0; i<this.itemList.length; i++){
 		if((data.id!=this.localPlayerid)&&(temp.id == data.id)){ //dont know if we need this
 			Matter.Body.setVelocity(itemList[i].physicsComponent, Matter.Vector.create(0,0)); // still object
@@ -223,58 +230,67 @@ var InputListener = function(socket){
 InputListener.prototype = GameObject.prototype;
 InputListener.prototype.contructor = InputListener;
 
-InputListener.prototype.update = function (delta) { 
+InputListener.prototype.update = function (delta) {
 
-	x_factor = y_factor = 0; 
+	x_factor = y_factor = 0;
+	var input = [];
 
-	if (38 in keysDown) { //up 
-		y_factor = -2; 
+	if (38 in keysDown) { //up
+		y_factor = -2;
+		input.push('u');
 		//player.WHATERVER();i//TODO IMPLEMENT CORRECT FUNCTION
-	} 
-	if (40 in keysDown) { //down 
-		y_factor = 2; 
-	} 
-	if (37 in keysDown) { // left 
-		x_factor = -2; 
-	} 
-	if (39 in keysDown) { // right 
-		x_factor = 2; 
+	}
+	if (40 in keysDown) { //down
+		y_factor = 2;
+		input.push('d');
+	}
+	if (37 in keysDown) { // left
+		x_factor = -2;
+		input.push('l');
+	}
+	if (39 in keysDown) { // right
+		x_factor = 2;
+		input.push('r');
 	}
 
 	if (32 in keysDown){ //Spacebar
 		//TODO(Fausto): implement attack
 		isAttacking = !isAttacking;
+		input.push('s');
 
-	}  
+	}
 
 	if (this.player != null) {
-		var message = {
-            gameid : this.player.gameid,
-            id :this.player.id,
-            xFac : x_factor,
-            yFac : y_factor,
-            attack: isAttacking
-        };
-        if(isAttacking){
-            if(!this.item){
-                    this.item = new Item(this.player.physicsComponent.position.x,
-                                     this.player.physicsComponent.position.y,10,10);
-                    /*this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,
-                                                      80,{isStatic: true});*/
-                    isAttacking = false;
-            }
+		if(input.length){
+			this.inputSeq += 1;
+			var message = {
+	            gameid : this.player.gameid,
+	            id :this.player.id,
+							pos:this.player.physicsComponent.position,
+							velocity: this.player.physicsComponent.velocity,
+	            xFac : x_factor,
+	            yFac : y_factor,
+	            attack: isAttacking,
+							inputSeq: this.inputSeq
+	        };
+	        if(isAttacking){
+	            if(!this.item){
+	                    this.item = new Item(this.player.physicsComponent.position.x,
+	                                     this.player.physicsComponent.position.y,10,10);
+	                    /*this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,
+	                                                      80,{isStatic: true});*/
+	                    isAttacking = false;
+	            }
 
-            else {
-                this.item = null;
-            }
+	            else {
+	                this.item = null;
+	            }
 
-        }
-        if((x_factor!=0)||(y_factor!=0)||(isAttacking)){
-            this.socket.emit('move', message);
-            Matter.Body.setVelocity(this.player.physicsComponent,
-                                Matter.Vector.create(x_factor, y_factor));
-        }
-    } 
+	        }
+					  this.socket.emit('move', message);
+	          Matter.Body.setVelocity(this.player.physicsComponent,
+	                                Matter.Vector.create(x_factor, y_factor));
+
+			}
+    }
 };
-
-

@@ -31,10 +31,14 @@ ServerPlayer.prototype.update = function(delta){
   ServerPlayer.super_.prototype.update(delta);
 };
 ServerPlayer.prototype.attack = function(){
-    this.item = new Item(this.x,this.y,100,100,100,this.worldData);  
+    this.item = new Item(this.x,this.y,100,100,100,this.worldData);
 };
 
 ServerPlayer.prototype.stopAttack = function(){
     this.item = null ;
 };
 
+ServerPlayer.prototype.currPos = function(){
+	var pos ={x:this.newX, y:this.newY};
+	return pos;
+};

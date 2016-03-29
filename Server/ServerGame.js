@@ -20,8 +20,7 @@ var tick = function (delay) {
             }, _delay);
         }
     } else {
-        timer = 
-        window.requestAnimationFrame;
+        timer =window.requestAnimationFrame;
     }
     return function (cb) {
         return timer(cb);
@@ -29,13 +28,13 @@ var tick = function (delay) {
 };
 
 tick = tick(100);
-    
+
 var Game = function (fps) {
     this.id;
     this.host = true;
-    this.fps = fps;    
+    this.fps = fps;
     this.playerList=[];
-    this.itemList =[];	
+    this.itemList =[];
     this.delay = 1000 / this.fps;
     this.lastTime = 0;
     this.raf = 0;
@@ -44,10 +43,10 @@ var Game = function (fps) {
     };
     this.onRender = function () {
     };
-    
+
     // Matter.js module aliases
     this.engine = Matter.Engine.create();
-	Events = Matter.Events;
+    Events = Matter.Events;
 
     // create a GameObjectManager
     GameObjManager.GameObjectManager = new GameObjectManager();
@@ -56,7 +55,7 @@ var Game = function (fps) {
 
     // create a ground
     var ground = Matter.Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
-    
+
     Matter.World.add(this.engine.world, ground);
 
     //TODO: What is this item?
@@ -108,7 +107,7 @@ Game.prototype.loop = function (now) {
       //this.lastTime = now;
     //}
 };
-Game.prototype.start = function () {    
+Game.prototype.start = function () {
     if (this.raf < 1) {
         this.loop(0);
     }
@@ -127,9 +126,9 @@ Game.prototype.addOtherPlayer = function(player){
   newPlayer.ServerPlayer=new ServerPlayer(player.newX, player.newY, null, player.id, false);
   newPlayer.ServerPlayer.oldX = player.oldX;
   newPlayer.ServerPlayer.oldY = player.oldY;
-  newPlayer.ServerPlayer.gameid = player.gameid; 
+  newPlayer.ServerPlayer.gameid = player.gameid;
   this.playerList.push(newPlayer);
-  GameObjManager.GameObjectManager.AddObject(newPlayer); 
+  GameObjManager.GameObjectManager.AddObject(newPlayer);
   console.log('add other from server');
 };
 
@@ -137,12 +136,16 @@ Game.prototype.updatePlayerPosition = function(data){
   for (var i=0; i<GameObjManager.GameObjectManager.GameObjectList.length; i++){
       var temp = GameObjManager.GameObjectManager.GameObjectList[i];
       if((temp.ServerPlayer.id == data.id)){
-        //console.log(temp.ServerPlayer.id); 
-	    Matter.Body.setVelocity(temp.ServerPlayer.physicsComponent, 
+        //console.log(temp.ServerPlayer.id);
+        // console.log('Server pos');
+        // console.log(temp.ServerPlayer.physicsComponent.position);
+        // console.log('Client pos');
+        // console.log(data.pos);
+	       Matter.Body.setVelocity(temp.ServerPlayer.physicsComponent,
                                 Matter.Vector.create(data.xFac, data.yFac));
       }
   }
-  //RENDER ITEM ON GROUND   
+  //RENDER ITEM ON GROUND
    for(var i=0; i<this.itemList.length; i++){
        if((data.id!=this.localPlayerid)&&(temp.id == data.id)){ //dont know if we need this
          Matter.Body.setVelocity(itemList[i].physicsComponent, Matter.Vector.create(0,0)); // still object
@@ -155,20 +158,15 @@ Game.prototype.addItem = function (item){
   // this.itemList.push(item);
   //TODO(Fausto): Make sure that item is still
 }
-	
+
 Game.prototype.attack = function(data){
   for (var i=0; i<GameObjManager.GameObjectList.length; i++){
       var temp = GameObjManager.GameObjectList[i];
       if((data.id!=this.localPlayerid)&&(temp.id == data.id)){
         this.item.Item = new Item(temp.physicsComponent.position.x,temp.physicsComponent.position.y,10,10,10, GameObjManager);
 //  this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,80,{isStatic: true});
-      
+
       }
   }
 
 };
-
-
-
-
-
