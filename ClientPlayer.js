@@ -2,7 +2,7 @@
 //TODO: Implement Player functions
 var ClientPlayer= function (x, y, texture_location, id, isServer) {
     GameObject.call(this);
-    this.AddPhysicsComponent(x, y, new RectBodyData(80, 80), texture_location);
+    this.AddPhysicsComponent(x, y, new CircleBodyData(40), texture_location);
 
     //set these values so we don't rotate as we collide with stuff
     this.physicsComponent.inertia = Infinity;
@@ -32,7 +32,8 @@ ClientPlayer.prototype.stopAttack = function(){
 ClientPlayer.prototype.onCollisionEnter = function (other) {
     if (other.tag == "player") {
         console.log("I hit other player!!");
-        GameObjManager.remove(other);
+        //GameObjManager.remove(other);
+        //Matter.Body.scale(this, 0.95, 0.95);
     }       
 }
 
