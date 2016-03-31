@@ -6,6 +6,7 @@
 var GameObject = function () {
     this.physicsComponent = null;
     this.tag = "";
+    this.manager;
 };
 
 GameObject.prototype.AddPhysicsComponent = function (x, y, RigidBodyData, texture_location) {
@@ -17,7 +18,23 @@ GameObject.prototype.update = function (delta) {
 };
 
 GameObject.prototype.onCollisionEnter = function (other) {
+ //TODO: Get this function to work
 
+   if (this.type == "item" && other.type == "player") {
+    //TODO(Fred/Fausto): reduce player health here
+    other.hp -= this.dmg
+    this.manager.remove(this);
+    console.log("ITEM AND PLAYER COLLISION"); 
+  }  else if(this.type == "player" && other.type == "item")  {
+
+     //TODO(Fred/Fausto): reduce player health here
+    this.hp -= other.dmg
+    other.manager.remove(other);
+      
+    console.log("ITEM AND PLAYER COLLISION"); 
+
+
+  }
 };
 
 // classes containing data to create physics rigidbody

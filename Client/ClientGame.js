@@ -77,17 +77,37 @@ var Game = function (fps) {
 	World.add(this.engine.world,item.body);
 
 	Events.on(this.engine, 'collisionStart', function(event) {
-			var pairs = event.pairs;
-			for (var i = 0; i < pairs.length; i++) {
-			var pair = pairs[i];
-			var baseObject = GameObjManager.GetGameObjectFromBody(pair.bodyA);
-			var otherObject = GameObjManager.GetGameObjectFromBody(pair.bodyB);
-			if (baseObject != null && otherObject != null) {
-			baseObject.onCollisionEnter(otherObject);
-			otherObject.onCollisionEnter(baseObject);
-			}
-			}
-			});
+	  var pairs = event.pairs;
+          for (var i = 0; i < pairs.length; i++) {
+	    var pair = pairs[i];
+
+            //TODO(BUGFIX): these functions return null
+	    var baseObject = GameObjManager.GetGameObjectFromBody(pair.bodyA);
+	    var otherObject = GameObjManager.GetGameObjectFromBody(pair.bodyB);
+
+            console.log(baseObject.type + " with " + otherObject.type);
+	    if (baseObject != null && otherObject != null) {
+	      baseObject.onCollisionEnter(otherObject);
+	      otherObject.onCollisionEnter(baseObject);
+	     }
+	    if (baseObject.type == "item" && otherObject.type == "player") {
+             //TODO(Fred/Fausto): reduce player health here
+             //otherObject.hp -= baseObject.dmg
+             baseObject.manager.remove(baseObject);
+             console.log("ITEM AND PLAYER COLLISION");
+            }  else if(baseObject.type == "player" && otherObject.type == "item")  {
+
+              //TODO(Fred/Fausto): reduce player health here
+              //baseObject.hp -= otherObject.dmg
+              otherObject.manager.remove(otherObject);
+
+              console.log("ITEM AND PLAYER COLLISION");
+
+
+  }
+   
+	   }
+	});
 };
 
 Game.prototype.update = function (delta) {
@@ -275,11 +295,11 @@ InputListener.prototype.update = function (delta) {
 	        };
 	        if(isAttacking){
 	            if(!this.item){
-	                    this.item = new Item(this.player.physicsComponent.position.x,
-	                                     this.player.physicsComponent.position.y,10,10);
+	                    tempitem = new Item(this.player.physicsComponent.position.x+100, this.player.physicsComponent.position.y+100,10,10);
 	                    /*this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,
 	                                                      80,{isStatic: true});*/
-	                    isAttacking = false;
+	              GameObjManager.AddObject(tempitem);      
+                      isAttacking = false;
 	            }
 
 	            else {
@@ -294,3 +314,4 @@ InputListener.prototype.update = function (delta) {
 			}
     }
 };
+

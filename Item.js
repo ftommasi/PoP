@@ -10,7 +10,7 @@ function Item(x,y,width,height,damage){
   this.damage=damage;
   this.width=width;
   this.height=height;
-  this.tag = "item";
+  this.type= "item";
   this.id;
   this.gameid;
   this.dmg;
@@ -19,7 +19,7 @@ function Item(x,y,width,height,damage){
 Item.prototype = GameObject.prototype;
 Item.prototype.constructor = Item;
 
-function Item.prototype.getDamage(){
+Item.prototype.getDamage = function(){
   return this.dmg;
 
 }

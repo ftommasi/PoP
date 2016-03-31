@@ -10,6 +10,7 @@ var GameObjectManager = function () {
 };  
   
 GameObjectManager.prototype.AddObject = function (object) {
+    object.manager = this;
     this.GameObjectList.push(object);
 };
 

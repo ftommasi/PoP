@@ -14,8 +14,9 @@ var ClientPlayer= function (x, y, texture_location, id, isServer) {
     this.id = id; //may need id for plaryer AND game
     this.gameid;
     this.item;
-   
-    this.tag = "player";
+    //TODO IMPLEMENT
+    this.hp;
+    this.type = "player";
 }
 
 ClientPlayer.prototype = GameObject.prototype;
