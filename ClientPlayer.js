@@ -33,7 +33,7 @@ ClientPlayer.prototype.onCollisionEnter = function (other) {
     if (other.tag == "player") {
         console.log("I hit other player!!");
         //GameObjManager.remove(other);
-        //Matter.Body.scale(this, 0.95, 0.95);
+        console.log(this instanceof Object)
     }       
 }
 
