@@ -62,9 +62,13 @@
 	      	}
 	      }
 	    });
-	    
+	    socket.on('hit', function(data){
+		if(game.id==data.gameid){
+		//TODO: Subtract health from whoever was hit
+		}
+		});
 	    //Remove other players as they leave.
-	    socket.on('removeOtherPlayer', function(data){
+	    socket.on('removePlayer', function(data){
 	      if(game.id==data.gameid){
 		game.removeOtherPlayer(data);
 	      }

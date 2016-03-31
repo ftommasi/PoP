@@ -220,7 +220,18 @@ Game.prototype.attack = function(data){
 	}
 
 };
+Game.prototype.removeOtherPlayer = function(data){
+        for (var i=0; i<GameObjManager.GameObjectList.length; i++){
+		var temp = GameObjManager.GameObjectList[i];
+		if(temp.id == data.id){
+		  this.playerList.splice(this.playerList.indexOf(temp),1);
+		  GameObjManager.remove(data.id);	
+		}	
+		
+	}
 
+
+};
 //----------------------------------------------------------------------------------------------------------------------------------------------
 //begin input
 //----------------------------------------------------------------------------------------------------------------------------------------------

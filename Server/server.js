@@ -76,8 +76,8 @@ var checkReady = function(gameid){
 };
 
 //Handles removing a player from the game.
-var removePlayer = function(id){
-  
+var removePlayer = function(id, gameid){
+  games[gameid].Game.removePlayer(id);
 };
 
 //Updates the player data
