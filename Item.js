@@ -13,7 +13,13 @@ function Item(x,y,width,height,damage){
   this.tag = "item";
   this.id;
   this.gameid;
+  this.dmg;
 };
 
 Item.prototype = GameObject.prototype;
 Item.prototype.constructor = Item;
+
+function Item.prototype.getDamage(){
+  return this.dmg;
+
+}
