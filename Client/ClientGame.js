@@ -100,7 +100,6 @@ var Game = function (fps) {
               //TODO(Fred/Fausto): reduce player health here
               //baseObject.hp -= otherObject.dmg
               otherObject.manager.remove(otherObject);
-
               console.log("ITEM AND PLAYER COLLISION");
 
 

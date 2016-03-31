@@ -31,10 +31,11 @@ ClientPlayer.prototype.stopAttack = function(){
 };
 
 ClientPlayer.prototype.onCollisionEnter = function (other) {
-    if (other.tag == "player") {
+    if (other.type== "player") {
         console.log("I hit other player!!");
         //GameObjManager.remove(other);
         this.scalebodyandsprite(0.95, 0.95);
+	console.log("SCALE DOWN");
     }       
 };
 
