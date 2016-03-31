@@ -61,7 +61,7 @@ var CircleBodyData = function (radius) {
 };
 
 CircleBodyData.prototype.MakeRigidBody = function (x, y, texture_location) {
-    body = Matter.Bodies.circle(x, y, radius, {
+    body = Matter.Bodies.circle(x, y, this.radius, {
         render: {
             strokeStyle: '#ffffff',
                 sprite: {

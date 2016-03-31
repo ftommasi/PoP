@@ -19,7 +19,7 @@ function Item(x,y,width,height,damage){
 Item.prototype = GameObject.prototype;
 Item.prototype.constructor = Item;
 
-Item.prototype.getDamage = function(){
+Item.prototype.getDamage = function (){
   return this.dmg;
 
 }
