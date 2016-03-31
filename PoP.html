@@ -70,6 +70,7 @@
 	    //Remove other players as they leave.
 	    socket.on('removePlayer', function(data){
 	      if(game.id==data.gameid){
+                console.log(data);
 		game.removeOtherPlayer(data);
 	      }
 	    });
