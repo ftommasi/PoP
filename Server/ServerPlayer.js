@@ -6,7 +6,7 @@ var GameObject = require('./GameObject.js')
 //TODO: Update this so it behaves like Client - should consider a better way to do this!
 var ServerPlayer= function (x, y, texture_location, id, isServer) {
     GameObject.call(this);
-    this.AddPhysicsComponent(x, y, new GameObject.RectBodyData(80, 80), texture_location);
+    this.AddPhysicsComponent(x, y, new GameObject.CircleBodyData(40), texture_location);
 
     //set these values so we don't rotate as we collide with stuff
     this.physicsComponent.inertia = Infinity;
