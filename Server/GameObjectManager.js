@@ -34,7 +34,17 @@ GameObjectManager.prototype.GetGameObjectFromBody = function (body) {
     return null;
 };
 
-GameObjectManager.prototype.remove = function (gameObject) {
+GameObjectManager.prototype.findObject(id){
+    for (var i = 0; i < this.GameObjectList.length; i++) {
+        if (this.GameObjectList[i].ServerPlayer.id == id)
+            return this.GameObjectList[i];
+    }
+    return null;
+
+
+};
+GameObjectManager.prototype.remove = function (id) {
+    var gameObject=findObject(id);
     this.RemoveList.push(gameObject);
     Matter.Body.setPosition(gameObject.physicsComponent, Matter.Vector.create(1000, 1000));
     var index = this.GameObjectList.indexOf(gameObject);

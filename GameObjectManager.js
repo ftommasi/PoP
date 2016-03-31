@@ -32,7 +32,17 @@ GameObjectManager.prototype.GetGameObjectFromBody = function (body) {
     return null;
 };
 
-GameObjectManager.prototype.remove = function (gameObject) {
+GameObjectManager.prototype.findObject(id){
+    for (var i = 0; i < this.GameObjectList.length; i++) {
+        if (this.GameObjectList[i].id == id)
+	    console.log("Found Game Object");
+            return this.GameObjectList[i];
+    }
+    return null;
+};
+
+GameObjectManager.prototype.remove = function (id) {
+    var gameObject=findObject(id);
     this.RemoveList.push(gameObject);
     Matter.Body.setPosition(gameObject.physicsComponent, Matter.Vector.create(1000, 1000));
     console.log("attempt remove");

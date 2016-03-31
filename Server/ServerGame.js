@@ -170,3 +170,8 @@ Game.prototype.attack = function(data){
   }
 
 };
+
+Game.prototype.removePlayer = function(data){
+	this.playerList.splice(this.playerList.indexOf(data),1);
+	GameObjManager.GameObjectManager.remove(data);
+};

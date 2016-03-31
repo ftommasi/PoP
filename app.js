@@ -32,7 +32,7 @@ io.on('connection', function(socket){
     //Find a game.
     var player=world.addPlayer(socketid);
     console.log('Player id: '+player.id+' Connected to game: '+player.gameid);
-    
+    socket.gameid=player.gameid;
     //Send so you are created locally.
     socket.emit('createPlayer', player);
     
@@ -63,10 +63,16 @@ io.on('connection', function(socket){
     //console.log(newData);
     socket.broadcast.emit('move', newData);
   });
+  socket.on('hit', function(data){
+   //TODO: world.hit(data)
+  socket.broadcast.emit('hit', data);
+  });
   
   //TODO Remove other players as they disconnect.
   socket.on('disconnect', function(){
- 
+   world.removePlayer(socket.id, socket.gameid);
+  var data={id:socket.id, gameid:socket.gameid};
+   socket.broadcast.emit('removePlayer', data); 
   });
 });
 
