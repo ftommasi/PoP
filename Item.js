@@ -19,7 +19,14 @@ function Item(x,y,width,height,damage){
 Item.prototype = GameObject.prototype;
 Item.prototype.constructor = Item;
 
-Item.prototype.getDamage = function (){
-  return this.dmg;
+Item.prototype.getDamage = function () {
+    return this.dmg;
+};
 
-}
+Item.prototype.onCollisionEnter = function (other) {
+    if (other.type == "player") {
+        other.hp -= this.dmg
+        GameObjManager.remove(this);
+        console.log("ITEM AND PLAYER COLLISION");
+    }
+};
