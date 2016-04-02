@@ -42,6 +42,11 @@ GameObjectManager.prototype.findObject = function(id){
 };
 
 GameObjectManager.prototype.remove = function (id) {
+    //remove all of tha object's children
+    for (var i = gameObject.physicsComponent.parts.length; i - 1 > 0; i--) {
+        remove(gameObject);
+    }
+
     var gameObject=this.findObject(id);
     this.RemoveList.push(gameObject);
     Matter.Body.setPosition(gameObject.physicsComponent, Matter.Vector.create(1000, 1000));

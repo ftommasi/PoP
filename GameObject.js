@@ -18,20 +18,18 @@ GameObject.prototype.update = function (delta) {
 };
 
 GameObject.prototype.onCollisionEnter = function (other) {
- //TODO: Get this function to work
-   if (this.type == "item" && other.type == "player") {
-    //TODO(Fred/Fausto): reduce player health here
-    other.hp -= this.dmg
-    this.manager.remove(this);
-    console.log("ITEM AND PLAYER COLLISION"); 
-  }
-  else if(this.type == "player" && other.type == "item")  {
-     //TODO(Fred/Fausto): reduce player health here
-    this.hp -= other.dmg
-    other.manager.remove(other);
-    console.log("ITEM AND PLAYER COLLISION"); 
-  }
 
+};
+
+GameObject.prototype.SetParent = function (parent) {
+    if (this.physicsComponent == null || !(parent instanceof GameObject))
+        return;
+    console.log("attempt set parent");
+    Matter.Body.setParts(parent.physicsComponent, this.physicsComponent.parts);
+};
+
+GameObject.prototype.SetPosition = function (newX, newY) {
+    this.physicsComponent.setPosition(Matter.Vector.create(newX, newY));
 };
 
 // classes containing data to create physics rigidbody
