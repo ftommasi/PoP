@@ -32,7 +32,7 @@ GameObjectManager.prototype.GetGameObjectFromBody = function (body) {
     return null;
 };
 
-GameObjectManager.prototype.findObject(id){
+GameObjectManager.prototype.findObject = function(id){
     for (var i = 0; i < this.GameObjectList.length; i++) {
         if (this.GameObjectList[i].id == id)
 	    console.log("Found Game Object");
@@ -42,7 +42,7 @@ GameObjectManager.prototype.findObject(id){
 };
 
 GameObjectManager.prototype.remove = function (id) {
-    var gameObject=findObject(id);
+    var gameObject=this.findObject(id);
     this.RemoveList.push(gameObject);
     Matter.Body.setPosition(gameObject.physicsComponent, Matter.Vector.create(1000, 1000));
     console.log("attempt remove");
