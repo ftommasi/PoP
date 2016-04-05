@@ -35,7 +35,8 @@ Item.prototype.onCollisionEnter = function (other){
         other.scalebodyandsprite(0.95, 0.95);
        //TODO(Fausto): Make proper projectile class
        if(this.proj){
-         GameObjManager.remove(this);
+         console.log("Item id" + this.id);
+         GameObjManager.remove(this.id);
        }
 
      }
