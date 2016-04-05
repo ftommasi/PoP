@@ -202,6 +202,7 @@ Game.prototype.attack = function(data){
 		if((data.id!=this.localPlayerid)&&(temp.id == data.id)){
 			var item = new Item(data.pos.x + 60*(data.direction),data.pos.y,10,10,true);
 			item.proj = true;
+            item.id=data.itemId;
                         Matter.Body.setVelocity( item.physicsComponent,Matter.Vector.create(data.direction*15,0));
 			GameObjManager.AddObject(item);
 			//  this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,80,{isStatic: true});
@@ -252,6 +253,7 @@ InputListener.prototype.contructor = InputListener;
 
 InputListener.prototype.update = function (delta) {
         isAttacking = false;
+    itemId=null;
 	x_factor = y_factor = 0;
 	var input = [];
         var direction= 1;
@@ -277,7 +279,8 @@ InputListener.prototype.update = function (delta) {
 
 	if (32 in keysDown){ //Spacebar
 		isAttacking = true;
-		input.push('s');
+		itemId=Math.random()*10000;
+        input.push('s');
 
 	}
 
@@ -293,12 +296,14 @@ InputListener.prototype.update = function (delta) {
 	                     yFac : y_factor,
 	                     attack: isAttacking,
 	                     inputSeq: this.inputSeq,
-			     direction: direction
+			     direction: direction,
+                 itemId: itemId
 			     };
 			   if(isAttacking){
 			 var tempitem = new Item(this.player.physicsComponent.position.x+60*direction, this.player.physicsComponent.position.y,10,10,true);
                          Matter.Body.setVelocity( tempitem.physicsComponent,Matter.Vector.create(direction*15,0));
-			 tempitem.proj = true;
+			 tempitem.id=itemId;
+             tempitem.proj = true;
 		GameObjManager.AddObject(tempitem);      
 
 			}
