@@ -31,7 +31,7 @@ ClientPlayer.prototype.stopAttack = function(){
 };
 
 ClientPlayer.prototype.onCollisionEnter = function (other) {
-    if (other.type== "player") {
+    if (other.type== "item" && other.isProjectile()) {
         console.log("I hit other player!!");
         //GameObjManager.remove(other);
         this.scalebodyandsprite(0.95, 0.95);

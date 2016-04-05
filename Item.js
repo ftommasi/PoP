@@ -3,7 +3,7 @@
 *  Purpose: item class to be used for weapons and powerups   
 */
 
-function Item(x,y,width,height,damage){
+function Item(x,y,width,height,damage,isProjectile=false){
   GameObject.call(this);
   this.AddPhysicsComponent(x,y,new RectBodyData(width,height)) ;
   this.body;
@@ -14,6 +14,7 @@ function Item(x,y,width,height,damage){
   this.id;
   this.gameid;
   this.dmg;
+  this.isProjectile = isProjectile;
 };
 
 Item.prototype = GameObject.prototype;
@@ -22,4 +23,8 @@ Item.prototype.constructor = Item;
 Item.prototype.getDamage = function (){
   return this.dmg;
 
+}
+
+Item.prototype.isProjectile = function(){
+  return this.isPrjectile;
 }

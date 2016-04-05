@@ -81,7 +81,6 @@ var Game = function (fps) {
           for (var i = 0; i < pairs.length; i++) {
 	    var pair = pairs[i];
 
-            //TODO(BUGFIX): these functions return null
 	    var baseObject = GameObjManager.GetGameObjectFromBody(pair.bodyA);
 	    var otherObject = GameObjManager.GetGameObjectFromBody(pair.bodyB);
 
@@ -90,12 +89,13 @@ var Game = function (fps) {
 	      baseObject.onCollisionEnter(otherObject);
 	      otherObject.onCollisionEnter(baseObject);
 	     }
-	    if (baseObject.type == "item" && otherObject.type == "player") {
+if (baseObject.type == "item" && baseObject.isProjectile()  && otherObject.type == "player") {
              //TODO(Fred/Fausto): reduce player health here
              //otherObject.hp -= baseObject.dmg
              baseObject.manager.remove(baseObject);
              console.log("ITEM AND PLAYER COLLISION");
-            }  else if(baseObject.type == "player" && otherObject.type == "item")  {
+            }  
+     else if(baseObject.type == "player" && otherObject.type == "item" && otherObject.isProjectile()){
 
               //TODO(Fred/Fausto): reduce player health here
               //baseObject.hp -= otherObject.dmg
@@ -253,7 +253,7 @@ InputListener.prototype.update = function (delta) {
 
 	x_factor = y_factor = 0;
 	var input = [];
-
+        var direction= 1;
 	if (38 in keysDown) { //up
 		y_factor = -2;
 		input.push('u');
@@ -266,10 +266,12 @@ InputListener.prototype.update = function (delta) {
 	if (37 in keysDown) { // left
 		x_factor = -2;
 		input.push('l');
+		direction = -1; //shoot projectile on the left  side
 	}
 	if (39 in keysDown) { // right
 		x_factor = 2;
 		input.push('r');
+		direction = 1; //shoot projectile on the right side
 	}
 
 	if (32 in keysDown){ //Spacebar
@@ -282,35 +284,38 @@ InputListener.prototype.update = function (delta) {
 	if (this.player != null) {
 		if(input.length){
 			this.inputSeq += 1;
-			var message = {
-	            gameid : this.player.gameid,
-	            id :this.player.id,
-							pos:this.player.physicsComponent.position,
-							velocity: this.player.physicsComponent.velocity,
-	            xFac : x_factor,
-	            yFac : y_factor,
-	            attack: isAttacking,
-							inputSeq: this.inputSeq
-	        };
-	        if(isAttacking){
-	            if(!this.item){
-	                    tempitem = new Item(this.player.physicsComponent.position.x+100, this.player.physicsComponent.position.y+100,10,10);
-	                    /*this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,
-	                                                      80,{isStatic: true});*/
-	              GameObjManager.AddObject(tempitem);      
-                      isAttacking = false;
-	            }
+			   if(isAttacking){
+				if(!this.item){
+					tempitem = new Item(this.player.physicsComponent.position.x+100*direction, this.player.physicsComponent.position.y+100*direction,10,10,true);
+					/*this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,
+					  80,{isStatic: true});*/
+					GameObjManager.AddObject(tempitem);      
+					isAttacking = false;
+				}
 
-	            else {
-	                this.item = null;
-	            }
-
-	        }
-					  this.socket.emit('move', message);
-	          Matter.Body.setVelocity(this.player.physicsComponent,
-	                                Matter.Vector.create(x_factor, y_factor));
+				else {
+					this.item = null;
+				}
 
 			}
-    }
+
+                           var message = {
+                             gameid : this.player.gameid,
+                             id :this.player.id,
+	                     pos:this.player.physicsComponent.position,
+	                     velocity: this.player.physicsComponent.velocity,
+	                     xFac : x_factor,
+	                     yFac : y_factor,
+	                     attack: isAttacking,
+	                     inputSeq: this.inputSeq
+	                     projectile: tempitem
+			     };
+
+			this.socket.emit('move', message);
+			Matter.Body.setVelocity(this.player.physicsComponent,
+					Matter.Vector.create(x_factor, y_factor));
+
+		}
+	}
 };
 
