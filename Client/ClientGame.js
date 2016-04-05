@@ -81,29 +81,16 @@ var Game = function (fps) {
           for (var i = 0; i < pairs.length; i++) {
 	    var pair = pairs[i];
 
-            //TODO(BUGFIX): these functions return null
 	    var baseObject = GameObjManager.GetGameObjectFromBody(pair.bodyA);
 	    var otherObject = GameObjManager.GetGameObjectFromBody(pair.bodyB);
 
-            console.log(baseObject.type + " with " + otherObject.type);
+            //console.log(baseObject.type + " with " + otherObject.type);
 	    if (baseObject != null && otherObject != null) {
 	      baseObject.onCollisionEnter(otherObject);
 	      otherObject.onCollisionEnter(baseObject);
 	     }
-	    if (baseObject.type == "item" && otherObject.type == "player") {
-             //TODO(Fred/Fausto): reduce player health here
-             //otherObject.hp -= baseObject.dmg
-             baseObject.manager.remove(baseObject);
-             console.log("ITEM AND PLAYER COLLISION");
-            }  else if(baseObject.type == "player" && otherObject.type == "item")  {
-
-              //TODO(Fred/Fausto): reduce player health here
-              //baseObject.hp -= otherObject.dmg
-              otherObject.manager.remove(otherObject);
-              console.log("ITEM AND PLAYER COLLISION");
 
 
-  }
    
 	   }
 	});
@@ -213,7 +200,10 @@ Game.prototype.attack = function(data){
 	for (var i=0; i<GameObjManager.GameObjectList.length; i++){
 		var temp = GameObjManager.GameObjectList[i];
 		if((data.id!=this.localPlayerid)&&(temp.id == data.id)){
-			this.item = new Item(temp.physicsComponent.position.x,temp.physicsComponent.position.y,10,10);
+			var item = new Item(data.pos.x + 60*(data.direction),data.pos.y,10,10,true);
+			item.proj = true;
+                        Matter.Body.setVelocity( item.physicsComponent,Matter.Vector.create(data.direction*15,0));
+			GameObjManager.AddObject(item);
 			//  this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,80,{isStatic: true});
 
 		}
@@ -261,10 +251,10 @@ InputListener.prototype = GameObject.prototype;
 InputListener.prototype.contructor = InputListener;
 
 InputListener.prototype.update = function (delta) {
-
+        isAttacking = false;
 	x_factor = y_factor = 0;
 	var input = [];
-
+        var direction= 1;
 	if (38 in keysDown) { //up
 		y_factor = -2;
 		input.push('u');
@@ -277,51 +267,47 @@ InputListener.prototype.update = function (delta) {
 	if (37 in keysDown) { // left
 		x_factor = -2;
 		input.push('l');
+		direction = -1; //shoot projectile on the left  side
 	}
 	if (39 in keysDown) { // right
 		x_factor = 2;
 		input.push('r');
+		direction = 1; //shoot projectile on the right side
 	}
 
 	if (32 in keysDown){ //Spacebar
-		//TODO(Fausto): implement attack
-		isAttacking = !isAttacking;
+		isAttacking = true;
 		input.push('s');
 
 	}
 
 	if (this.player != null) {
-		if(input.length){
+	      	if(input.length){
 			this.inputSeq += 1;
-			var message = {
-	            gameid : this.player.gameid,
-	            id :this.player.id,
-							pos:this.player.physicsComponent.position,
-							velocity: this.player.physicsComponent.velocity,
-	            xFac : x_factor,
-	            yFac : y_factor,
-	            attack: isAttacking,
-							inputSeq: this.inputSeq
-	        };
-	        if(isAttacking){
-	            if(!this.item){
-	                    tempitem = new Item(this.player.physicsComponent.position.x+100, this.player.physicsComponent.position.y+100,10,10);
-	                    /*this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,
-	                                                      80,{isStatic: true});*/
-	              GameObjManager.AddObject(tempitem);      
-                      isAttacking = false;
-	            }
-
-	            else {
-	                this.item = null;
-	            }
-
-	        }
-					  this.socket.emit('move', message);
-	          Matter.Body.setVelocity(this.player.physicsComponent,
-	                                Matter.Vector.create(x_factor, y_factor));
+                          var message = {
+                             gameid : this.player.gameid,
+                             id :this.player.id,
+	                     pos:this.player.physicsComponent.position,
+	                     velocity: this.player.physicsComponent.velocity,
+	                     xFac : x_factor,
+	                     yFac : y_factor,
+	                     attack: isAttacking,
+	                     inputSeq: this.inputSeq,
+			     direction: direction
+			     };
+			   if(isAttacking){
+			 var tempitem = new Item(this.player.physicsComponent.position.x+60*direction, this.player.physicsComponent.position.y,10,10,true);
+                         Matter.Body.setVelocity( tempitem.physicsComponent,Matter.Vector.create(direction*15,0));
+			 tempitem.proj = true;
+		GameObjManager.AddObject(tempitem);      
 
 			}
-    }
+
+                          			this.socket.emit('move', message);
+			Matter.Body.setVelocity(this.player.physicsComponent,
+					Matter.Vector.create(x_factor, y_factor));
+
+		}
+	}
 };
 
