@@ -32,12 +32,14 @@ Item.prototype.isProjectile = function(){
 Item.prototype.onCollisionEnter = function (other){
   //TODO: Get this function to work
      if (other.type == "player") {
-        other.scalebodyandsprite(0.95, 0.95);
+
+  console.log("ITEM AND PLAYER COLLISION. PROJECTILE = " + this.proj);
+      //TODO(Fred/Fausto): reduce player health here
+  //     other.hp -= this.dmg;
        //TODO(Fausto): Make proper projectile class
        if(this.proj){
          GameObjManager.remove(this);
        }
-
      }
 
 
