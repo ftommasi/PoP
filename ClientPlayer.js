@@ -14,9 +14,13 @@ var ClientPlayer= function (x, y, texture_location, id, isServer) {
     this.id = id; //may need id for plaryer AND game
     this.gameid;
     this.item;
-    //TODO IMPLEMENT
-    this.hp;
     this.type = "player";
+    this.alive = true;
+
+    this.health = {
+      healthvalue: 1000,
+      spritescale: 1.00
+    }
 }
 
 ClientPlayer.prototype = GameObject.prototype;
@@ -31,16 +35,27 @@ ClientPlayer.prototype.stopAttack = function(){
 };
 
 ClientPlayer.prototype.onCollisionEnter = function (other) {
-    if (other.type== "player") {
-        console.log("I hit other player!!");
-        //GameObjManager.remove(other);
-        this.scalebodyandsprite(0.95, 0.95);
-	console.log("SCALE DOWN");
-    }       
+
 };
 
-ClientPlayer.prototype.scalebodyandsprite = function (scaleFactor) {
-  Matter.Body.scale(this.physicsComponent, scaleFactor, scaleFactor);
-  this.physicsComponent.circleRadius *= scaleFactor;
+ClientPlayer.prototype.dodamage = function (scaleFactor) {
+  console.log("player health: " + this.health.healthvalue);
+  this.health.healthvalue -= (1000 * scaleFactor);
+  console.log("player health after update: " + this.health.healthvalue);
+ 
+  console.log("this.circleRadius: " + this.physicsComponent.circleRadius); 
+  if ((this.physicsComponent.circleRadius - (40 * scaleFactor)) < (40 * .10)) {
+    this.physicsComponent.circleRadius = (40 * 0.10);
+  } else {
+    console.log(this.physicsComponent.circleRadius - scaleFactor);
+    this.physicsComponent.circleRadius -= 0.4;
+    Matter.Body.scale(this.physicsComponent, (1 - scaleFactor), (1 - scaleFactor));
+  }
+
+
+  if (this.health.healthvalue < 50) {
+    this.alive = false;
+    console.log("someone died!!");
+  }
 };
 

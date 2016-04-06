@@ -70,9 +70,17 @@ io.on('connection', function(socket){
   
   //TODO Remove other players as they disconnect.
   socket.on('disconnect', function(){
-   world.removePlayer(socket.id, socket.gameid);
-  var data={id:socket.id, gameid:socket.gameid};
+   console.log(socket.id);
+   console.log(socket.gameid);
+     var data={id:socket.id, gameid:socket.gameid};
    socket.broadcast.emit('removePlayer', data); 
+   world.removePlayer(socket.id, socket.gameid);
+  });
+
+  socket.on('restart', function(data) {
+    if (world.checkReady(data.gameid)) {
+      socket.broadcast.emit('back', data.gameid);
+    }
   });
 });
 
