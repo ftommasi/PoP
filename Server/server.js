@@ -34,7 +34,7 @@ var joinGame=function(player){
       for(var i = 0; i<game_count; i++){
 	var temp = games[i];
 	var length=temp.Game.playerList.length;
-	if(length<2){
+	if(length<4){
 	  player.gameid=i;
 	  player.newX=100*(length+3);
 	  player.newY=500;
@@ -68,7 +68,7 @@ var addPlayer = function(id){
 
 //Checks if the game is ready
 var checkReady = function(gameid){
-  if(games[gameid].Game.playerList.length==2){
+  if(games[gameid].Game.playerList.length==4){
     games[gameid].Game.start();
     return true;
   }

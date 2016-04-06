@@ -58,7 +58,7 @@ var Game = function (fps) {
 	GameObjManager.engine = this.engine;
 
 	var renderOptions = this.engine.render.options;
-	renderOptions.background = './assets/grid.png';
+	renderOptions.background = './assets/Background.png';
 	renderOptions.showAngleIndicator = false;
 	renderOptions.wireframes = false;
 	Matter.Engine.run(this.engine);
