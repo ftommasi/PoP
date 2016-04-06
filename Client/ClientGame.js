@@ -34,7 +34,7 @@ var Game = function (fps) {
     this.localPlayerid;
     this.fps = fps;
     this.playerList =[];
-    this.deadPlayers = 0;
+//    this.deadPlayers = 0;
 		this.inputSeq=0;
     this.itemList =[];
     this.delay = 1000 / this.fps;
@@ -100,17 +100,18 @@ var Game = function (fps) {
 Game.prototype.update = function (delta) {
         var isLocalPlayerAlive = true;
 	this.onUpdate(delta);
+    var deadPlayers = 0;
 	GameObjManager.UpdateAll(delta);
         for (var i = 0; i < this.playerList.length; i++) {
           if (this.localPlayerId == this.playerList[i].id && !this.playerList[i].alive) {
             isLocalPlayerAlive = false;
           }
           if (!this.playerList[i].alive) {
-            this.deadPlayers++;
+                deadPlayers++;
           }
         }
 
-        if (this.deadPlayers == (this.playerList.length - 1)) {
+        if (deadPlayers == (this.playerList.length - 1)) {
           if (isLocalPlayerAlive) {
             var message = {
               gameid:this.id,
