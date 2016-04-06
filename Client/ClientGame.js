@@ -34,6 +34,7 @@ var Game = function (fps) {
     this.localPlayerid;
     this.fps = fps;
     this.playerList =[];
+    this.deadPlayers = 0;
 		this.inputSeq=0;
     this.itemList =[];
     this.delay = 1000 / this.fps;
@@ -97,9 +98,26 @@ var Game = function (fps) {
 };
 
 Game.prototype.update = function (delta) {
+        var isLocalPlayerAlive = true;
 	this.onUpdate(delta);
 	GameObjManager.UpdateAll(delta);
+        for (var i = 0; i < this.playerList.length; i++) {
+          if (this.localPlayerId == this.playerList[i].id && !this.playerList[i].alive) {
+            isLocalPlayerAlive = false;
+          }
+          if (!this.playerList[i].alive) {
+            this.deadPlayers++;
+          }
+        }
 
+        if (this.deadPlayers == (this.playerList.length - 1)) {
+          if (isLocalPlayerAlive) {
+            var message = {
+              gameid:this.id,
+            }
+            this.socket.emit('restart', message);
+          } 
+        }
 	// run the engine
 	//Matter.Engine.update(this.engine,e delta);
 	//Matter.Render.world(this.engine);
@@ -128,6 +146,11 @@ Game.prototype.start = function () {
 	if (this.raf < 1) {
 		this.loop(0);
 	}
+        for (var i = 0; i < this.playerList.length; i++) {
+          this.playerList[i].alive = true;
+          this.playerList[i].health.healthvalue = 1000;
+          this.playerList[i].health.spritescale = 1.00;
+        }
 };
 Game.prototype.stop = function () {
 	if (this.raf > 0) {

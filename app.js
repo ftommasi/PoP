@@ -76,6 +76,12 @@ io.on('connection', function(socket){
    socket.broadcast.emit('removePlayer', data); 
    world.removePlayer(socket.id, socket.gameid);
   });
+
+  socket.on('restart', function(data) {
+    if (world.checkReady(data.gameid)) {
+      socket.broadcast.emit('start', data.gameid);
+    }
+  });
 });
 
 var port = 4004;

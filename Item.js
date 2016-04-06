@@ -32,7 +32,7 @@ Item.prototype.isProjectile = function(){
 Item.prototype.onCollisionEnter = function (other){
   //TODO: Get this function to work
      if (other.type == "player") {
-        other.scalebodyandsprite(0.95, 0.95);
+        other.dodamage(0.01);
        //TODO(Fausto): Make proper projectile class
        if(this.proj){
          console.log("Item id" + this.id);
