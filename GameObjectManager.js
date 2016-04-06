@@ -34,8 +34,8 @@ GameObjectManager.prototype.GetGameObjectFromBody = function (body) {
 
 GameObjectManager.prototype.findObject = function(id){
     for (var i = 0; i < this.GameObjectList.length; i++) {
-        console.log("Gameobject id " + this.GameObjectList[i].id);
-        console.log("ID TO FIND " + id);
+        //console.log("Gameobject id " + this.GameObjectList[i].id);
+        //console.log("ID TO FIND " + id);
         if (this.GameObjectList[i].id == id){
 	         console.log("Found Game Object");
             return this.GameObjectList[i];
