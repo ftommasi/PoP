@@ -5,6 +5,8 @@
 var GameObjManager;
 var playerManager;
 var Events = Matter.Events;
+var numShots=10;
+var outOfShots=false;
 var inputTimer = 0;
 var inputTimeoutPeriod = 100;
 //TODO: make game render here
@@ -34,8 +36,7 @@ var Game = function (fps) {
     this.localPlayerid;
     this.fps = fps;
     this.playerList =[];
-//    this.deadPlayers = 0;
-		this.inputSeq=0;
+	this.inputSeq=0;
     this.itemList =[];
     this.delay = 1000 / this.fps;
     this.lastTime = 0;
@@ -70,12 +71,12 @@ var Game = function (fps) {
 	// create a ground
 	var ground = Matter.Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
 
-	var item = new Item(10,10,10,10,10);
-	item.body = Matter.Bodies.rectangle(400, 600, 80, 60, { isStatic: true });
+//	var item = new Item(10,10,10,10,10);
+//	item.body = Matter.Bodies.rectangle(400, 600, 80, 60, { isStatic: true });
 
 	World.add(this.engine.world, ground);
 
-	World.add(this.engine.world,item.body);
+	//World.add(this.engine.world,item.body);
 
 	Events.on(this.engine, 'collisionStart', function(event) {
 	  var pairs = event.pairs;
@@ -119,10 +120,20 @@ Game.prototype.update = function (delta) {
             this.socket.emit('restart', message);
           } 
         }
+        if(numShots==0){
+            if(outOfShots==false){
+                outOfShots=true;
+                setTimeout(shotFunction, 1000);
+            }
+        }
 	// run the engine
 	//Matter.Engine.update(this.engine,e delta);
 	//Matter.Render.world(this.engine);
 };
+function shotFunction(){
+    outOfShots=false;
+    numShots=10;
+}
 Game.prototype.render = function () {
 	this.onRender();
 };
@@ -224,9 +235,9 @@ Game.prototype.attack = function(data){
 	for (var i=0; i<GameObjManager.GameObjectList.length; i++){
 		var temp = GameObjManager.GameObjectList[i];
 		if((data.id!=this.localPlayerid)&&(temp.id == data.id)){
-			var item = new Item(data.pos.x + 60*(data.direction),data.pos.y,10,10,true);
+			var item = new Item(data.pos.x + 60*(data.direction),data.pos.y,10,10, data.itemId, true);
 			item.proj = true;
-            item.id=data.itemId;
+            //item.id=data.itemId;
                         Matter.Body.setVelocity( item.physicsComponent,Matter.Vector.create(data.direction*15,0));
 			GameObjManager.AddObject(item);
 			//  this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,80,{isStatic: true});
@@ -302,37 +313,40 @@ InputListener.prototype.update = function (delta) {
 	}
 
 	if (32 in keysDown){ //Spacebar
-		isAttacking = true;
-		itemId=Math.random()*10000;
+	    isAttacking = true;
+	    itemId=Math.random()*10000;
         input.push('s');
-
 	}
 
 	if (this.player != null) {
 	      	if(input.length){
-			this.inputSeq += 1;
-                          var message = {
-                             gameid : this.player.gameid,
-                             id :this.player.id,
-	                     pos:this.player.physicsComponent.position,
-	                     velocity: this.player.physicsComponent.velocity,
-	                     xFac : x_factor,
-	                     yFac : y_factor,
-	                     attack: isAttacking,
-	                     inputSeq: this.inputSeq,
-			     direction: direction,
-                 itemId: itemId
+			    this.inputSeq += 1;
+                var message = {
+                    gameid : this.player.gameid,
+                    id :this.player.id,
+	                pos:this.player.physicsComponent.position,
+	                velocity: this.player.physicsComponent.velocity,
+	                xFac : x_factor,
+	                yFac : y_factor,
+	                attack: isAttacking,
+	                inputSeq: this.inputSeq,
+			        direction: direction,
+                    itemId: itemId
 			     };
-			   if(isAttacking){
-			 var tempitem = new Item(this.player.physicsComponent.position.x+60*direction, this.player.physicsComponent.position.y,10,10,true);
-                         Matter.Body.setVelocity( tempitem.physicsComponent,Matter.Vector.create(direction*15,0));
-			 tempitem.id=itemId;
-             tempitem.proj = true;
-		GameObjManager.AddObject(tempitem);      
+			   if(isAttacking && (numShots>0)){
+			    var tempitem = new Item(this.player.physicsComponent.position.x+60*direction, this.player.physicsComponent.position.y,10,10,itemId, true);
+                Matter.Body.setVelocity( tempitem.physicsComponent,Matter.Vector.create(direction*15,0));
+                tempitem.proj = true;
+		        GameObjManager.AddObject(tempitem);
+                if(numShots>0){
+                    numShots-=1;
+                }
 
 			}
-
-                          			this.socket.emit('move', message);
+            if(numShots==0){
+                message.attack=false;
+            }
+            this.socket.emit('move', message);
 			Matter.Body.setVelocity(this.player.physicsComponent,
 					Matter.Vector.create(x_factor, y_factor));
 

@@ -7,7 +7,7 @@
 //List of games.
 var games = [];
 var game_count=0;
-
+var num_players=2;
 //Grab the game engine
 require('./ServerGame.js');
 
@@ -34,7 +34,7 @@ var joinGame=function(player){
       for(var i = 0; i<game_count; i++){
 	var temp = games[i];
 	var length=temp.Game.playerList.length;
-	if(length<4){
+	if(length<num_players){
 	  player.gameid=i;
 	  player.newX=100*(length+3);
 	  player.newY=500;
@@ -68,7 +68,7 @@ var addPlayer = function(id){
 
 //Checks if the game is ready
 var checkReady = function(gameid){
-  if(games[gameid].Game.playerList.length==4){
+  if(games[gameid].Game.playerList.length==num_players){
     games[gameid].Game.start();
     return true;
   }
