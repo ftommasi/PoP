@@ -3,7 +3,7 @@
 *  Purpose: item class to be used for weapons and powerups   
 */
 
-function Item(x,y,width,height,damage,Project=false){
+function Item(x,y,width,height,damage, id, Project=false){
   GameObject.call(this);
   this.AddPhysicsComponent(x,y,new RectBodyData(width,height)) ;
   this.body;
@@ -11,15 +11,25 @@ function Item(x,y,width,height,damage,Project=false){
   this.width=width;
   this.height=height;
   this.type= "item";
-  this.id;
+  this.id=id;
   this.gameid;
   this.dmg;
   this.proj= Project;
+  this.hasBeenRemoved = false;
+  setTimeout(this.itemRemove.bind(this), 3000);
 };
 
 Item.prototype = GameObject.prototype;
 Item.prototype.constructor = Item;
-
+Item.prototype.itemRemove = function(){
+    console.log("From timeout function");
+    console.log(this.hasBeenRemoved);
+    console.log(this.id);
+    if(!this.hasBeenRemoved){
+        this.hasBeenRemoved=true;
+        GameObjManager.remove(this.id);
+    }
+}
 Item.prototype.getDamage = function (){
   return this.dmg;
 
@@ -36,7 +46,10 @@ Item.prototype.onCollisionEnter = function (other){
        //TODO(Fausto): Make proper projectile class
        if(this.proj){
          console.log("Item id" + this.id);
-         GameObjManager.remove(this.id);
+         if(!this.hasBeenRemoved){
+            this.hasBeenRemoved=true;
+            GameObjManager.remove(this.id);
+        }
        }
 
      }
