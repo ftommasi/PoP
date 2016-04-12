@@ -1,0 +1,16 @@
+Last sprint velocity was 9.07 sprint points/week
+
+- Move to smash bros game style, main platform, die if you fall off
+- Move projectile launch position w/ character size
+- More robust death/win/restart state
+- Remove physics from server
+- Bigger maps
+- Main menu
+  - How to play
+- Character color to identify local player from other players
+- Jumping
+- Sound/music
+- Test/testing code
+- General code cleanup
+- Per game kill tracking
+- Shoot in all directions
