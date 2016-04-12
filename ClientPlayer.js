@@ -34,6 +34,12 @@ ClientPlayer.prototype.stopAttack = function(){
   this.item = null ;
 };
 
+ClientPlayer.prototype.getSize = function(){
+    var data = { health : this.health.healthvalue,
+                 radius : this.physicsComponent.circleRadius}
+    return data;
+};
+
 ClientPlayer.prototype.onCollisionEnter = function (other) {
 
 };

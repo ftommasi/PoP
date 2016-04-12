@@ -46,13 +46,13 @@ GameObjectManager.prototype.findObject = function(id){
 
 GameObjectManager.prototype.remove = function (id) {
     var gameObject=this.findObject(id);
-    this.RemoveList.push(gameObject);
-    Matter.Body.setPosition(gameObject.physicsComponent, Matter.Vector.create(1000, 1000));
-    console.log("attempt remove");
-    var index = this.GameObjectList.indexOf(gameObject);
-    if (index > -1) {
-        this.GameObjectList.splice(index, 1);
-    }
+        this.RemoveList.push(gameObject);
+        Matter.Body.setPosition(gameObject.physicsComponent, Matter.Vector.create(1000, 1000));
+        console.log("attempt remove");
+        var index = this.GameObjectList.indexOf(gameObject);
+        if (index > -1) {
+            this.GameObjectList.splice(index, 1);
+        }
 };
  
  

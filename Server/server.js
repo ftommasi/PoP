@@ -69,7 +69,6 @@ var addPlayer = function(id){
 //Checks if the game is ready
 var checkReady = function(gameid){
   if(games[gameid].Game.playerList.length==num_players){
-    games[gameid].Game.start();
     return true;
   }
   return false;

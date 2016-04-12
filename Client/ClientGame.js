@@ -216,6 +216,11 @@ Game.prototype.updatePlayerPosition = function(data){
 			else{
 					Matter.Body.setVelocity(temp.physicsComponent, Matter.Vector.create(data.xFac, data.yFac));
 			}
+            if(temp.health.healthvalue!=data.size.health || temp.physicsComponent.circleRadius!=data.size.radius){
+                temp.health.healthvalue = data.size.health;
+                temp.physicsComponent.circleRadius = data.size.radius;
+                Matter.Body.scale(temp.physicsComponent, (1 - .01), (1 - .01));
+            }
 		}
 	}
 	//RENDER ITEM ON GROUND
@@ -331,7 +336,8 @@ InputListener.prototype.update = function (delta) {
 	                attack: isAttacking,
 	                inputSeq: this.inputSeq,
 			        direction: direction,
-                    itemId: itemId
+                    itemId: itemId,
+                    size : this.player.getSize()
 			     };
 			   if(isAttacking && (numShots>0)){
 			    var tempitem = new Item(this.player.physicsComponent.position.x+60*direction, this.player.physicsComponent.position.y,10,10,itemId, true);
