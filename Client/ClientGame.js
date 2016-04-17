@@ -2,6 +2,8 @@
  *  Date: 2/9/2016
  *  Purpose: Create the main game loop
  */
+var localColor='#FF0000';
+var nonLocalColor='#FFFF00';
 var GameObjManager;
 var playerManager;
 var Events = Matter.Events;
@@ -173,7 +175,7 @@ Game.prototype.stop = function () {
 
 Game.prototype.addLocalPlayer = function(player){
 	//TODO: implement
-	var newPlayer = new ClientPlayer(player.newX, player.newY, null, player.id, false);
+	var newPlayer = new ClientPlayer(player.newX, player.newY, null, player.id, false, localColor);
 	newPlayer.oldX = player.oldX;
 	newPlayer.oldY = player.oldY;
 	newPlayer.gameid = player.gameid;
@@ -192,7 +194,7 @@ Game.prototype.addLocalPlayer = function(player){
 
 Game.prototype.addOtherPlayer = function(player){
 	//TODO: implement
-	var newPlayer = new ClientPlayer(player.newX, player.newY, null, player.id, false);
+	var newPlayer = new ClientPlayer(player.newX, player.newY, null, player.id, false, nonLocalColor);
 	newPlayer.oldX = player.oldX;
 	newPlayer.oldY = player.oldY;
 	newPlayer.gameid = player.gameid;
