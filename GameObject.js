@@ -9,8 +9,8 @@ var GameObject = function () {
     this.manager;
 };
 
-GameObject.prototype.AddPhysicsComponent = function (x, y, RigidBodyData, texture_location) {
-    this.physicsComponent = RigidBodyData.MakeRigidBody(x, y, texture_location);
+GameObject.prototype.AddPhysicsComponent = function (x, y, RigidBodyData, texture_location, color) {
+    this.physicsComponent = RigidBodyData.MakeRigidBody(x, y, texture_location, color);
 };
 
 GameObject.prototype.update = function (delta) {
@@ -26,9 +26,10 @@ var RectBodyData = function (width, height) {
     this.height = height;
 };
 
-RectBodyData.prototype.MakeRigidBody = function (x, y, texture_location) {
+RectBodyData.prototype.MakeRigidBody = function (x, y, texture_location, color) {
     body = Matter.Bodies.rectangle(x, y, this.width, this.height, {
         render: {
+            fillStyle: color,
             strokeStyle: '#ffffff',
             sprite: {
                 texture: texture_location
@@ -43,9 +44,10 @@ var CircleBodyData = function (radius) {
     this.radius = radius;
 };
 
-CircleBodyData.prototype.MakeRigidBody = function (x, y, texture_location) {
+CircleBodyData.prototype.MakeRigidBody = function (x, y, texture_location, color) {
     body = Matter.Bodies.circle(x, y, this.radius, {
         render: {
+            fillStyle: color,
             strokeStyle: '#ffffff',
                 sprite: {
                 texture: texture_location

@@ -1,8 +1,8 @@
 //TODO: ADD HEADER
 //TODO: Implement Player functions
-var ClientPlayer= function (x, y, texture_location, id, isServer) {
+var ClientPlayer= function (x, y, texture_location, id, isServer, color) {
     GameObject.call(this);
-    this.AddPhysicsComponent(x, y, new CircleBodyData(40), texture_location);
+    this.AddPhysicsComponent(x, y, new CircleBodyData(40), texture_location, color);
 
     //set these values so we don't rotate as we collide with stuff
     this.physicsComponent.inertia = Infinity;
