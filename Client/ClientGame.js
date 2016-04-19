@@ -11,6 +11,8 @@ var numShots=10;
 var outOfShots=false;
 var inputTimer = 0;
 var inputTimeoutPeriod = 100;
+var x_direction= 1;
+var y_direction= 1;
 //TODO: make game render here
 var tick = function (delay) {
 	var _delay = delay;
@@ -242,10 +244,10 @@ Game.prototype.attack = function(data){
 	for (var i=0; i<GameObjManager.GameObjectList.length; i++){
 		var temp = GameObjManager.GameObjectList[i];
 		if((data.id!=this.localPlayerid)&&(temp.id == data.id)){
-			var item = new Item(data.pos.x + 60*(data.direction),data.pos.y,10,10, data.itemId, true);
+			var item = new Item(data.pos.x + 60*(data.x_direction),data.pos.y,10,10, data.itemId, true);
 			item.proj = true;
             //item.id=data.itemId;
-                        Matter.Body.setVelocity( item.physicsComponent,Matter.Vector.create(data.direction*15,0));
+                        Matter.Body.setVelocity( item.physicsComponent,Matter.Vector.create(data.x_direction*15,0));
 			GameObjManager.AddObject(item);
 			//  this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,80,{isStatic: true});
 
@@ -298,25 +300,25 @@ InputListener.prototype.update = function (delta) {
     itemId=null;
 	x_factor = y_factor = 0;
 	var input = [];
-        var direction= 1;
 	if (38 in keysDown) { //up
 		y_factor = -2;
 		input.push('u');
-		//player.WHATERVER();i//TODO IMPLEMENT CORRECT FUNCTION
+		y_direction = -1;
 	}
 	if (40 in keysDown) { //down
 		y_factor = 2;
 		input.push('d');
+		y_direction = 1;
 	}
 	if (37 in keysDown) { // left
 		x_factor = -2;
 		input.push('l');
-		direction = -1; //shoot projectile on the left  side
+		x_direction = -1; //shoot projectile on the left  side
 	}
 	if (39 in keysDown) { // right
 		x_factor = 2;
 		input.push('r');
-		direction = 1; //shoot projectile on the right side
+		x_direction = 1; //shoot projectile on the right side
 	}
 
 	if (32 in keysDown){ //Spacebar
@@ -337,13 +339,13 @@ InputListener.prototype.update = function (delta) {
 	                yFac : y_factor,
 	                attack: isAttacking,
 	                inputSeq: this.inputSeq,
-			        direction: direction,
+			        x_direction: direction,
                     itemId: itemId,
                     size : this.player.getSize()
 			     };
 			   if(isAttacking && (numShots>0)){
-			    var tempitem = new Item(this.player.physicsComponent.position.x+60*direction, this.player.physicsComponent.position.y,10,10,itemId, true);
-                Matter.Body.setVelocity( tempitem.physicsComponent,Matter.Vector.create(direction*15,0));
+			    var tempitem = new Item(this.player.physicsComponent.position.x+60*x_direction, this.player.physicsComponent.position.y*(y_direction)sudo,10,10,itemId, true);
+                Matter.Body.setVelocity( tempitem.physicsComponent,Matter.Vector.create(x_direction*15,0));
                 tempitem.proj = true;
 		        GameObjManager.AddObject(tempitem);
                 if(numShots>0){
