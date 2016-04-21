@@ -2,6 +2,7 @@
 <html lang="en">
   
   <head>
+  <audio loop id="music"><source src ="/assets/DirtyPoP.mp3" type="audio/mpeg"></audio>
   <meta charset="utf-8">
   <script id="lib-script" src = "https://cdn.rawgit.com/GoodBoyDigital/pixi.js/dev/bin/pixi.js"></script>
   <script type ="text/javascript" src="/socket.io/socket.io.js"></script>
@@ -85,5 +86,22 @@
 	      }
 	    });
     </script>
+     <script>
+    var isPlaying = false;
+    var music = document.getElementById("music");
+    function toggle(){
+        if(isPlaying){
+            music.pause();
+            isPlaying = false;
+        }
+        else{
+            music.play();
+            isPlaying = true;
+        }
+    }
+    toggle();
+    </script>
+   <p align = "bottom"> <button  onclick = "toggle()" type ="button">Mute</button></p>
+
   </body>
 </html>
