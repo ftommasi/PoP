@@ -10,13 +10,23 @@
 //                 Character size
 //
 // Takes optional anonymous object as initialization arguments
-var Character = function (x, y, WorldData) {
+
+//So character is not in use now?????
+var Character = function (x, y, texture_location) {
     GameObject.call(this);
-    this.AddPhysicsComponent(x, y, new RectBodyData(80, 80), WorldData);
+    this.AddPhysicsComponent(x, y, new CircleBodyData(40), texture_location);
 
     //set these values so we don't rotate as we collide with stuff
     this.physicsComponent.inertia = Infinity;
     this.physicsComponent.inverseInertia = 0;
+    this.oldX=x;
+    this.oldY=y;
+    this.newX;
+    this.newY;
+    this.id;
+    this.gameid;
+    this.type = "character";
+    this.item;
 
     this.tag = "hero";
 }
@@ -24,3 +34,7 @@ var Character = function (x, y, WorldData) {
 Character.prototype = GameObject.prototype;
 Character.prototype.contructor = Character;
 
+Character.prototype.onCollisionEnter = function(other) {
+    if (other.tag == "hero")
+        console.log("I hit other player!!");
+}

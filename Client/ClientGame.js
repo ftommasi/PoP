@@ -14,7 +14,6 @@ var inputTimer = 0;
 var inputTimeoutPeriod = 100;
 var x_direction= 1;
 var y_direction= 1;
-//TODO: make game render here
 var tick = function (delay) {
 	var _delay = delay;
 	var timer;
@@ -76,12 +75,9 @@ var Game = function (fps) {
 	// create a ground
 	var ground = Matter.Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
 
-//	var item = new Item(10,10,10,10,10);
-//	item.body = Matter.Bodies.rectangle(400, 600, 80, 60, { isStatic: true });
 
 	World.add(this.engine.world, ground);
 
-	//World.add(this.engine.world,item.body);
 
 	Events.on(this.engine, 'collisionStart', function(event) {
 	  var pairs = event.pairs;
@@ -91,7 +87,6 @@ var Game = function (fps) {
 	    var baseObject = GameObjManager.GetGameObjectFromBody(pair.bodyA);
 	    var otherObject = GameObjManager.GetGameObjectFromBody(pair.bodyB);
 
-            //console.log(baseObject.type + " with " + otherObject.type);
 	    if (baseObject != null && otherObject != null) {
 	      baseObject.onCollisionEnter(otherObject);
 	      otherObject.onCollisionEnter(baseObject);
@@ -126,10 +121,7 @@ Game.prototype.update = function (delta) {
           } 
         }
         
-	// run the engine
-	//Matter.Engine.update(this.engine,e delta);
-	//Matter.Render.world(this.engine);
-};
+	};
 function shotFunction(){
     outOfShots=false;
     numShots=10;
@@ -145,15 +137,7 @@ Game.prototype.loop = function (now) {
 		this.render();
 		this.lastTime = now;
 	}
-	/*this.raf = requestAnimationFrame(this.loop.bind(this));
-	  var delta = now - this.lastTime;
-	//if (delta >= this.delay) {
-	console.log('new delta');
-	this.update(delta);
-	this.render();
-	this.lastTime = now;
-	}*/
-};
+	};
 Game.prototype.start = function () {
 	if (this.raf < 1) {
 		this.loop(0);
@@ -172,17 +156,13 @@ Game.prototype.stop = function () {
 };
 
 Game.prototype.addLocalPlayer = function(player){
-	//TODO: implement
 	var newPlayer = new ClientPlayer(player.newX, player.newY, null, player.id, false, localColor);
 	newPlayer.oldX = player.oldX;
 	newPlayer.oldY = player.oldY;
 	newPlayer.gameid = player.gameid;
 	this.playerList.push(newPlayer);
 	this.localPlayerid=newPlayer.id;
-	//var myCharacter = new Character(player.Player.startX, player.Player.startY);
-	//myCharacter.id=player.Player.id;
-	//myCharacter.gameid=this.id;
-	GameObjManager.AddObject(newPlayer);
+		GameObjManager.AddObject(newPlayer);
 	playerManager.setLocalPLayer(newPlayer);
 	var myInputManager = new InputListener(this.socket);
 	myInputManager.player=newPlayer;
@@ -197,9 +177,6 @@ Game.prototype.addOtherPlayer = function(player){
 	newPlayer.oldY = player.oldY;
 	newPlayer.gameid = player.gameid;
 	this.playerList.push(newPlayer);
-	//var myCharacter = new Character(player.Player.startX, player.Player.startY);
-	//myCharacter.id=player.Player.id;
-	//myCharacter.gameid=this.id;
 	GameObjManager.AddObject(newPlayer);
 	console.log('add other from client');
 };
@@ -223,7 +200,6 @@ Game.prototype.updatePlayerPosition = function(data){
             }
 		}
 	}
-	//RENDER ITEM ON GROUND
 	for(var i=0; i<this.itemList.length; i++){
 		if((data.id!=this.localPlayerid)&&(temp.id == data.id)){ //dont know if we need this
 			Matter.Body.setVelocity(itemList[i].physicsComponent, Matter.Vector.create(0,0)); // still object
@@ -233,20 +209,16 @@ Game.prototype.updatePlayerPosition = function(data){
 
 Game.prototype.addItem = function (item){
 	this.itemList.push(item);
-	//TODO(Fausto): Make sure that item is still
 }
 
 Game.prototype.attack = function(data){
 	for (var i=0; i<GameObjManager.GameObjectList.length; i++){
 		var temp = GameObjManager.GameObjectList[i];
 		if((data.id!=this.localPlayerid)&&(temp.id == data.id)){
-                        //TODO have this scale with correct player radius
 			var item = new Item(data.pos.x + (data.size.radius *(data.x_direction)),data.pos.y + (data.size.radius *(data.y_direction)),10,10, data.itemId, true);
 			item.proj = true;
-            //item.id=data.itemId;
                         Matter.Body.setVelocity( item.physicsComponent,Matter.Vector.create(data.x_direction*20,data.y_direction*20));
 			GameObjManager.AddObject(item);
-			//  this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,80,{isStatic: true});
 
 		}
 	}
@@ -256,9 +228,7 @@ Game.prototype.removeOtherPlayer = function(data){
         for (var i=0; i<GameObjManager.GameObjectList.length; i++){
 		var temp = GameObjManager.GameObjectList[i];
 		if(temp.id == data.id){
-		  //this.playerList.splice(this.playerList.indexOf(temp),1);
-		  //GameObjManager.remove(data.id);	
-		}	
+		 		}	
 		
 	}
 
@@ -267,11 +237,9 @@ Game.prototype.removeOtherPlayer = function(data){
 //----------------------------------------------------------------------------------------------------------------------------------------------
 //begin input
 //----------------------------------------------------------------------------------------------------------------------------------------------
-//TODO: ADD HEADER
 var keysDown = {};
 var isAttacking = false;
 var InputListener = function(socket){
-	//TODO: Add members as necessary
 	GameObject.call(this);
 	this.socket=socket;
 	this.player;
@@ -357,7 +325,6 @@ InputListener.prototype.update = function (delta) {
                         size : this.player.getSize()
 			     };
 			   if(isAttacking){
-				//TODO scale with radius 
 			    var tempitem = new Item(this.player.physicsComponent.position.x+((this.player.getSize().radius + 10)*x_direction), this.player.physicsComponent.position.y+(y_direction*(this.player.getSize().radius + 10)),10,10,itemId, true);
                 Matter.Body.setVelocity( tempitem.physicsComponent,Matter.Vector.create(x_direction*20,y_direction*20));
                 tempitem.proj = true;

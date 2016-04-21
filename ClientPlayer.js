@@ -1,9 +1,7 @@
 //TODO: ADD HEADER
-//TODO: Implement Player functions
 var ClientPlayer= function (x, y, texture_location, id, isServer, color) {
     GameObject.call(this);
     this.AddPhysicsComponent(x, y, new CircleBodyData(40), texture_location, color);
-
     //set these values so we don't rotate as we collide with stuff
     this.physicsComponent.inertia = Infinity;
     this.physicsComponent.inverseInertia = 0;
@@ -11,7 +9,7 @@ var ClientPlayer= function (x, y, texture_location, id, isServer, color) {
     this.oldY=y;
     this.newX;
     this.newY;
-    this.id = id; //may need id for plaryer AND game
+    this.id = id; 
     this.gameid;
     this.item;
     this.type = "player";
@@ -45,6 +43,7 @@ ClientPlayer.prototype.onCollisionEnter = function (other) {
 };
 
 ClientPlayer.prototype.dodamage = function (scaleFactor) {
+  //TODO Remove Console
   console.log("player health: " + this.health.healthvalue);
   this.health.healthvalue -= (1000 * scaleFactor);
   console.log("player health after update: " + this.health.healthvalue);
