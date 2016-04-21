@@ -16,7 +16,7 @@ function Item(x,y,width,height,damage, id, Project=false){
   this.dmg;
   this.proj= Project;
   this.hasBeenRemoved = false;
-  setTimeout(this.itemRemove.bind(this), 3000);
+//  setTimeout(this.itemRemove.bind(this), 3000);
 };
 
 Item.prototype = GameObject.prototype;

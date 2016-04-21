@@ -7,8 +7,9 @@ var nonLocalColor='#FFFF00';
 var GameObjManager;
 var playerManager;
 var Events = Matter.Events;
-var numShots=10;
-var outOfShots=false;
+var MAXSHOTS = 120;
+var numShots=MAXSHOTS;
+var reloading = false;
 var inputTimer = 0;
 var inputTimeoutPeriod = 100;
 var x_direction= 1;
@@ -124,12 +125,7 @@ Game.prototype.update = function (delta) {
             this.socket.emit('restart', message);
           } 
         }
-        if(numShots==0){
-            if(outOfShots==false){
-                outOfShots=true;
-                setTimeout(shotFunction, 1000);
-            }
-        }
+        
 	// run the engine
 	//Matter.Engine.update(this.engine,e delta);
 	//Matter.Render.world(this.engine);
@@ -244,10 +240,11 @@ Game.prototype.attack = function(data){
 	for (var i=0; i<GameObjManager.GameObjectList.length; i++){
 		var temp = GameObjManager.GameObjectList[i];
 		if((data.id!=this.localPlayerid)&&(temp.id == data.id)){
-			var item = new Item(data.pos.x + 60*(data.x_direction),data.pos.y,10,10, data.itemId, true);
+                        //TODO have this scale with correct player radius
+			var item = new Item(data.pos.x + (50 *(data.x_direction)),data.pos.y + (50 *(data.y_direction)),10,10, data.itemId, true);
 			item.proj = true;
             //item.id=data.itemId;
-                        Matter.Body.setVelocity( item.physicsComponent,Matter.Vector.create(data.x_direction*15,0));
+                        Matter.Body.setVelocity( item.physicsComponent,Matter.Vector.create(data.x_direction*20,data.y_direction*20));
 			GameObjManager.AddObject(item);
 			//  this.item.body = Bodies.rectangle(this.player.x,80,this.player.y,80,{isStatic: true});
 
@@ -304,26 +301,41 @@ InputListener.prototype.update = function (delta) {
 		y_factor = -2;
 		input.push('u');
 		y_direction = -1;
+		x_direction = 0;
 	}
 	if (40 in keysDown) { //down
 		y_factor = 2;
 		input.push('d');
 		y_direction = 1;
+		x_direction = 0;
 	}
 	if (37 in keysDown) { // left
 		x_factor = -2;
 		input.push('l');
 		x_direction = -1; //shoot projectile on the left  side
+		y_direction = 0;
 	}
 	if (39 in keysDown) { // right
 		x_factor = 2;
 		input.push('r');
 		x_direction = 1; //shoot projectile on the right side
+		y_direction = 0;
 	}
 
 	if (32 in keysDown){ //Spacebar
-	    isAttacking = true;
 	    itemId=Math.random()*10000;
+	    if(numShots >= 0 && !reloading){
+	      isAttacking = true;
+	      numShots--;
+	    }
+	    else{
+	        reloading = true;
+	    	numShots++;
+		if(numShots == MAXSHOTS){
+		  reloading = false;
+		}
+	    }
+               
         input.push('s');
 	}
 
@@ -339,21 +351,21 @@ InputListener.prototype.update = function (delta) {
 	                yFac : y_factor,
 	                attack: isAttacking,
 	                inputSeq: this.inputSeq,
-			        x_direction: direction,
+			x_direction: x_direction,
+			y_direction: y_direction,
                     itemId: itemId,
                     size : this.player.getSize()
 			     };
-			   if(isAttacking && (numShots>0)){
-			    var tempitem = new Item(this.player.physicsComponent.position.x+60*x_direction, this.player.physicsComponent.position.y*(y_direction)sudo,10,10,itemId, true);
-                Matter.Body.setVelocity( tempitem.physicsComponent,Matter.Vector.create(x_direction*15,0));
+			   if(isAttacking){
+				//TODO scale with radius 
+			    var tempitem = new Item(this.player.physicsComponent.position.x+((50)*x_direction), this.player.physicsComponent.position.y+(y_direction*(50)),10,10,itemId, true);
+                Matter.Body.setVelocity( tempitem.physicsComponent,Matter.Vector.create(x_direction*20,y_direction*20));
                 tempitem.proj = true;
 		        GameObjManager.AddObject(tempitem);
-                if(numShots>0){
-                    numShots-=1;
-                }
+                
 
 			}
-            if(numShots==0){
+            if(!isAttacking){
                 message.attack=false;
             }
             this.socket.emit('move', message);
