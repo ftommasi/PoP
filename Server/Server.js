@@ -15,11 +15,9 @@ require('./ServerGame.js');
 var createGame=function(player){
   var game={};
   
-  console.log('Created game.');
-  game.Game=new Game(60);
-  game.Game.id=game_count;
+  game.Game=new Game(game_count);
   games.push(game);
-  player.gameid=game.Game.id;
+  player.gameid=game.Game.getGameId();
   player.newX=100;
   player.newY=500;
   game.Game.addOtherPlayer(player);
@@ -32,19 +30,19 @@ var joinGame=function(player){
   var validGame=false;
   if(game_count!=0){
       for(var i = 0; i<game_count; i++){
-	var temp = games[i];
-	var length=temp.Game.playerList.length;
-	if(length<num_players){
-	  player.gameid=i;
-	  player.newX=100*(length+3);
-	  player.newY=500;
-	  temp.Game.addOtherPlayer(player);
-	  validGame=true;
-	  break;
-	}
+        var temp = games[i];
+        var length=temp.Game.playerList.length;
+        if(length<num_players){
+          player.gameid=i;
+          player.newX=100*(length+3);
+          player.newY=500;
+          temp.Game.addOtherPlayer(player);
+          validGame=true;
+          break;
+        }
       }
       if(!validGame){
-	player.gameid=createGame(player);
+	    player.gameid=createGame(player);
       }
   }
   else{

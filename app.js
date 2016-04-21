@@ -8,7 +8,7 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var UUID = require('node-uuid');
-var world = require('./Server/server.js');
+var world = require('./Server/Server.js');
 
 //Send the index page
 app.get('/', function(req, res){
