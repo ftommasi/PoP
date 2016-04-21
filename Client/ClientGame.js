@@ -241,7 +241,7 @@ Game.prototype.attack = function(data){
 		var temp = GameObjManager.GameObjectList[i];
 		if((data.id!=this.localPlayerid)&&(temp.id == data.id)){
                         //TODO have this scale with correct player radius
-			var item = new Item(data.pos.x + (50 *(data.x_direction)),data.pos.y + (50 *(data.y_direction)),10,10, data.itemId, true);
+			var item = new Item(data.pos.x + (data.size.radius *(data.x_direction)),data.pos.y + (data.size.radius *(data.y_direction)),10,10, data.itemId, true);
 			item.proj = true;
             //item.id=data.itemId;
                         Matter.Body.setVelocity( item.physicsComponent,Matter.Vector.create(data.x_direction*20,data.y_direction*20));
@@ -353,12 +353,12 @@ InputListener.prototype.update = function (delta) {
 	                inputSeq: this.inputSeq,
 			x_direction: x_direction,
 			y_direction: y_direction,
-                    itemId: itemId,
-                    size : this.player.getSize()
+                        itemId: itemId,
+                        size : this.player.getSize()
 			     };
 			   if(isAttacking){
 				//TODO scale with radius 
-			    var tempitem = new Item(this.player.physicsComponent.position.x+((50)*x_direction), this.player.physicsComponent.position.y+(y_direction*(50)),10,10,itemId, true);
+			    var tempitem = new Item(this.player.physicsComponent.position.x+((this.player.getSize().radius + 10)*x_direction), this.player.physicsComponent.position.y+(y_direction*(this.player.getSize().radius + 10)),10,10,itemId, true);
                 Matter.Body.setVelocity( tempitem.physicsComponent,Matter.Vector.create(x_direction*20,y_direction*20));
                 tempitem.proj = true;
 		        GameObjManager.AddObject(tempitem);
