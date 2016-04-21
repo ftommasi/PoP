@@ -2,13 +2,34 @@
 <html lang="en">
   
   <head>
+  <audio loop id = "music"><source src="/assets/DirtyPoP.mp3" type="audio/mpeg"></audio>
   <meta charset="utf-8">
   <title>PoP</title>
   </head>
-  <body>
+  <body background ="assets/gameScreen.png">
     <center>
     <button onclick ="location.href='/PoP.html'">Start</button>
     </center>
-  </body>
-  
+    <center>
+    <button onclick ="location.href='/HowToPlay.html'">How To Play</button>
+    </center>
+    <center>
+    <button onclick ="toggle()" type = "button">Mute</button>
+    </center>
+ </body>
+ <script>
+    var isPlaying = false;
+    var music = document.getElementById("music");
+    function toggle(){
+        if(isPlaying){
+            music.pause();
+            isPlaying = false;
+        }
+        else{
+            music.play();
+            isPlaying = true;
+        }
+    }
+    toggle();
+ </script> 
  </html>
