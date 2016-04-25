@@ -99,7 +99,7 @@ var Game = function (fps) {
 };
 
 Game.prototype.update = function (delta) {
-        var isLocalPlayerAlive = true;
+	var isLocalPlayerAlive = true;
 	this.onUpdate(delta);
     var deadPlayers = 0;
 	GameObjManager.UpdateAll(delta);
@@ -162,7 +162,7 @@ Game.prototype.addLocalPlayer = function(player){
 	newPlayer.gameid = player.gameid;
 	this.playerList.push(newPlayer);
 	this.localPlayerid=newPlayer.id;
-		GameObjManager.AddObject(newPlayer);
+	GameObjManager.AddObject(newPlayer);
 	playerManager.setLocalPLayer(newPlayer);
 	var myInputManager = new InputListener(this.socket);
 	myInputManager.player=newPlayer;
@@ -188,10 +188,24 @@ Game.prototype.updatePlayerPosition = function(data){
 			if(temp.physicsComponent.position.x != data.pos.x || temp.physicsComponent.position.y != data.pos.y)
 			{
 					Matter.Body.setPosition(temp.physicsComponent, data.pos);
-					Matter.Body.setVelocity(temp.physicsComponent, Matter.Vector.create(data.xFac, data.yFac));
+					if (temp.canFly()) {
+					    temp.flying = true;
+					    Matter.Body.setVelocity(temp.physicsComponent, Matter.Vector.create(data.xFac, data.yFac));
+					}
+					else {
+					    temp.flying = false;
+					    Matter.Body.setVelocity(temp.physicsComponent, Matter.Vector.create(data.xFac, temp.physicsComponent.velocity.y));
+					}
 			}
 			else{
-					Matter.Body.setVelocity(temp.physicsComponent, Matter.Vector.create(data.xFac, data.yFac));
+			    if (temp.canFly()) {
+			        temp.flying = true;
+			        Matter.Body.setVelocity(temp.physicsComponent, Matter.Vector.create(data.xFac, data.yFac));
+			    }
+			    else {
+			        Matter.Body.setVelocity(temp.physicsComponent, Matter.Vector.create(data.xFac, temp.physicsComponent.velocity.y));
+			        temp.flying = false;
+			    }
 			}
             if(temp.health.healthvalue!=data.size.health || temp.physicsComponent.circleRadius!=data.size.radius){
                 temp.health.healthvalue = data.size.health;
@@ -217,9 +231,8 @@ Game.prototype.attack = function(data){
 		if((data.id!=this.localPlayerid)&&(temp.id == data.id)){
 			var item = new Item(data.pos.x + (data.size.radius *(data.x_direction)),data.pos.y + (data.size.radius *(data.y_direction)),10,10, data.itemId, true);
 			item.proj = true;
-                        Matter.Body.setVelocity( item.physicsComponent,Matter.Vector.create(data.x_direction*20,data.y_direction*20));
+            Matter.Body.setVelocity( item.physicsComponent,Matter.Vector.create(data.x_direction*20,data.y_direction*20));
 			GameObjManager.AddObject(item);
-
 		}
 	}
 
@@ -261,7 +274,7 @@ InputListener.prototype = GameObject.prototype;
 InputListener.prototype.contructor = InputListener;
 
 InputListener.prototype.update = function (delta) {
-        isAttacking = false;
+    isAttacking = false;
     itemId=null;
 	x_factor = y_factor = 0;
 	var input = [];
@@ -308,37 +321,41 @@ InputListener.prototype.update = function (delta) {
 	}
 
 	if (this.player != null) {
-	      	if(input.length){
-			    this.inputSeq += 1;
-                var message = {
-                    gameid : this.player.gameid,
-                    id :this.player.id,
-	                pos:this.player.physicsComponent.position,
-	                velocity: this.player.physicsComponent.velocity,
-	                xFac : x_factor,
-	                yFac : y_factor,
-	                attack: isAttacking,
-	                inputSeq: this.inputSeq,
-			x_direction: x_direction,
-			y_direction: y_direction,
-                        itemId: itemId,
-                        size : this.player.getSize()
-			     };
-			   if(isAttacking){
-			    var tempitem = new Item(this.player.physicsComponent.position.x+((this.player.getSize().radius + 10)*x_direction), this.player.physicsComponent.position.y+(y_direction*(this.player.getSize().radius + 10)),10,10,itemId, true);
-                Matter.Body.setVelocity( tempitem.physicsComponent,Matter.Vector.create(x_direction*20,y_direction*20));
-                tempitem.proj = true;
-		        GameObjManager.AddObject(tempitem);
-                
-
+		if (input.length) {
+			this.inputSeq += 1;
+			var message = {
+				gameid: this.player.gameid,
+				id: this.player.id,
+				pos: this.player.physicsComponent.position,
+				velocity: this.player.physicsComponent.velocity,
+				xFac: x_factor,
+				yFac: y_factor,
+				attack: isAttacking,
+				inputSeq: this.inputSeq,
+				x_direction: x_direction,
+				y_direction: y_direction,
+				itemId: itemId,
+				size: this.player.getSize()
+			};
+			if (isAttacking) {
+				var tempitem = new Item(this.player.physicsComponent.position.x + ((this.player.getSize().radius + 10) * x_direction), this.player.physicsComponent.position.y + (y_direction * (this.player.getSize().radius + 10)), 10, 10, itemId, true);
+				Matter.Body.setVelocity(tempitem.physicsComponent, Matter.Vector.create(x_direction * 20, y_direction * 20));
+				tempitem.proj = true;
+				GameObjManager.AddObject(tempitem);
 			}
-            if(!isAttacking){
-                message.attack=false;
-            }
-            this.socket.emit('move', message);
-			Matter.Body.setVelocity(this.player.physicsComponent,
-					Matter.Vector.create(x_factor, y_factor));
+			if (!isAttacking)
+				message.attack = false;
+			this.socket.emit('move', message);
 
+            //pressed up
+			if (y_factor == -2 && this.player.canFly()) {
+			    this.player.flying = true;
+			    Matter.Body.setVelocity(this.player.physicsComponent, Matter.Vector.create(x_factor, y_factor));
+			}
+			else {
+			    this.player.flying = false;
+			    Matter.Body.setVelocity(this.player.physicsComponent, Matter.Vector.create(x_factor, this.player.physicsComponent.velocity.y));
+			}
 		}
 	}
 };

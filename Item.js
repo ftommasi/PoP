@@ -29,26 +29,26 @@ Item.prototype.itemRemove = function(){
         this.hasBeenRemoved=true;
         GameObjManager.remove(this.id);
     }
-}
-Item.prototype.getDamage = function (){
-  return this.dmg;
+};
 
-}
+Item.prototype.getDamage = function (){
+    return this.dmg;
+
+};
 
 Item.prototype.isProjectile = function(){
-  return this.proj;
-}
+    return this.proj;
+};
 
 Item.prototype.onCollisionEnter = function (other){
      
-     if (other.type == "player") {
+    if (other.type == "player") {
         other.dodamage(0.01);
        
-     }
+    }
 
-     //Remove all projectiles after collision
-     if(this.proj){
-            GameObjManager.remove(this.id);
-       }
-
-}
+    //Remove all projectiles after collision
+    if(this.proj){
+        GameObjManager.remove(this.id);
+    }
+};
