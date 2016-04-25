@@ -4,11 +4,9 @@
 */
 require('./ServerPlayer.js');
 
-var Game = function (fps) {
-    this.id;
-    this.fps = fps;
+var Game = function (id) {
+    this.id=id;
     this.playerList=[];
-    this.itemList =[];
     this.lastTime = 0;
 
     // create a ground
@@ -17,7 +15,9 @@ var Game = function (fps) {
 
 
 module.exports = global.Game = Game;
-
+Game.prototype.getGameId = function(){
+    return this.id;
+};
 Game.prototype.addOtherPlayer = function(player){
   var newPlayer ={};
   newPlayer.ServerPlayer=new ServerPlayer(player.newX, player.newY, player.id);
@@ -25,7 +25,6 @@ Game.prototype.addOtherPlayer = function(player){
   newPlayer.ServerPlayer.oldY = player.oldY;
   newPlayer.ServerPlayer.gameid = player.gameid;
   this.playerList.push(newPlayer);
-  console.log('add other from server');
 };
 
 Game.prototype.updatePlayerPosition = function(data){

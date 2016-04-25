@@ -10,7 +10,6 @@ var ServerPlayer= function (x, y, id) {
     this.newY=y;
     this.id = id; //may need id for player AND game
     this.gameid;
-    this.item;
 
     this.tag = "player";
 };
