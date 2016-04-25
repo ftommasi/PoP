@@ -14,10 +14,11 @@ var ClientPlayer= function (x, y, texture_location, id, isServer, color) {
     this.item;
     this.type = "player";
     this.alive = true;
+    this.flying = false;
     this.maxFuel = 100;
     this.currentFuel = this.maxFuel;
     this.fuelRegenPerSec = 10;
-    this.fuelDrainPerSec = 20;
+    this.fuelDrainPerSec = 30;
 
     this.health = {
       healthvalue: 1000,
@@ -25,19 +26,23 @@ var ClientPlayer= function (x, y, texture_location, id, isServer, color) {
     }
 }
 
-ClientPlayer.prototype = GameObject.prototype;
+ClientPlayer.prototype = new GameObject();
 ClientPlayer.prototype.contructor = ClientPlayer;
 
 ClientPlayer.prototype.update = function (delta) {
-    if (this.physicsComponent.velocity.y > 0) {
-        console.log(delta);
-        this.currentFuel -= fuelDrainPerSec * delta * 1000;
+    if (this.flying) {
+        this.currentFuel -= this.fuelDrainPerSec * (delta / 1000);
         console.log(this.currentFuel);
     }
+    else
+        this.currentFuel = Math.min(this.currentFuel + this.fuelRegenPerSec * (delta / 1000), this.maxFuel);
 };
 
-ClientPlayer.prototype.canFly = function() {
-    return this.currentFuel > 0;
+ClientPlayer.prototype.canFly = function () {
+    if (!this.flying)
+        return this.currentFuel > this.fuelDrainPerSec;
+    else
+        return this.currentFuel > 0;
 };
 
 ClientPlayer.prototype.attack = function(){
