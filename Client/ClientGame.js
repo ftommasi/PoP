@@ -188,24 +188,10 @@ Game.prototype.updatePlayerPosition = function(data){
 			if(temp.physicsComponent.position.x != data.pos.x || temp.physicsComponent.position.y != data.pos.y)
 			{
 					Matter.Body.setPosition(temp.physicsComponent, data.pos);
-					if (temp.canFly()) {
-					    temp.flying = true;
 					    Matter.Body.setVelocity(temp.physicsComponent, Matter.Vector.create(data.xFac, data.yFac));
-					}
-					else {
-					    temp.flying = false;
-					    Matter.Body.setVelocity(temp.physicsComponent, Matter.Vector.create(data.xFac, temp.physicsComponent.velocity.y));
-					}
 			}
 			else{
-			    if (temp.canFly()) {
-			        temp.flying = true;
 			        Matter.Body.setVelocity(temp.physicsComponent, Matter.Vector.create(data.xFac, data.yFac));
-			    }
-			    else {
-			        Matter.Body.setVelocity(temp.physicsComponent, Matter.Vector.create(data.xFac, temp.physicsComponent.velocity.y));
-			        temp.flying = false;
-			    }
 			}
             if(temp.health.healthvalue!=data.size.health || temp.physicsComponent.circleRadius!=data.size.radius){
                 temp.health.healthvalue = data.size.health;
@@ -274,15 +260,19 @@ InputListener.prototype = GameObject.prototype;
 InputListener.prototype.contructor = InputListener;
 
 InputListener.prototype.update = function (delta) {
+    if(this.player!=null){
     isAttacking = false;
     itemId=null;
 	x_factor = y_factor = 0;
 	var input = [];
 	if (38 in keysDown) { //up
-		y_factor = -2;
-		input.push('u');
-		y_direction = -1;
-		x_direction = 0;
+		if(this.player.canFly()){
+			this.player.flying=true;
+			y_factor = -2;
+			input.push('u');
+			y_direction = -1;
+			x_direction = 0;
+		}
 	}
 	if (40 in keysDown) { //down
 		y_factor = 2;
@@ -320,7 +310,6 @@ InputListener.prototype.update = function (delta) {
         input.push('s');
 	}
 
-	if (this.player != null) {
 		if (input.length) {
 			this.inputSeq += 1;
 			var message = {
@@ -346,17 +335,12 @@ InputListener.prototype.update = function (delta) {
 			if (!isAttacking)
 				message.attack = false;
 			this.socket.emit('move', message);
-
-            //pressed up
-			if (y_factor == -2 && this.player.canFly()) {
-			    this.player.flying = true;
+			if(y_factor == 0){
+			  this.player.flying=false;
+			}
+		//pressed up
 			    Matter.Body.setVelocity(this.player.physicsComponent, Matter.Vector.create(x_factor, y_factor));
-			}
-			else {
-			    this.player.flying = false;
-			    Matter.Body.setVelocity(this.player.physicsComponent, Matter.Vector.create(x_factor, this.player.physicsComponent.velocity.y));
-			}
 		}
-	}
+  }
 };
 
