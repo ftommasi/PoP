@@ -116,6 +116,7 @@ Game.prototype.update = function (delta) {
           if (isLocalPlayerAlive) {
             var message = {
               gameid:this.id,
+              winner:this.localPlayerid,
             }
             this.socket.emit('restart', message);
           } 
@@ -234,6 +235,13 @@ Game.prototype.removeOtherPlayer = function(data){
 
 
 };
+Game.prototype.endgame = function(winner) {
+  if (winner == this.localPlayerid) {
+    window.location="win.html";
+  } else {
+    window.location="lose.html";
+  }
+}
 //----------------------------------------------------------------------------------------------------------------------------------------------
 //begin input
 //----------------------------------------------------------------------------------------------------------------------------------------------

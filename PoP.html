@@ -52,10 +52,11 @@
 	      console.log('From createPlayer Client gameid: '+data.gameid);
 	      game.addLocalPlayer(data);
 	    });
-        socket.on('back', function(data){
-            if(game.id==data){
+        socket.on('gameover', function(data){
+            /*if(game.id==data.gameid){
                 window.location="index.html";
-            }
+            }*/
+            game.endgame(data.winner);
         }); 
 	    //Add other players when they connect
 	    socket.on('addOtherPlayer', function(data){
