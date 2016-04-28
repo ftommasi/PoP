@@ -73,11 +73,14 @@ var Game = function (fps) {
 	GameObjManager.AddObject(playerManager);
 
 	// create a ground
-	var ground = Matter.Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
-
-
-	World.add(this.engine.world, ground);
-
+	var boundary = Matter.Bodies.rectangle(400, 610, 810, 60, { isStatic: true }); //ground
+	World.add(this.engine.world, boundary);
+	boundary = Matter.Bodies.rectangle(400, -20, 810, 60, { isStatic: true }); //top
+	World.add(this.engine.world, boundary);
+	boundary = Matter.Bodies.rectangle(0, 610, 20, 1200, { isStatic: true }); //left
+	World.add(this.engine.world, boundary);
+	boundary = Matter.Bodies.rectangle(800, 610, 20, 1200, { isStatic: true }); //right
+	World.add(this.engine.world, boundary);
 
 	Events.on(this.engine, 'collisionStart', function(event) {
 	  var pairs = event.pairs;
