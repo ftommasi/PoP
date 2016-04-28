@@ -79,7 +79,7 @@ io.on('connection', function(socket){
 
   socket.on('restart', function(data) {
     if (world.checkReady(data.gameid)) {
-      socket.broadcast.emit('back', data.gameid);
+      socket.broadcast.emit('gameover', data);
     }
   });
 });
