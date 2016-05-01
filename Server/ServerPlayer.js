@@ -1,8 +1,9 @@
-//TODO: ADD HEADER
-//TODO: Implement Player functions
-//TODO: Update this so it behaves like Client - should consider a better way to do this!
-var ServerPlayer= function (x, y, id) {
+/* Author/Contributors: Nick Anderson, Eric Whitman
+ * Date: 3/01/2016
+ * Purpose: The player for the server to manage.
+ */
 
+var ServerPlayer= function (x, y, id) {
     //set these values so we don't rotate as we collide with stuff
     this.oldX;
     this.oldY;

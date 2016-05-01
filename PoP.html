@@ -4,17 +4,14 @@
   <head>
   <audio loop id="music"><source src ="/assets/DirtyPoP.mp3" type="audio/mpeg"></audio>
   <meta charset="utf-8">
-  <script id="lib-script" src = "https://cdn.rawgit.com/GoodBoyDigital/pixi.js/dev/bin/pixi.js"></script>
   <script type ="text/javascript" src="/socket.io/socket.io.js"></script>
-  <!--<script src="Player.js"></script>-->
-
   </head>
   <body>
 
   <script src="matter.js" type="text/javascript"></script>
   <script src="GameObjectManager.js"></script>
   <script src="GameObject.js"></script>
-  <script src="ClientPlayer.js"></script>
+  <script src="Client/ClientPlayer.js"></script>
   <script src="Item.js"></script>
   <script src="PlayerManager.js"></script>
   <script src="Client/ClientGame.js"></script>
@@ -51,12 +48,11 @@
 	      console.log('From createPlayer Client gameid: '+data.gameid);
 	      game.addLocalPlayer(data);
 	    });
-        socket.on('gameover', function(data){
-            /*if(game.id==data.gameid){
-                window.location="index.html";
-            }*/
-            game.endgame(data.winner);
-        }); 
+        
+	    socket.on('gameover', function(data){
+         	game.endgame(data.winner);
+            }); 
+	    
 	    //Add other players when they connect
 	    socket.on('addOtherPlayer', function(data){
 	      if(game.id==data.gameid){
@@ -67,10 +63,7 @@
 	      	}
 	      }
 	    });
-	    socket.on('hit', function(data){
-		if(game.id==data.gameid){
-		}
-		});
+
 	    //Remove other players as they leave.
 	    socket.on('removePlayer', function(data){
 	      if(game.id==data.gameid){
@@ -78,6 +71,7 @@
 		game.removeOtherPlayer(data);
 	      }
 	    });
+	
 	    socket.on('RequestOldPlayer', function(data){
 	      console.log('From RequestOldPlayer');
 	      if(game.id==data.gameid){
@@ -102,6 +96,5 @@
     toggle();
     </script>
    <p align = "bottom"> <button  onclick = "toggle()" type ="button">Mute</button></p>
-
   </body>
 </html>
