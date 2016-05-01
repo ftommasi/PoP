@@ -78,7 +78,6 @@ var removePlayer = function(id, gameid){
 };
 
 //Updates the player data
-//TODO Nick correct client data if needed.
 var updatePlayerData = function(data){
     var newData = games[data.gameid].Game.updatePlayerPosition(data);
     return newData;

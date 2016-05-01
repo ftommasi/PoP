@@ -13,11 +13,12 @@ var Game = function (id) {
     this.ground = {x:400, y:610, width:810, height:60, isStatic:true}; 
 };
 
-
 module.exports = global.Game = Game;
+
 Game.prototype.getGameId = function(){
     return this.id;
 };
+
 Game.prototype.addOtherPlayer = function(player){
   var newPlayer ={};
   newPlayer.ServerPlayer=new ServerPlayer(player.newX, player.newY, player.id);
@@ -37,6 +38,7 @@ Game.prototype.updatePlayerPosition = function(data){
     }
    return data;
 }
+
 Game.prototype.removePlayer = function(data){
 	this.playerList.splice(this.playerList.indexOf(data),1);
 };

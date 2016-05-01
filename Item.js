@@ -21,10 +21,6 @@ function Item(x,y,width,height,damage, id, Project=false){
 Item.prototype = GameObject.prototype;
 Item.prototype.constructor = Item;
 Item.prototype.itemRemove = function(){
-    //TODO Remove Console
-    console.log("From timeout function");
-    console.log(this.hasBeenRemoved);
-    console.log(this.id);
     if(!this.hasBeenRemoved){
         this.hasBeenRemoved=true;
         GameObjManager.remove(this.id);
@@ -46,7 +42,6 @@ Item.prototype.onCollisionEnter = function (other){
         other.dodamage(0.01);
        
     }
-
     //Remove all projectiles after collision
     if(this.proj){
         GameObjManager.remove(this.id);
