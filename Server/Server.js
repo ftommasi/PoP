@@ -7,7 +7,7 @@
 //List of games.
 var games = [];
 var game_count=0;
-var num_players=2;
+var num_players=4;
 //Grab the game engine
 require('./ServerGame.js');
 

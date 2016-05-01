@@ -81,7 +81,8 @@ ClientPlayer.prototype.dodamage = function (scaleFactor) {
 
   if (this.health.healthvalue < 50) {
     this.alive = false;
-    console.log("someone died!!");
+    this.physicsComponent.circleRadius = 0.00001;
+    //console.log("someone died!!");
   }
 };
 

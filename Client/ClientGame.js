@@ -271,7 +271,7 @@ InputListener.prototype = GameObject.prototype;
 InputListener.prototype.contructor = InputListener;
 
 InputListener.prototype.update = function (delta) {
-    if(this.player!=null){
+    if(this.player!=null && this.player.alive){
     isAttacking = false;
     itemId=null;
 	x_factor = y_factor = 0;
